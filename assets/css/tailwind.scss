@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* --------- fonts start ---------------- */
+@font-face {
+    font-family: 'yekan';
+    src: url('./../../public/assets/fonts/Yekan.ttf');
+}
+@font-face {
+    font-family: 'Poppins';
+    src: url('./../../public/assets/fonts/Poppins-ExtraBold.ttf');
+}
+/* ----------fonts end ------------------ */
+
+
+@layer base {
+  html {
+    @apply font-yekan ;
+  }
+
+  // img:not(div.content img) {
+  //   @apply w-full h-full object-cover;
+  // }
+
+}

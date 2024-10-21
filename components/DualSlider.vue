@@ -42,7 +42,7 @@ function fillColor() {
   const percent1 = (range.value[0] / +sliderMaxValue) * 100;
   const percent2 = (range.value[1] / +sliderMaxValue) * 100;
 
-  sliderTrack.value!.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #3264fe ${percent1}% , #3264fe ${percent2}%, #dadae5 ${percent2}%)`;
+  sliderTrack.value!.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #1ebfbf ${percent1}% , #1ebfbf ${percent2}%, #dadae5 ${percent2}%)`;
 
 }
 
@@ -56,17 +56,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div dir="ltr" class="wrapper">
-    <div class="values">
-      <span id="range1">
-        0
-      </span>
-      <span> &dash; </span>
-      <span id="range2">
-        100
-      </span>
-    </div>
-    <div class="container">
+  <div dir="ltr" class="wrapper" style="font-size: 8px;" >
+    
+    <div class="relative w-full h-10">
       <div class="slider-track" ref="sliderTrack"></div>
       <input type="range" :min :max v-model.number="range[0]" id="slider-1" @input="slideOne()">
       <input type="range" :min :max v-model.number="range[1]" id="slider-2" @input="slideTwo()">
@@ -75,12 +67,6 @@ onMounted(() => {
 </template>
 
 <style scoped>
-.container {
-  position: relative;
-  width: 100%;
-  height: 100px;
-  margin-top: 30px;
-}
 
 input[type="range"] {
   -webkit-appearance: none;
@@ -125,11 +111,11 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   height: 1.7em;
   width: 1.7em;
-  background-color: #3264fe;
+  background-color: #1ebfbf;
   cursor: pointer;
-  margin-top: -9px;
   pointer-events: auto;
   border-radius: 50%;
+  transform: translateY(-40%);
 }
 
 input[type="range"]::-moz-range-thumb {
@@ -138,7 +124,7 @@ input[type="range"]::-moz-range-thumb {
   width: 1.7em;
   cursor: pointer;
   border-radius: 50%;
-  background-color: #3264fe;
+  background-color: #1ebfbf;
   pointer-events: auto;
   border: none;
 }
@@ -149,39 +135,14 @@ input[type="range"]::-ms-thumb {
   width: 1.7em;
   cursor: pointer;
   border-radius: 50%;
-  background-color: #3264fe;
+  background-color: #1ebfbf;
   pointer-events: auto;
 }
 
 input[type="range"]:active::-webkit-slider-thumb {
   background-color: #ffffff;
-  border: 1px solid #3264fe;
+  border: 1px solid #1ebfbf;
 }
 
-.values {
-  background-color: #3264fe;
-  width: 32%;
-  position: relative;
-  margin: auto;
-  padding: 10px 0;
-  border-radius: 5px;
-  text-align: center;
-  font-weight: 500;
-  font-size: 25px;
-  color: #ffffff;
-}
 
-.values:before {
-  content: "";
-  position: absolute;
-  height: 0;
-  width: 0;
-  border-top: 15px solid #3264fe;
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  margin: auto;
-  bottom: -14px;
-  left: 0;
-  right: 0;
-}
 </style>

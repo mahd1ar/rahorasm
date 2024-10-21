@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+const usernameInput = useTemplateRef('username-input')
+
 const validated = ref(false);
 const username = ref("");
 const password = ref("");
@@ -6,6 +9,7 @@ const errorMessage = ref("");
 const successMessage = ref("");
 const isLoading = ref(false);
 const errorOnValidateUsername = ref("")
+
 
 function validate(){
   if(!username.value.startsWith('09')){
@@ -66,12 +70,9 @@ const handleSubmit = async () => {
   }
 };
 
-
-
-
-
-
-
+onMounted(()=>{
+  usernameInput.value?.focus()
+})
 
 </script>
 
@@ -105,7 +106,7 @@ const handleSubmit = async () => {
               <label class="text-[#6c757d]">
                 شماره تماس خود را وارد نمایید
               </label>
-              <input type="text" class='form-controls1' ref={userRef} v-model="username" />
+              <input type="text" class='form-controls1' ref="username-input" v-model="username" />
               <div v-if="errorOnValidateUsername" class="text-red-500 text-sm" >
                 {{ errorOnValidateUsername }}
               </div>

@@ -10,7 +10,7 @@ export default defineNuxtPlugin(() => {
     const $api = $fetch.create({
       headers,
       credentials: 'include',
-      baseURL: 'https://example.com',
+      baseURL: 'http://192.168.1.3:7000',
       onResponseError (ctx) {
         if (ctx.response.status === 401) {
           navigateTo({ path: '/login', query: { go: route.fullPath } })

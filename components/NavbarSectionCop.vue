@@ -5,7 +5,7 @@ import { vOnClickOutside } from '@vueuse/components'
 type Item = {
   id: string | number,
   name: string,
-  children: Item[],
+  children?: Item[],
   path?: string
 }
 
@@ -68,7 +68,7 @@ function closeSubmenu() {
           class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  text-dark ">
           <li v-for="i in items" :key="i.id">
 
-            <template v-if="i.children?.length > 0">
+            <template v-if="(i.children?.length || 0) > 0">
 
               <button :id="'dropdown-' + i.name" data-dropdown-toggle="dropdownNavbar" @click="selectSubmenu(1, i.name)"
                 class="js-dropdown flex items-center justify-between w-full py-2 px-3 md:hover:bg-transparent md:border-0 md:hover:text-Secondary md:p-0 md:w-auto  ">
@@ -84,7 +84,7 @@ function closeSubmenu() {
                  :style="{'--max-items' : i.children?.length }" class=" slide-up z-10 font-normal bg-gray-50 md:bg-white text-dark border border-gray-300 divide-y divide-gray-100 rounded-lg w-full md:w-44 ">
                 <ul class="py-2 text-sm " aria-labelledby="dropdownLargeButton">
                   <template v-for="ii in i.children" :key="ii.name">
-                    <li :key="ii.id + '02'" v-if="ii.children?.length > 0" aria-labelledby="dropdownNavbarLink">
+                    <li :key="ii.id + '02'" v-if="(ii.children?.length || 0) > 0" aria-labelledby="dropdownNavbarLink">
                       <button @click="selectSubmenu(2, ii.name)" data-dropdown-placement="right-start" type="button"
                         class="flex items-center justify-between w-full px-4 py-2 hover:bg-white  ">
                         {{ ii.name }} 
@@ -95,12 +95,12 @@ function closeSubmenu() {
                         </svg>
                       </button>
                       <div :class="l2 && ii.name === l2 ? 'md:absolute relative' : 'hidden'"
-                        :style="{'--max-items' : ii.children.length }" class="slide-up z-10 bg-gray-200 md:bg-white border border-gray-300 divide-y divide-gray-300 rounded-lg  w-full md:w-44 left-0  lg:-translate-x-full lg:-translate-y-10 ">
+                        :style="{'--max-items' : ii.children?.length || 0 }" class="slide-up z-10 bg-gray-200 md:bg-white border border-gray-300 divide-y divide-gray-300 rounded-lg  w-full md:w-44 left-0  lg:-translate-x-full lg:-translate-y-10 ">
                         <ul class="py-2 text-sm "
                           aria-labelledby="doubleDropdownButton">
 
                           <template v-for="iii in ii.children" :key="iii.id">
-                            <li :key="iii.id + '02'" v-if="iii.children?.length > 0"
+                            <li :key="iii.id + '02'" v-if="iii.children?.length && iii.children?.length > 0"
                               aria-labelledby="dropdownNavbarLink">
                               <button id="doubleDropdownButton" data-dropdown-toggle="doubleDropdown"
                                 @click="selectSubmenu(3, iii.name)" data-dropdown-placement="right-start" type="button"

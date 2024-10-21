@@ -5,7 +5,7 @@ export default defineNuxtConfig({
    devServer: {
     port: 3036
   },
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/icon', '@vueform/nuxt'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/icon', '@vueform/nuxt', '@pinia/nuxt',  '@vueuse/nuxt'],
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.scss'
   },

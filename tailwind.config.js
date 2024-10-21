@@ -22,7 +22,8 @@ export default {
   },
   plugins: [
     // require('@tailwindcss/forms')
-    
+    require('tailwindcss-no-scrollbar'),
+    require('@vueform/vueform/tailwind')    
   ],
 }
 

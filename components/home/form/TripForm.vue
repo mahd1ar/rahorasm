@@ -113,10 +113,7 @@ const handleSubmit = async (e: Event) => {
 
 <style scoped>
 
-.retro-style{
-box-shadow: 3px 3px black;
-    border: 2px solid black;
-}
+
 
 [type=number] {
   direction: rtl;

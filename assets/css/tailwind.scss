@@ -25,3 +25,22 @@
   // }
 
 }
+
+@layer components {
+  .flex-center {
+    @apply flex items-center justify-center;
+  }
+
+  .overlay {
+    @apply absolute inset-0 h-full w-full;
+  } 
+
+.retro-style{
+  box-shadow: 3px 3px black;
+      border: 2px solid black;
+  }
+
+  .btn {
+    @apply bg-primary text-black hover:text-gray-100;
+  }
+}

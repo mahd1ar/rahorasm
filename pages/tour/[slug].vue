@@ -118,8 +118,10 @@ const airlines = ref([
     count: 11
   }
 ])
-
-const { data } = useAPI<Root[]>('/tour/tours/?continent=آسیا')
+const route = useRoute()
+const { data } = useAPI<Root[]>('/tour/tours/',{
+  query: route.query
+})
 
 const sortItems = [
   '  پیشنهاد راه و رسم',

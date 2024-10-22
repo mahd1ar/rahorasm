@@ -34,6 +34,16 @@ export default defineNuxtPlugin(() => {
     credentials: 'include',
     baseURL: 'https://rahorasm.msdcorporation.top',
     retry: 2,
+    onRequest(ctx){
+
+      if(accessToken.value)
+      {
+        ctx.options.headers.delete('Authorization')
+        ctx.options.headers.delete('authorization')
+        ctx.options.headers.append('Authorization', `Bearer ${accessToken.value}`)
+      }
+     
+    },
     onResponseError(ctx) {
 
       // if (ctx.response.status === 401) {

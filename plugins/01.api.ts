@@ -1,12 +1,23 @@
+import { COOKIES } from "~/data/types";
+
 export default defineNuxtPlugin(() => {
     const appState = useAppState()
     const route = useRoute()
   
     const headers: [string, string][] = []
+    
     if (import.meta.server) {
       const cookie = useRequestHeader('cookie')
       if (cookie) { headers.push(['cookie', cookie]) }
     }
+
+    // JWT Section
+    const accessToken = useCookie(COOKIES.Access);
+
+    if(accessToken.value){
+      headers.push(['Authorization', `Bearer ${accessToken.value}` ])
+    }
+
     const $api = $fetch.create({
       headers,
       credentials: 'include',

@@ -27,6 +27,7 @@ interface Hotel {
 
 const {data} = useAPI<Root[]>('/hotels')
 
+
 </script>
 
 <template>

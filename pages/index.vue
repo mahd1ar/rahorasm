@@ -7,15 +7,17 @@ import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
 
 
+const {isHydrating} = useNuxtApp()
+
 
 </script>
 
 
 <template>
-    <main>
+    <main :style=" isHydrating && 'transform: scale(0.9);transform-origin: top;opacity: 0.7;'" >
         <!-- <ResponsiveDebugger /> -->
         
-        <section class="py-3 container px-4">
+        <section class="py-3 container px-4 mx-auto">
             <div class="flex align-items-center homeImg">
                 <div class="hidden lg:block lg:w-4/12 relative" data-aos="fade-left" data-aos-duration="1500">
                     <img src="/assets/images/home/intro.webp" class="w-full " />
@@ -147,7 +149,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
 
         <!-- home section -->
         <div class="container mx-auto rounded-3xl min-h-60 bg-dark grid grid-cols-2 text-white overflow-hidden">
-            <div class="bg-primary p-12">
+            <div class="bg-primary p-12 flex flex-col">
 
                 <h2 class="text-dark text-2xl relative font-bold asia-title inline-block h-24">
 
@@ -234,7 +236,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
                         </div>
                     </SplideSlide>
                 </Splide>
-                <div class="mt-10 text-dark">
+                <div class="mt-auto text-dark">
                     <div class="flex-center gap-4 font-bold text-xl">
                         مشاهده بیشتر
                         <Icon name="material-symbols:arrow-left-alt" size="24px" />
@@ -359,11 +361,11 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
                                         <path fill="currentColor"
                                             d="M512 512a96 96 0 1 0 0-192a96 96 0 0 0 0 192m0 64a160 160 0 1 1 0-320a160 160 0 0 1 0 320" />
                                     </svg>
-                                    <input type="text" class="w-full focus:outline-none py-1 text-sm"
+                                    <input type="text" class="w-full px-0 focus:ring-0  focus:outline-none border-none py-1 text-sm"
                                         placeholder="کشور مقصد">
                                 </div>
                                 <button
-                                    class="bg-primary mt-4 mb-2 text-white hover:text-black py-1 block retro-style w-full rounded">
+                                    class="bg-primary mt-4 mb-2 text-white  hover:text-black py-1 block retro-style w-full rounded">
                                     جستجو
                                 </button>
 

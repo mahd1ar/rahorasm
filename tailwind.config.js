@@ -1,11 +1,7 @@
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    './vueform.config.ts', // or where `vueform.config.js` is located. Change `.js` to `.ts` if required.
-    './node_modules/@vueform/vueform/themes/tailwind/**/*.vue',
-    './node_modules/@vueform/vueform/themes/tailwind/**/*.js'
-  ],
+  content: [],
   theme: {
     extend: {
       colors: {
@@ -23,7 +19,6 @@ export default {
   plugins: [
     // require('@tailwindcss/forms')
     require('tailwindcss-no-scrollbar'),
-    require('@vueform/vueform/tailwind'),
     require('@tailwindcss/forms'),    
   ],
 }

@@ -71,31 +71,31 @@ const handleSubmit = async (e: Event) => {
         <div class="flex gap-3 content-between items-center w-full">
           <div class="lg:w-3/12">
             <div class="flex bg-white p-1 items-center rounded gap-2">
-              <div class="shrink-0">
+              <div class="shrink-0 w-5 bg flex-center ">
                 <Icon name="ic:outline-location-on" style="color: gray" />
 
               </div>
-              <input placeholder="شهر مقصد" autocomplete="off" type="text" id="destination" class="w-full focus:outline-none"
+              <input placeholder="شهر مقصد" autocomplete="off" type="text" id="destination" class="w-full focus:outline-none border-none focus:border-none focus:ring-gray-200"
                 value="" />
             </div>
           </div>
           <div class="lg:w-3/12">
             <div class="flex bg-white p-1 items-center  rounded gap-2">
-              <div  class="shrink-0">
+              <div class="shrink-0 w-5 bg flex-center ">
 
                 <Icon name="hugeicons:moon-02" style="color: gray" />
               </div>
-              <input placeholder="تعداد شب" autocomplete="off" type="number" id="days" class="w-full focus:outline-none"
+              <input placeholder="تعداد شب" autocomplete="off" type="number" id="days" class="w-full focus:outline-none border-none focus:border-none focus:ring-gray-200"
                 v-model="days" />
             </div>
           </div>
           <div class="lg:w-3/12 ">
             <div class="flex bg-white p-1 items-center rounded gap-2">
-              <span>
+              <span class="shrink-0 w-5 bg flex-center ">
                 <Icon name="material-symbols:filter-alt-outline-sharp" style="color: gray" />
               </span>
 
-              <input placeholder="قیمت از" autocomplete="off" type="number" id="budget" class="w-full focus:outline-none"
+              <input placeholder="قیمت از" autocomplete="off" type="number" id="budget" class="w-full focus:outline-none border-none focus:border-none focus:ring-gray-200"
                 v-model="budget" />
             </div>
           </div>
@@ -112,7 +112,6 @@ const handleSubmit = async (e: Event) => {
 </template>
 
 <style scoped>
-
 
 
 [type=number] {

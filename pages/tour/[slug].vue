@@ -159,7 +159,7 @@ const info =  [
 <template>
   <main>
 
-    <section class="container mx-auto flex gap-4 items-start ">
+    <section class="container mx-auto flex gap-4 items-start mt-6">
 
 
 

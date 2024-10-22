@@ -17,7 +17,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
   tour_guide: string
   start_date: string
   end_date: string
-  price: string
+  least_price: string
   created_at: string
   edited_at: string
   package: number
@@ -119,7 +119,7 @@ const airlines = ref([
   }
 ])
 const route = useRoute()
-const { data } = useAPI<Root[]>('/tour/tours/',{
+const { data,status } = useAPI<Root[]>('/tour/tours/',{
   query: route.query
 })
 
@@ -161,7 +161,7 @@ const info =  [
 <template>
   <main>
 
-    <section class="container mx-auto flex gap-4 items-start mt-6">
+    <section id="main" class="container mx-auto flex gap-4 items-start mt-6">
 
 
 
@@ -298,12 +298,19 @@ const info =  [
 
           </div>
         </div>
+        
+        <LoadingIndicator v-if="status === 'pending'" />
         <TravelItemCard 
         v-for="d in data" :key="d.id"
         :id="d.id" :title="d.description"
-         :duration="d.tour_duration" :data="d.start_date" :price="d.price" :airline="d.airline.name"
+         :duration="d.tour_duration" :data="d.start_date" :price="d.least_price ? Intl.NumberFormat('fa-ir',{}).format(+d.least_price).replaceAll('٬','/') : '0' " :airline="d.airline.name"
          :info="[...info]"
          />
+
+         <div class="block text-center p-6" v-if="data && data.length === 0"  >
+          هیچ ایتمی برای نمایش وجود ندارد
+         </div>
+
       </div>
     </section>
   </main>

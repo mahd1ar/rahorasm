@@ -9,7 +9,7 @@ interface Info {
 }
 
 defineProps({
-  id: String,
+  id: Number,
   title: String,
   duration: String,
   date: String,

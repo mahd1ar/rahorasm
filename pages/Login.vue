@@ -10,6 +10,7 @@ const successMessage = ref("");
 const isLoading = ref(false);
 const errorOnValidateUsername = ref("")
 
+const { $api } = useNuxtApp()
 
 function validate(){
   if(!username.value.startsWith('09')){
@@ -48,26 +49,29 @@ const handleSubmit = async () => {
   isLoading.value = (true);
 
   try {
-    const response = await fetch("http://5.161.155.143/auth/login/request", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(userCredentials),
-    });
+    // const response = await fetch("http://5.161.155.143/auth/login/request", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify(userCredentials),
+    // });
 
-    const data = await response.json();
+    const response = await $api<any>('/auth/login/request',{
+      method: 'POST',
+      body : userCredentials
+    })
 
-    if (!response.ok) {
-      throw new Error(data.message || "ورود انجام نشد");
-    }
-
+    
     successMessage.value = ("ورود موفقیت آمیز بود!");
-    navigateTo('/');
+    
+    setTimeout(() => {  
+      navigateTo('/');
+    }, 1000);
+
   } catch (error) {
     errorMessage.value = ((error as Error).message);
-  } finally {
-    // Set loading state to false after the fetch call is complete
     isLoading.value = (false);
-  }
+  } 
+
 };
 
 onMounted(()=>{

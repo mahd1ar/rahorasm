@@ -13,7 +13,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
 
 <template>
     <main>
-        <ResponsiveDebugger />
+        <!-- <ResponsiveDebugger /> -->
         
         <section class="py-3 container px-4">
             <div class="flex align-items-center homeImg">
@@ -376,6 +376,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
 
                         ما را در شبکه های اجتماعی دنبال کنید
                     </div>
+                    <!-- Social Networks -->
                     <div class="mr-auto flex gap-4">
                         <!-- insta -->
                         <svg xmlns="http://www.w3.org/2000/svg"

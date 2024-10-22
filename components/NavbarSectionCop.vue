@@ -2,16 +2,7 @@
 
 import { vOnClickOutside } from '@vueuse/components'
 
-type Item = {
-  id: string | number,
-  name: string,
-  children?: Item[],
-  path?: string
-}
-
-defineProps({
-  items: { type: Array as PropType<Item[]>, default: () => [] }
-})
+const appState = useAppState()
 
 const l1 = ref('')
 const l2 = ref('')
@@ -48,9 +39,8 @@ function closeSubmenu() {
 
   <nav class="bg-[f8f9fa] border-gray-200 shadow-xl text-dark ">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-      <NuxtLink to="/" class="flex text-xl items-center gap-1 font-poppins  ">
-        <span class="self-center  font-semibold whitespace-nowrap ">ahorasm</span>
-        <div class=" text-white bg-dark rounded-full flex-center font-normal w-8 h-8">R</div>
+      <NuxtLink to="/" class="  ">
+      <LogoComponent />
       </NuxtLink>
       <button data-collapse-toggle="navbar-multi-level" type="button" @click="navIsOpen = !navIsOpen"
         class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
@@ -66,7 +56,7 @@ function closeSubmenu() {
         id="navbar-multi-level">
         <ul
           class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  text-dark ">
-          <li v-for="i in items" :key="i.id">
+          <li v-for="i in appState.navbar" :key="i.id">
 
             <template v-if="(i.children?.length || 0) > 0">
 

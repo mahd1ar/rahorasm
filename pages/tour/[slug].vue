@@ -2,23 +2,106 @@
 // @ts-ignore
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
 
-export interface Root {
-  id: string
+ interface Root {
+  id: number
+  airline: Airline
+  origin_airport: OriginAirport
+  destination_airport: DestinationAirport
   title: string
-  duration: string
-  date: string
-  airline: string
+  description: string
+  tour_type: string
+  is_featured: boolean
+  tour_duration: string
+  needed_documents: string
+  agency_service: string
+  tour_guide: string
+  start_date: string
+  end_date: string
   price: string
-  info: Info[]
+  created_at: string
+  edited_at: string
+  package: number
 }
 
-export interface Info {
+ interface Airline {
   id: number
-  turn: string
-  retunTime: string
-  packagePrice: string
-  path: string
+  name: string
+  description: string
+  image: any
+  created_at: string
+  edited_at: string
 }
+
+ interface OriginAirport {
+  id: number
+  city: City
+  name: string
+  short_name: string
+  created_at: string
+  edited_at: string
+}
+
+ interface City {
+  id: number
+  country: Country
+  name: string
+  description: string
+  created_at: string
+  edited_at: string
+}
+
+ interface Country {
+  id: number
+  continent: Continent
+  name: string
+  description: string
+  created_at: string
+  edited_at: string
+}
+
+ interface Continent {
+  id: number
+  name: string
+  description: string
+  created_at: string
+  edited_at: string
+}
+
+ interface DestinationAirport {
+  id: number
+  city: City2
+  name: string
+  short_name: string
+  created_at: string
+  edited_at: string
+}
+
+ interface City2 {
+  id: number
+  country: Country2
+  name: string
+  description: string
+  created_at: string
+  edited_at: string
+}
+
+ interface Country2 {
+  id: number
+  continent: Continent2
+  name: string
+  description: string
+  created_at: string
+  edited_at: string
+}
+
+ interface Continent2 {
+  id: number
+  name: string
+  description: string
+  created_at: string
+  edited_at: string
+}
+
 
 
 const priceRange = ref([5, 30])
@@ -36,7 +119,7 @@ const airlines = ref([
   }
 ])
 
-const { data } = useAPI<Root[]>('/travelsInfo')
+const { data } = useAPI<Root[]>('/tour/tours/?continent=آسیا')
 
 const sortItems = [
   '  پیشنهاد راه و رسم',
@@ -46,6 +129,30 @@ const sortItems = [
   'بیشترین مدت',
   '  گران ترین'
 ]
+
+const info =  [
+      {
+        "id": 57,
+        "turn": "پنجشنبه 1403/05/06",
+        "retunTime": "چهارشنبه 1403/05/10",
+        "packagePrice": "14/800/000",
+        "path": "/asia-tour-استانبول-1403-05-06-01"
+      },
+      {
+        "id": 102,
+        "turn": "پنجشنبه 1403/05/16",
+        "retunTime": "چهارشنبه 1403/05/20",
+        "packagePrice": "15/900/000",
+        "path": "/asia-tour-استانبول-1403-05-16-02"
+      },
+      {
+        "id": 38,
+        "turn": "دوشنبه 1403/05/26",
+        "retunTime": "چهارشنبه 1403/05/30",
+        "packagePrice": "17/100/000",
+        "path": "/asia-tour-استانبول-1403-05-06-01"
+      }
+    ]
 
 </script>
 
@@ -178,9 +285,7 @@ const sortItems = [
                     height: '6rem',
                   },
                 },
-              }" @splide:dragged="e=> {
-                console.log(e.index)
-              }" aria-label="Sort items" class="w-full">
+              }"  aria-label="Sort items" class="w-full">
                 <SplideSlide v-for="i in sortItems" class="w-auto" :key="i">
                   <button type="button" class=" flex-center py-2 btn whitespace-pre rounded-md block w-full">
                     {{ i }}
@@ -191,7 +296,12 @@ const sortItems = [
 
           </div>
         </div>
-        <TravelItemCard v-for="d in data" :key="d.id" v-bind="{ ...d }" />
+        <TravelItemCard 
+        v-for="d in data" :key="d.id"
+        :id="d.id" :title="d.description"
+         :duration="d.tour_duration" :data="d.start_date" :price="d.price" :airline="d.airline.name"
+         :info="[...info]"
+         />
       </div>
     </section>
   </main>

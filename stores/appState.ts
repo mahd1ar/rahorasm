@@ -1,10 +1,18 @@
 import { defineStore } from 'pinia'
 
-type User = {
+export type User = {
     id: string,
     name: string,
     phone: string
 }
+
+export interface NavbarItem {
+  id: number
+  name: string
+  path?: string
+  children?: NavbarItem[]
+}
+
 
 export const useAppState = defineStore('appState', {
   state () {
@@ -13,15 +21,12 @@ export const useAppState = defineStore('appState', {
         id: '',
         name: '',
       } as User,
-
-      // Toasts state
-    //   _toasts: [] as Toast[],
-
-      // loading state
+      _navbar: [] as NavbarItem[] ,
       _isLoading: true
     }
   },
   getters: {
+    navbar: state => state._navbar,
     isAuth: state => !!state._user.id,
     user: state => ({ ...state._user }),
     isLoading: state => state._isLoading
@@ -39,6 +44,11 @@ export const useAppState = defineStore('appState', {
       }
     },
 
+    setNavbar(n: NavbarItem[]){
+      n.forEach(i => {
+        this._navbar.push(i)
+      })
+    },
 
     // loading actions
     toggleLoading (newVal?: boolean) {

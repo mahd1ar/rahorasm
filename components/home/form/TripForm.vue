@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
-import AOS from 'aos';
+// import AOS from 'aos';
 
-onMounted(() => {
-  AOS.init(); // TODO probebly delete this
-})
+// onMounted(() => {
+//   AOS.init(); // TODO probebly delete this
+// })
 
 const destination = ref("");
 const days = ref("");

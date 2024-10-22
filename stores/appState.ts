@@ -1,33 +1,8 @@
 import { defineStore } from 'pinia'
 
-interface Failed {
-  detail: string
-  code: string
-  messages: Message[]
-}
-
-interface Success {
-  payload: Payload
-}
-
-export interface Payload {
-  id: number
-  name: any
-  phone_number: string
-  email: any
-  is_staff: boolean
-}
-
-
- interface Message {
-  token_class: string
-  token_type: string
-  message: string
-}
-
 
 export type User = {
-    id: string,
+    id: number,
     name: string,
     phone: string
 }
@@ -44,7 +19,7 @@ export const useAppState = defineStore('appState', {
   state () {
     return {
       _user: {
-        id: '',
+        id: 0,
         name: '',
       } as User,
       _navbar: [] as NavbarItem[] ,
@@ -64,18 +39,11 @@ export const useAppState = defineStore('appState', {
     },
     deleteUser () {
       this._user = {
-        id: '',
+        id: 0,
         name: '',
         phone: ''
       }
     },
-
-    fetchUser(){
-
-      
-
-    },
-
     setNavbar(n: NavbarItem[]){
       n.forEach(i => {
         this._navbar.push(i)

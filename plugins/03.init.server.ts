@@ -8,7 +8,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     try {
         
         const res = await $api<NavbarItem[]>('/tour/navbar/')
-    
+    console.log(res)
         appState.setNavbar(res)
     } catch (error) {
         console.log(error)

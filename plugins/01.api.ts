@@ -1,4 +1,5 @@
 import { COOKIES } from "~/data/types";
+import { timeout } from "~/utils";
 
 export default defineNuxtPlugin(() => {
     const appState = useAppState()
@@ -23,6 +24,7 @@ export default defineNuxtPlugin(() => {
       credentials: 'include',
       baseURL: 'https://rahorasm.msdcorporation.top',
       onResponseError (ctx) {
+        
         if (ctx.response.status === 401) {
           navigateTo({ path: '/login', query: { go: route.fullPath } })
         }
@@ -34,7 +36,20 @@ export default defineNuxtPlugin(() => {
         //   })
         }
       },
-      onResponse (ctx) {
+      async onResponse (ctx) {
+
+        if (ctx.response.status === 401) {
+          try {
+            const newToken = await $();
+            accessToken.value = newToken;
+
+            options.headers = { Authorization: `Bearer ${newToken}` };
+            useFetch(url, options as UseFetchOptions<T>);
+          } catch (error) {
+            console.error("Token refresh failed:", error);
+          }
+        }
+
         if (ctx.response.ok && ctx.response._data.message) {
         //   appState.addToast({
         //     type: 'success',

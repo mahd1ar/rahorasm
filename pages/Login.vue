@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import { COOKIES } from '~/data/types';
+
+
+export interface Root {
+  refresh?: string
+  access?: string
+  message: string
+}
 
 const usernameInput = useTemplateRef('username-input')
 
@@ -11,6 +19,8 @@ const isLoading = ref(false);
 const errorOnValidateUsername = ref("")
 
 const { $api } = useNuxtApp()
+const accessTocken = useCookie(COOKIES.Access)
+const refreshTocken = useCookie(COOKIES.Refresh)
 
 function validate(){
   if(!username.value.startsWith('09')){
@@ -42,30 +52,34 @@ const handleSubmit = async () => {
   const userCredentials = {
     username,
     password,
-    expiresInMins: 30, // Optional, defaults to 60
+    // expiresInMins: 30, // Optional, defaults to 60
   };
 
   // Set loading state to true before the fetch call
   isLoading.value = (true);
 
   try {
-    // const response = await fetch("http://5.161.155.143/auth/login/request", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(userCredentials),
-    // });
+    
 
-    const response = await $api<any>('/auth/login/request',{
+    const response = await $api<Root>('/auth/login',{
       method: 'POST',
       body : userCredentials
     })
 
-    
-    successMessage.value = ("ورود موفقیت آمیز بود!");
-    
-    setTimeout(() => {  
-      navigateTo('/');
-    }, 1000);
+    if(response.access && response.refresh){
+
+      successMessage.value = response.message  || ("ورود موفقیت آمیز بود!");
+      
+      accessTocken.value = response.access
+      refreshTocken.value = response.refresh
+
+      setTimeout(() => {  
+        navigateTo('/');
+      }, 1000);
+      
+    }else {
+      errorMessage.value = response.message
+    }
 
   } catch (error) {
     errorMessage.value = ((error as Error).message);

@@ -1,5 +1,31 @@
 import { defineStore } from 'pinia'
 
+interface Failed {
+  detail: string
+  code: string
+  messages: Message[]
+}
+
+interface Success {
+  payload: Payload
+}
+
+export interface Payload {
+  id: number
+  name: any
+  phone_number: string
+  email: any
+  is_staff: boolean
+}
+
+
+ interface Message {
+  token_class: string
+  token_type: string
+  message: string
+}
+
+
 export type User = {
     id: string,
     name: string,
@@ -42,6 +68,12 @@ export const useAppState = defineStore('appState', {
         name: '',
         phone: ''
       }
+    },
+
+    fetchUser(){
+
+      
+
     },
 
     setNavbar(n: NavbarItem[]){

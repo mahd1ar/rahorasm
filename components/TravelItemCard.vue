@@ -153,7 +153,7 @@ const expanded = ref(false)
                </strong>
           </div>
           <div class="lg:w-2/12 flex-center ">
-            <NuxtLink to="#" class="text-sm border border-dark rounded-md px-3 p-1 flex-center gap-1" >
+            <NuxtLink to="/tour/tours/1212" class="text-sm border border-dark rounded-md px-3 p-1 flex-center gap-1" >
               جزِییات
               <svg xmlns="http://www.w3.org/2000/svg" class="text-primary" width="0.44em" height="1em" viewBox="0 0 7 16"><path fill="currentColor" d="M5.5 13a.47.47 0 0 1-.35-.15l-4.5-4.5c-.2-.2-.2-.51 0-.71l4.5-4.49c.2-.2.51-.2.71 0s.2.51 0 .71L1.71 8l4.15 4.15c.2.2.2.51 0 .71c-.1.1-.23.15-.35.15Z"/></svg>
             </NuxtLink>

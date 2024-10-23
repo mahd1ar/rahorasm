@@ -61,7 +61,7 @@ const hotels = ref([
 
   <main class="bg-gray-50 h-full">
 
-    <div class="container mx-auto flex gap-4 pt-6  h-full items-start">
+    <div class="container mx-auto flex gap-4 my-6  h-full items-start">
 
       <aside class="w-3/12 shrink-0  p-6 rounded-md border bg-white">
         <h3 class="text-xl">

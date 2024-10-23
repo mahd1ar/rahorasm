@@ -11,6 +11,7 @@
         <slot />
       </div>
     </div>
+    <FooterSection />
   </div>
 </template>
 

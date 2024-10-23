@@ -105,15 +105,15 @@ function closeSubmenu() {
                               <div id="doubleDropdown" :class="l3 && iii.name === l3 ? 'md:absolute relative' : 'hidden'"
                                 class="z-10 divide-y bg-gray-300 md:bg-white border border-gray-300 divide-gray-100 rounded-lg  w-full md:w-44 left-0  lg:-translate-x-full lg:-translate-y-10 ">
                                 <ul class="py-2 text-sm  " aria-labelledby="doubleDropdownButton">
-                                  <li v-for="iiii in iii.children" :key="iiii.id">
+                                  <li @click="closeSubmenu" v-for="iiii in iii.children" :key="iiii.id">
                                     <NuxtLink :to="iiii.path ||'#'" class="block px-4 py-2 hover:bg-white ">{{ iiii.name }}</NuxtLink>
                                   </li>
 
                                 </ul>
                               </div>
                             </li>
-                            <li :key="i.id + '01'" v-else>
-                              <NuxtLink :to=" i.path || '#'" class="block px-4 py-2 hover:bg-white ">
+                            <li @click="closeSubmenu" :key="i.id + '01'" v-else>
+                              <NuxtLink  :to=" i.path || '#'" class="block px-4 py-2 hover:bg-white ">
                                 {{ iii.name }}
                               </NuxtLinK>
                             </li>
@@ -123,7 +123,7 @@ function closeSubmenu() {
 
                       </div>
                     </li>
-                    <li :key="ii.id + '01'" v-else>
+                    <li @click="closeSubmenu" :key="ii.id + '01'" v-else>
                       <NuxtLink :to=" ii.path || '#'" class="block px-4 py-2 hover:bg-gray-100 ">
                         {{ ii.name }}
                       </NuxtLink>

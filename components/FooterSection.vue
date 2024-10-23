@@ -1,5 +1,18 @@
 <script setup lang="ts">
 import LogoComponent from './LogoComponent.vue'
+
+const col1 = ref([
+  'استانبول',
+  'امارات',
+  'هند',
+  'فرانسه',
+  'گرجستان',
+  'ایتالیا',
+  'تایلند',
+  'اسپانیا',
+])
+
+
 </script>
 
 <template>
@@ -60,8 +73,9 @@ import LogoComponent from './LogoComponent.vue'
                   </span>
                   02145246
                 </strong>
-                <p class="flex gap-2 items-start" >
-                  <span class="text-primary ml-2 shrink-0 bg-gray-50 border w-6 h-6 rounded-full inline-flex flex-center">
+                <p class="flex gap-2 items-start">
+                  <span
+                    class="text-primary ml-2 shrink-0 bg-gray-50 border w-6 h-6 rounded-full inline-flex flex-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                       <path fill="currentColor"
                         d="M12 11.5A2.5 2.5 0 0 1 9.5 9A2.5 2.5 0 0 1 12 6.5A2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7" />
@@ -70,8 +84,9 @@ import LogoComponent from './LogoComponent.vue'
                   آدرس: تهران - خیابان جردن (خیابان نلسون ماندلا) - خیابان ناهید
                   غربی - پلاک 38 - طبقه سوم - واحد 16
                 </p>
-                <p class="flex gap-2 items-start" >
-                  <span class="text-primary ml-2 shrink-0 bg-gray-50 border w-6 h-6 rounded-full inline-flex flex-center">
+                <p class="flex gap-2 items-start">
+                  <span
+                    class="text-primary ml-2 shrink-0 bg-gray-50 border w-6 h-6 rounded-full inline-flex flex-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                       <path fill="currentColor"
                         d="M17 3.34a10 10 0 1 1-14.995 8.984L2 12l.005-.324A10 10 0 0 1 17 3.34M12 6a1 1 0 0 0-.993.883L11 7v5l.009.131a1 1 0 0 0 .197.477l.087.1l3 3l.094.082a1 1 0 0 0 1.226 0l.094-.083l.083-.094a1 1 0 0 0 0-1.226l-.083-.094L13 11.585V7l-.007-.117A1 1 0 0 0 12 6" />
@@ -81,8 +96,9 @@ import LogoComponent from './LogoComponent.vue'
                   ساعت کاری آژانس: شنبه تا چهارشنبه 09:30 الی 17:30 پنج شنبه ها
                   09:30 الی 14:00
                 </p>
-                <p class="flex gap-2 items-start" >
-                  <span class="text-primary ml-2 shrink-0 bg-gray-50 border w-6 h-6 rounded-full inline-flex flex-center">
+                <p class="flex gap-2 items-start">
+                  <span
+                    class="text-primary ml-2 shrink-0 bg-gray-50 border w-6 h-6 rounded-full inline-flex flex-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                       <path fill="currentColor"
                         d="m6.68 3.32l.613-.613a1 1 0 0 1 1.414 0l2.586 2.586a1 1 0 0 1 0 1.414L9.5 8.5a.98.98 0 0 0-.183 1.133a11.3 11.3 0 0 0 5.05 5.05a.98.98 0 0 0 1.133-.184l1.793-1.792a1 1 0 0 1 1.414 0l2.586 2.586a1 1 0 0 1 0 1.414l-.613.613a6 6 0 0 1-7.843.558l-1.208-.907a23 23 0 0 1-4.6-4.6l-.907-1.208A6 6 0 0 1 6.68 3.32" />
@@ -92,8 +108,9 @@ import LogoComponent from './LogoComponent.vue'
                   <br />
                   همراه کاری : 09127335749
                 </p>
-                <p class="flex gap-2 items-start" >
-                  <span class="text-primary ml-2 shrink-0 bg-gray-50 border w-6 h-6 rounded-full inline-flex flex-center">
+                <p class="flex gap-2 items-start">
+                  <span
+                    class="text-primary ml-2 shrink-0 bg-gray-50 border w-6 h-6 rounded-full inline-flex flex-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                       <path fill="currentColor"
                         d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25a.85.85 0 1 1 .9-1.44L12 11l6.7-4.19a.85.85 0 1 1 .9 1.44" />
@@ -149,87 +166,52 @@ import LogoComponent from './LogoComponent.vue'
           </div>
 
           <div class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-3">
+
+
             <div>
-              <p class="font-medium text-gray-900">Services</p>
+              <p class="font-medium text-gray-900">جاذبه های گردشگری
+              </p>
 
               <ul class="mt-6 space-y-4 text-sm">
-                <li>
+                <li v-for="i in col1" :key="i">
                   <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    1on1 Coaching
+                    جاذبه های گردشگری
+                    {{ i }}
                   </a>
                 </li>
 
-                <li>
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    Company Review
-                  </a>
-                </li>
+              </ul>
+            </div>
 
-                <li>
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    Accounts Review
-                  </a>
-                </li>
 
-                <li>
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    HR Consulting
-                  </a>
-                </li>
+            <div>
+              <p class="font-medium text-gray-900">
+                اطلاعات
+                هتل ها
+              </p>
 
-                <li>
+              <ul class="mt-6 space-y-4 text-sm">
+                <li v-for="i in col1" :key="i">
                   <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    SEO Optimisation
+                    هتل های
+                    {{ i }}
                   </a>
                 </li>
               </ul>
             </div>
 
             <div>
-              <p class="font-medium text-gray-900">Company</p>
+              <p class="font-medium text-gray-900">پربازدید ترین تورها</p>
 
               <ul class="mt-6 space-y-4 text-sm">
-                <li>
+                <li v-for="i in col1" :key="i">
                   <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    About
+                    تورهای
+                    {{ i }}
                   </a>
                 </li>
 
-                <li>
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    Meet the Team
-                  </a>
-                </li>
 
-                <li>
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    Accounts Review
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <p class="font-medium text-gray-900">Helpful Links</p>
-
-              <ul class="mt-6 space-y-4 text-sm">
-                <li>
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    Contact
-                  </a>
-                </li>
-
-                <li>
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    FAQs
-                  </a>
-                </li>
-
-                <li>
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    Live Chat
-                  </a>
-                </li>
               </ul>
             </div>
           </div>
@@ -256,7 +238,8 @@ import LogoComponent from './LogoComponent.vue'
             </ul>
 
             <p class="mt-8 text-xs text-gray-500">
-              &copy; {{ new Date().toLocaleDateString('fa-ir',{ year: 'numeric' }) }}. Company Name. All rights reserved.
+              &copy; {{ new Date().toLocaleDateString('fa-ir', { year: 'numeric' }) }}. Company Name. All rights
+              reserved.
             </p>
           </div>
         </div>

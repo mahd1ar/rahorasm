@@ -2,37 +2,50 @@
 // @ts-ignore
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
 
- interface Root {
+export type Root = Root2[]
+
+export interface Root2 {
   id: number
   airline: Airline
-  origin_airport: OriginAirport
-  destination_airport: DestinationAirport
+  flights: Flight[]
   title: string
   description: string
   tour_type: string
-  is_featured: boolean
-  tour_duration: string
   needed_documents: string
   agency_service: string
   tour_guide: string
-  start_date: string
-  end_date: string
+  tour_duration: string
+  is_featured: boolean
   least_price: string
   created_at: string
   edited_at: string
-  package: number
+  destination: number
 }
 
- interface Airline {
+export interface Airline {
   id: number
   name: string
-  description: string
-  image: any
   created_at: string
   edited_at: string
 }
 
- interface OriginAirport {
+export interface Flight {
+  id: number
+  origin_airport: OriginAirport
+  destination_airport: DestinationAirport
+  return_origin_airport: ReturnOriginAirport
+  return_destination_airport: ReturnDestinationAirport
+  departure: string
+  arrival: string
+  return_departure: string
+  return_arrival: string
+  start_price: string
+  created_at: string
+  edited_at: string
+  tour: number
+}
+
+export interface OriginAirport {
   id: number
   city: City
   name: string
@@ -41,33 +54,30 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
   edited_at: string
 }
 
- interface City {
+export interface City {
   id: number
   country: Country
   name: string
-  description: string
   created_at: string
   edited_at: string
 }
 
- interface Country {
+export interface Country {
   id: number
   continent: Continent
   name: string
-  description: string
   created_at: string
   edited_at: string
 }
 
- interface Continent {
+export interface Continent {
   id: number
   name: string
-  description: string
   created_at: string
   edited_at: string
 }
 
- interface DestinationAirport {
+export interface DestinationAirport {
   id: number
   city: City2
   name: string
@@ -76,32 +86,92 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
   edited_at: string
 }
 
- interface City2 {
+export interface City2 {
   id: number
   country: Country2
   name: string
-  description: string
   created_at: string
   edited_at: string
 }
 
- interface Country2 {
+export interface Country2 {
   id: number
   continent: Continent2
   name: string
-  description: string
   created_at: string
   edited_at: string
 }
 
- interface Continent2 {
+export interface Continent2 {
   id: number
   name: string
-  description: string
   created_at: string
   edited_at: string
 }
 
+export interface ReturnOriginAirport {
+  id: number
+  city: City3
+  name: string
+  short_name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface City3 {
+  id: number
+  country: Country3
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Country3 {
+  id: number
+  continent: Continent3
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Continent3 {
+  id: number
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface ReturnDestinationAirport {
+  id: number
+  city: City4
+  name: string
+  short_name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface City4 {
+  id: number
+  country: Country4
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Country4 {
+  id: number
+  continent: Continent4
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Continent4 {
+  id: number
+  name: string
+  created_at: string
+  edited_at: string
+}
 
 
 const priceRange = ref([5, 30])
@@ -118,8 +188,10 @@ const airlines = ref([
     count: 11
   }
 ])
+
+
 const route = useRoute()
-const { data,status } = useAPI<Root[]>('/tour/tours/',{
+const { data, status } = useAPI<Root>('/tour/tours/', {
   query: route.query
 })
 
@@ -132,29 +204,29 @@ const sortItems = [
   '  گران ترین'
 ]
 
-const info =  [
-      {
-        "id": 57,
-        "turn": "پنجشنبه 1403/05/06",
-        "retunTime": "چهارشنبه 1403/05/10",
-        "packagePrice": "14/800/000",
-        "path": "/asia-tour-استانبول-1403-05-06-01"
-      },
-      {
-        "id": 102,
-        "turn": "پنجشنبه 1403/05/16",
-        "retunTime": "چهارشنبه 1403/05/20",
-        "packagePrice": "15/900/000",
-        "path": "/asia-tour-استانبول-1403-05-16-02"
-      },
-      {
-        "id": 38,
-        "turn": "دوشنبه 1403/05/26",
-        "retunTime": "چهارشنبه 1403/05/30",
-        "packagePrice": "17/100/000",
-        "path": "/asia-tour-استانبول-1403-05-06-01"
-      }
-    ]
+const info = [
+  {
+    "id": 57,
+    "turn": "پنجشنبه 1403/05/06",
+    "retunTime": "چهارشنبه 1403/05/10",
+    "packagePrice": "14/800/000",
+    "path": "/asia-tour-استانبول-1403-05-06-01"
+  },
+  {
+    "id": 102,
+    "turn": "پنجشنبه 1403/05/16",
+    "retunTime": "چهارشنبه 1403/05/20",
+    "packagePrice": "15/900/000",
+    "path": "/asia-tour-استانبول-1403-05-16-02"
+  },
+  {
+    "id": 38,
+    "turn": "دوشنبه 1403/05/26",
+    "retunTime": "چهارشنبه 1403/05/30",
+    "packagePrice": "17/100/000",
+    "path": "/asia-tour-استانبول-1403-05-06-01"
+  }
+]
 
 </script>
 
@@ -287,7 +359,7 @@ const info =  [
                     height: '6rem',
                   },
                 },
-              }"  aria-label="Sort items" class="w-full">
+              }" aria-label="Sort items" class="w-full">
                 <SplideSlide v-for="i in sortItems" class="w-auto" :key="i">
                   <button type="button" class=" flex-center py-2 btn whitespace-pre rounded-md block w-full">
                     {{ i }}
@@ -298,18 +370,28 @@ const info =  [
 
           </div>
         </div>
-        
-        <LoadingIndicator v-if="status === 'pending'" />
-        <TravelItemCard 
-        v-for="d in data" :key="d.id"
-        :id="d.id" :title="d.description"
-         :duration="d.tour_duration" :data="d.start_date" :price="d.least_price ? Intl.NumberFormat('fa-ir',{}).format(+d.least_price).replaceAll('٬','/') : '0' " :airline="d.airline.name"
-         :info="[...info]"
-         />
 
-         <div class="block text-center p-6" v-if="data && data.length === 0"  >
+
+        <LoadingIndicator v-if="status === 'pending'" />
+
+        <template v-else>
+
+          <TravelItemCard v-for="d in data || []" :key="d.id" :id="d.id" :title="d.title" :duration="d.tour_duration"
+            :data="d.start_date"
+            :price="d.least_price ? Intl.NumberFormat('fa-ir', {}).format(+d.least_price).replaceAll('٬', '/') : '0'"
+            :info="d.flights.map(f => ({
+              id: f.id,
+              turn: f.departure,
+              retunTime: f.return_departure,
+              packagePrice: f.start_price,
+              path: '/tour/details/' + f.id,
+              airline: f.origin_airport.city.country.name
+            }))" />
+        </template>
+
+        <div class="block text-center p-6" v-if="data && data.length === 0">
           هیچ ایتمی برای نمایش وجود ندارد
-         </div>
+        </div>
 
       </div>
     </section>

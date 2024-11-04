@@ -13,6 +13,8 @@ const usernameInput = useTemplateRef('name_')
 
 const { $api, $fetchUserData, $swal } = useNuxtApp()
 
+const redirectTo = useRouteParams<string>('go','/')
+
 const mode = ref<1 | 2>(1)
 const username = ref("");
 const name = ref("");
@@ -23,21 +25,57 @@ const OTP = ref('');
 const errorMessage = ref("");
 const successMessage = ref("");
 const isLoading = ref(false);
-const errorOnValidateUsername = ref("")
 
+function convertToEnglishNumbers(input: string): string {
+  const farsiToEnglish = {
+    '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', 
+    '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9'
+  };
+
+  const arabicToEnglish = {
+    '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', 
+    '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'
+  };
+//@ts-ignore
+return input.replace(/[۰-۹]/g, char => farsiToEnglish[char])
+//@ts-ignore
+              .replace(/[٠-٩]/g, char => arabicToEnglish[char]);
+}
 
 function validate() {
-  if (!username.value.startsWith('09')) {
 
-    errorOnValidateUsername.value = 'شماره موبایل باید با 09 شروع بشود'
-    return false
+  if (mode.value === 1) {
+const usernameValue = convertToEnglishNumbers(username.value)
+    if (!usernameValue.startsWith('09')) {
+
+      errorMessage.value = 'شماره موبایل باید با 09 شروع بشود'
+      return false
+    }
+
+    if (usernameValue.trim().length !== 11) {
+
+      errorMessage.value = 'شماره موبایل وارد شده معتبر نیست'
+      return false
+    }
+
+    if (password.value.trim() !== confirmPassword.value.trim()) {
+
+      errorMessage.value = 'رمز عبور و تکرار آن یکسان نیست'
+      return false
+    }
+
   }
 
-  if (username.value.trim().length !== 11) {
+  if (mode.value === 2) {
 
-    errorOnValidateUsername.value = 'شماره موبایل وارد شده معتبر نیست'
-    return false
+    if (OTP.value.trim().length !== 6) {
+
+      errorMessage.value = 'رمز یکبار مصرف وارد شده معتبر نیست'
+      return false
+    }
   }
+
+  errorMessage.value = ''
 
   return true
 
@@ -64,7 +102,7 @@ const handleSubmit2 = async () => {
 
     console.log(data)
     $swal.success('ثبت نام با موفقیت انجام شد')
-    navigateTo('/')
+    navigateTo(redirectTo.value)
 
   } catch (error) {
     $swal.error('خطا در ثبت نام')
@@ -182,7 +220,8 @@ onMounted(() => {
             </div>
 
 
-            <button class="btn w-full p-2 rounded-lg retro-style mb-2" type="submit" :disabled="isLoading">
+            <button class="btn w-full p-2 rounded-lg retro-style mb-2 disabled:bg-gray-300 disabled:opacity-50 "
+              type="submit" :disabled="isLoading">
               ثبت و ادامه
             </button>
 
@@ -220,8 +259,7 @@ onMounted(() => {
         </div>
         <div class="form-left rounded-xl rounded-t-none sm:rounded-l-xl sm:rounded-r-none w-full sm:w-1/2">
 
-          <img class="w-full h-full object-cover"
-            src="https://images.unsplash.com/photo-1471506480208-91b3a4cc78be?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          <img class="w-full h-full object-cover" src="/assets/images/login/photo-1471506480208-91b3a4cc78be.jpg"
             alt="">
         </div>
       </div>

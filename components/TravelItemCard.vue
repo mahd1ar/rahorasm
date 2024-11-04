@@ -6,6 +6,7 @@ interface Info {
   retunTime: string
   packagePrice: string
   path: string
+  airline: String,
 }
 
 defineProps({
@@ -13,7 +14,6 @@ defineProps({
   title: String,
   duration: String,
   date: String,
-  airline: String,
   price: String,
   info: {
     type: Array as PropType<Info[]>,
@@ -80,7 +80,7 @@ const expanded = ref(false)
             <path fill="currentColor"
               d="M20.56 3.91c.59.59.59 1.54 0 2.12l-3.89 3.89l2.12 9.19l-1.41 1.42l-3.88-7.43L9.6 17l.36 2.47l-1.07 1.06l-1.76-3.18l-3.19-1.77L5 14.5l2.5.37L11.37 11L3.94 7.09l1.42-1.41l9.19 2.12l3.89-3.89c.56-.58 1.56-.58 2.12 0" />
           </svg>
-          <span> {{ airline }} شب </span>
+          <span> 121212 شب </span>
         </div>
 
         <div class="h-1/2 flex gap-2 items-center p-2">
@@ -117,12 +117,13 @@ const expanded = ref(false)
 
     </div>
     <Transition>
-      <div v-if="expanded" :style="{'--items-count' : info.length}" class="bg-[#fcfcfd] divide-y-2 divide-gray-100 border border-gray-50 shadow-lg rounded-md mt-2" >
-      
-        <div v-for="inf in info" :key="inf.id"  class="flex p-4">
-        
+      <div v-if="expanded" :style="{ '--items-count': info.length }"
+        class="bg-[#fcfcfd] divide-y-2 divide-gray-100 border border-gray-50 shadow-lg rounded-md mt-2">
+
+        <div v-for="inf in info" :key="inf.id" class="flex p-4">
+
           <div class="lg:w-2/12 flex-center">
-        
+
             <img class="w-16" src="/assets/images/tours/dateTravel.webp" alt="">
           </div>
           <div class="lg:w-1/12 flex-center">
@@ -135,30 +136,37 @@ const expanded = ref(false)
           </div>
           <div class="lg:w-4/12 flex-center flex flex-col items-start gap-4 pr-4">
             <div>
-              <span class="block font-normal text-gray-600" > تاریخ رفت :</span>
-              
-              <strong>  {{ inf.retunTime }} </strong>
+              <span class="block font-normal text-gray-600"> تاریخ رفت :</span>
+
+              <strong> {{ inf.retunTime }} </strong>
             </div>
             <div>
-              <span class="block font-normal text-gray-600" > برگشت رفت: </span>
-              
-              <strong>  {{ inf.turn }} </strong>
+              <span class="block font-normal text-gray-600"> برگشت رفت: </span>
+
+              <strong> {{ inf.turn }} </strong>
             </div>
           </div>
           <div class="lg:w-3/12  flex flex-col  justify-center">
-            <div class="text-gray-600" >قیمت </div>
-            <strong class="text-dark text-lg" >
+            <div class="text-gray-600">
+              قیمت
+              از
+            </div>
+            <strong class="text-dark text-lg">
               {{ inf.packagePrice }}
-               ت 
-               </strong>
+              ت
+            </strong>
           </div>
           <div class="lg:w-2/12 flex-center ">
-            <NuxtLink to="/tour/tours/1212" class="text-sm border border-dark rounded-md px-3 p-1 flex-center gap-1" >
+            <NuxtLink :to="inf.path" class="text-sm border border-dark rounded-md px-3 p-1 flex-center gap-1">
               جزِییات
-              <svg xmlns="http://www.w3.org/2000/svg" class="text-primary" width="0.44em" height="1em" viewBox="0 0 7 16"><path fill="currentColor" d="M5.5 13a.47.47 0 0 1-.35-.15l-4.5-4.5c-.2-.2-.2-.51 0-.71l4.5-4.49c.2-.2.51-.2.71 0s.2.51 0 .71L1.71 8l4.15 4.15c.2.2.2.51 0 .71c-.1.1-.23.15-.35.15Z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" class="text-primary" width="0.44em" height="1em"
+                viewBox="0 0 7 16">
+                <path fill="currentColor"
+                  d="M5.5 13a.47.47 0 0 1-.35-.15l-4.5-4.5c-.2-.2-.2-.51 0-.71l4.5-4.49c.2-.2.51-.2.71 0s.2.51 0 .71L1.71 8l4.15 4.15c.2.2.2.51 0 .71c-.1.1-.23.15-.35.15Z" />
+              </svg>
             </NuxtLink>
           </div>
-        
+
         </div>
       </div>
     </Transition>
@@ -168,29 +176,32 @@ const expanded = ref(false)
 </template>
 
 <style scoped>
-
 /* Animation keyframes for sliding up */
 @keyframes slideUp {
-    from {
-      opacity: 1; /* Start invisible */
-      max-height: 0px;
-    }
-      to {
-        opacity: 1; /* End fully visible */
-        max-height: calc( var(--items-count) * 145px );
-    }
+  from {
+    opacity: 1;
+    /* Start invisible */
+    max-height: 0px;
+  }
+
+  to {
+    opacity: 1;
+    /* End fully visible */
+    max-height: calc(var(--items-count) * 145px);
+  }
 }
 
 /* Class to trigger the animation */
 .slide-up {
   overflow: hidden;
-    animation: slideUp 0.5s forwards; /* Apply the animation */
+  animation: slideUp 0.5s forwards;
+  /* Apply the animation */
 }
 
 .v-enter-active,
 .v-leave-active {
   transition: all 0.5s ease;
-  max-height: calc( var(--items-count) * 145px );
+  max-height: calc(var(--items-count) * 145px);
   /* max-height: calc( 3 * 145px ); */
   overflow: hidden;
 }

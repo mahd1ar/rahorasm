@@ -22,6 +22,7 @@ export default {
     },
      fontFamily: {
         yekan: ['yekan', 'sans-serif'],
+        shabnam: ['Shabnam', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif']
       },
   },

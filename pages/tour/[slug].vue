@@ -159,13 +159,13 @@ const info =  [
 </script>
 
 <template>
-  <main>
+  <main class="py-6 mb-4" >
 
-    <section id="main" class="container mx-auto flex gap-4 items-start my-6">
+    <section id="main" class="container mx-auto flex gap-4 items-start">
 
 
 
-      <aside class="w-3/12 shrink-0 bg-white shadow-md border border-gray-300 rounded-md flex flex-col gap-4 p-3 py-4">
+      <aside class="w-3/12 shrink-0 bg-white  border border-gray-300 rounded-md flex flex-col gap-4 p-3 py-4">
 
 
         <FilterCard title="توضیحات تور استانبول">
@@ -319,7 +319,8 @@ const info =  [
 
 <style scoped>
 main {
-  background: url("/assets/images/tours/hero-bg.svg") no-repeat;
-  background-size: contain;
+  background: url("/assets/images/tours/hero-bg.svg") no-repeat ;
+  background-position: right top;
+  background-size: cover;
 }
 </style>

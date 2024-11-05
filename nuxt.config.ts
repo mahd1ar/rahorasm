@@ -2,6 +2,15 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
+  app: {
+    head: {
+      link: [
+        {
+           href : "https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css" ,rel : "stylesheet", type : "text/css" 
+        }
+      ]
+    }
+  },
    devServer: {
     port: 3036
   },

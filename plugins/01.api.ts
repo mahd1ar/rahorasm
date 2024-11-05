@@ -32,17 +32,16 @@ export default defineNuxtPlugin(() => {
   const $api = $fetch.create({
     headers,
     credentials: 'include',
-    baseURL: 'https://rahorasm.msdcorporation.top',
+    baseURL: import.meta.dev ? 'http://192.168.1.54:8000' : 'https://rahorasm.msdcorporation.top',
     retry: 2,
-    onRequest(ctx){
+    onRequest(ctx) {
 
-      if(accessToken.value)
-      {
+      if (accessToken.value) {
         ctx.options.headers.delete('Authorization')
         ctx.options.headers.delete('authorization')
         ctx.options.headers.append('Authorization', `Bearer ${accessToken.value}`)
       }
-     
+
     },
     onResponseError(ctx) {
 

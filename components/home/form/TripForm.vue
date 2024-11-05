@@ -68,8 +68,8 @@ const handleSubmit = async (e: Event) => {
         <span class="text-2xl">سفرت رو با ما برنامه ریزی کن</span>
       </h5>
       <div class="mt-3" >
-        <div class="flex gap-3 content-between items-center w-full">
-          <div class="lg:w-3/12">
+        <div class="flex flex-col lg:flex-row gap-3 content-between items-center w-full">
+          <div class="w-full lg:w-3/12">
             <div class="flex bg-white p-1 items-center rounded gap-2">
               <div class="shrink-0 w-5 bg flex-center ">
                 <Icon name="ic:outline-location-on" style="color: gray" />
@@ -79,7 +79,7 @@ const handleSubmit = async (e: Event) => {
                 value="" />
             </div>
           </div>
-          <div class="lg:w-3/12">
+          <div class="w-full lg:w-3/12">
             <div class="flex bg-white p-1 items-center  rounded gap-2">
               <div class="shrink-0 w-5 bg flex-center ">
 
@@ -89,7 +89,7 @@ const handleSubmit = async (e: Event) => {
                 v-model="days" />
             </div>
           </div>
-          <div class="lg:w-3/12 ">
+          <div class="w-full lg:w-3/12 ">
             <div class="flex bg-white p-1 items-center rounded gap-2">
               <span class="shrink-0 w-5 bg flex-center ">
                 <Icon name="material-symbols:filter-alt-outline-sharp" style="color: gray" />

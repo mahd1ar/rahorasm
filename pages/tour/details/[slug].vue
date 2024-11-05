@@ -1,36 +1,221 @@
 <script setup lang="ts">
 
-const data = ref({
-  travel: [
-    {
-      type: 'start',
-      title: 'تهران | جمعه 23 شهریور',
-      srcAirport: {
-        code: "IKA",
-        title: 'فرودگاه بین المللی امام خمینی'
+export interface Root {
+  id: number
+  origin_airport: OriginAirport
+  destination_airport: DestinationAirport
+  return_origin_airport: ReturnOriginAirport
+  return_destination_airport: ReturnDestinationAirport
+  airline: Airline
+  tour: Tour
+  departure: string
+  arrival: string
+  return_departure: string
+  return_arrival: string
+  start_price: string
+  created_at: string
+  edited_at: string
+}
+
+export interface OriginAirport {
+  id: number
+  city: City
+  name: string
+  short_name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface City {
+  id: number
+  country: Country
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Country {
+  id: number
+  continent: Continent
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Continent {
+  id: number
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface DestinationAirport {
+  id: number
+  city: City2
+  name: string
+  short_name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface City2 {
+  id: number
+  country: Country2
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Country2 {
+  id: number
+  continent: Continent2
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Continent2 {
+  id: number
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface ReturnOriginAirport {
+  id: number
+  city: City3
+  name: string
+  short_name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface City3 {
+  id: number
+  country: Country3
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Country3 {
+  id: number
+  continent: Continent3
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Continent3 {
+  id: number
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface ReturnDestinationAirport {
+  id: number
+  city: City4
+  name: string
+  short_name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface City4 {
+  id: number
+  country: Country4
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Country4 {
+  id: number
+  continent: Continent4
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Continent4 {
+  id: number
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Airline {
+  id: number
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Tour {
+  id: number
+  title: string
+  description: string
+  tour_type: string
+  needed_documents: string
+  agency_service: string
+  tour_guide: string
+  tour_duration: string
+  is_featured: boolean
+  least_price: string
+  created_at: string
+  edited_at: string
+  destination: number
+}
+
+const param = useRouteParams('slug', 1, { transform: Number })
+
+const { data: apiData } = useAPI<Root>('/tour/flight/' + param.value + '/')
+
+const data = computed(() => {
+
+  if (!apiData.value) {
+    return {}
+  }
+
+  return {
+
+    travel: [
+      {
+        type: 'start',
+        title: new Date(apiData.value?.departure).toLocaleDateString('fa-ir', { dateStyle: 'full' }) + ' | ' + apiData.value?.origin_airport.city.name, // 'تهران | جمعه 23 شهریور',
+        srcAirport: {
+          code: apiData.value.origin_airport.short_name || '',
+          title: apiData.value.origin_airport.name || ''
+        },
+        destAirport: {
+          code: apiData.value.destination_airport.short_name || '',
+          title: apiData.value.destination_airport.name || ''
+        },
+        airline: { name: apiData.value.airline.name, logo: 'https://last-cdn.com//cdn/static/airlines/iranair--40x40xwt.png' },
+        time: new Date(apiData.value?.departure).toLocaleTimeString()
       },
-      destAirport: {
-        code: "IKA",
-        title: 'فرودگاه بین المللی امام خمینی'
-      }
-    },
-    {
-      type: 'residence',
-      title: 'استانبول |4 شب',
-      srcAirport: {
-        code: "IKA",
-        title: 'فرودگاه بین المللی امام خمینی'
+      {
+        type: 'residence',
+        title: new Date(apiData.value?.arrival).toLocaleDateString('fa-ir', { dateStyle: 'full' }) + ' | ' + apiData.value?.destination_airport.city.name, // 'تهران | جمعه 23 شهریور',
+        time: new Date(apiData.value?.return_departure).toLocaleTimeString(),
+
+        srcAirport: {
+          code: apiData.value.return_origin_airport.short_name || '',
+          title: apiData.value.return_origin_airport.name || ''
+        },
+        destAirport: {
+          code: apiData.value.return_destination_airport.short_name || '',
+          title: apiData.value.return_destination_airport.name || ''
+        },
+        airline: { name: apiData.value.airline.name, logo: apiData.value.airline.logo }
       },
-      destAirport: {
-        code: "IKA",
-        title: 'فرودگاه بین المللی امام خمینی'
-      }
-    },
-    {
-      type: 'end',
-      title: 'تهران | سه شنبه 28 شهریور',
-    },
-  ]
+      {
+        type: 'end',
+        title: new Date(apiData.value?.return_arrival).toLocaleDateString('fa-ir', { dateStyle: 'full' }) + ' | ' + apiData.value?.return_destination_airport.city.name, // 'تهران | جمعه 23 شهریور',
+      },
+    ]
+  }
 
 
 })
@@ -60,6 +245,7 @@ const hotels = ref([
 <template>
 
   <main class="bg-gray-50 h-full">
+
 
     <div class="container mx-auto flex gap-4 my-6  h-full items-start">
 
@@ -173,9 +359,11 @@ const hotels = ref([
                 </div>
                 <div class="w-2/12">
                   <div class="w-full flex-center flex-col gap-3">
-                    <strong class="">ایران ایر</strong>
+                    <strong class="">
+                      {{ i.airline.name }}
+                    </strong>
                     <div>
-                      <img src="https://last-cdn.com//cdn/static/airlines/iranair--40x40xwt.png" alt="">
+                      <img class="w-12" :src="i.airline.logo" alt="">
                     </div>
                   </div>
                 </div>
@@ -183,7 +371,7 @@ const hotels = ref([
                   <div class="w-full flex-center flex-col gap-3">
                     <strong class="">ساعت پرواز</strong>
                     <div class="text-gray-700">
-                      06:30
+                      {{ i.time }}
                     </div>
                   </div>
                 </div>

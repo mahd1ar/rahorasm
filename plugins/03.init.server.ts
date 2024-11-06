@@ -8,6 +8,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     try {
 
         const res = await $api<NavbarItem[]>('/tour/navbar/')
+        
         await $fetchUserData()
         
         if (Array.isArray(res))

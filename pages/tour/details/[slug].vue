@@ -1,267 +1,135 @@
 <script setup lang="ts">
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 
-export interface Root {
-  id: number
-  origin_airport: OriginAirport
-  destination_airport: DestinationAirport
-  return_origin_airport: ReturnOriginAirport
-  return_destination_airport: ReturnDestinationAirport
-  airline: Airline
-  tour: Tour
-  departure: string
-  arrival: string
-  return_departure: string
-  return_arrival: string
-  start_price: string
-  created_at: string
-  edited_at: string
-}
+const param = useRouteParams("slug", 1, { transform: Number });
 
-export interface OriginAirport {
-  id: number
-  city: City
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City {
-  id: number
-  country: Country
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country {
-  id: number
-  continent: Continent
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface DestinationAirport {
-  id: number
-  city: City2
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City2 {
-  id: number
-  country: Country2
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country2 {
-  id: number
-  continent: Continent2
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent2 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface ReturnOriginAirport {
-  id: number
-  city: City3
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City3 {
-  id: number
-  country: Country3
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country3 {
-  id: number
-  continent: Continent3
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent3 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface ReturnDestinationAirport {
-  id: number
-  city: City4
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City4 {
-  id: number
-  country: Country4
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country4 {
-  id: number
-  continent: Continent4
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent4 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Airline {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Tour {
-  id: number
-  title: string
-  description: string
-  tour_type: string
-  needed_documents: string
-  agency_service: string
-  tour_guide: string
-  tour_duration: string
-  is_featured: boolean
-  least_price: string
-  created_at: string
-  edited_at: string
-  destination: number
-}
-
-const param = useRouteParams('slug', 1, { transform: Number })
-
-const { data: apiData } = useAPI<Root>('/tour/flight/' + param.value + '/')
+const { data: apiData } = useAPI<TourDetailsAPI.Root>(
+  "/tour/flight/" + param.value
+);
 
 const data = computed(() => {
-
   if (!apiData.value) {
-    return {}
+    return {};
   }
 
   return {
-
     travel: [
       {
-        type: 'start',
-        title: new Date(apiData.value?.departure).toLocaleDateString('fa-ir', { dateStyle: 'full' }) + ' | ' + apiData.value?.origin_airport.city.name, // 'تهران | جمعه 23 شهریور',
+        type: "start",
+        title:
+          new Date(apiData.value?.departure).toLocaleDateString("fa-ir", {
+            dateStyle: "full",
+          }) +
+          " | " +
+          apiData.value?.origin_airport.city.name, // 'تهران | جمعه 23 شهریور',
         srcAirport: {
-          code: apiData.value.origin_airport.short_name || '',
-          title: apiData.value.origin_airport.name || ''
+          code: apiData.value.origin_airport.short_name || "",
+          title: apiData.value.origin_airport.name || "",
         },
         destAirport: {
-          code: apiData.value.destination_airport.short_name || '',
-          title: apiData.value.destination_airport.name || ''
+          code: apiData.value.destination_airport.short_name || "",
+          title: apiData.value.destination_airport.name || "",
         },
-        airline: { name: apiData.value.airline.name, logo: 'https://last-cdn.com//cdn/static/airlines/iranair--40x40xwt.png' },
-        time: new Date(apiData.value?.departure).toLocaleTimeString()
+        airline: {
+          name: apiData.value.airline.name,
+          logo: "https://last-cdn.com//cdn/static/airlines/iranair--40x40xwt.png",
+        },
+        time: new Date(apiData.value?.departure).toLocaleTimeString(),
       },
       {
-        type: 'residence',
-        title: new Date(apiData.value?.arrival).toLocaleDateString('fa-ir', { dateStyle: 'full' }) + ' | ' + apiData.value?.destination_airport.city.name, // 'تهران | جمعه 23 شهریور',
+        type: "residence",
+        title:
+          new Date(apiData.value?.arrival).toLocaleDateString("fa-ir", {
+            dateStyle: "full",
+          }) +
+          " | " +
+          apiData.value?.destination_airport.city.name, // 'تهران | جمعه 23 شهریور',
         time: new Date(apiData.value?.return_departure).toLocaleTimeString(),
 
         srcAirport: {
-          code: apiData.value.return_origin_airport.short_name || '',
-          title: apiData.value.return_origin_airport.name || ''
+          code: apiData.value.return_origin_airport.short_name || "",
+          title: apiData.value.return_origin_airport.name || "",
         },
         destAirport: {
-          code: apiData.value.return_destination_airport.short_name || '',
-          title: apiData.value.return_destination_airport.name || ''
+          code: apiData.value.return_destination_airport.short_name || "",
+          title: apiData.value.return_destination_airport.name || "",
         },
-        airline: { name: apiData.value.airline.name, logo: apiData.value.airline.logo }
+        airline: {
+          name: apiData.value.airline.name,
+          logo: apiData.value.airline.logo,
+        },
       },
       {
-        type: 'end',
-        title: new Date(apiData.value?.return_arrival).toLocaleDateString('fa-ir', { dateStyle: 'full' }) + ' | ' + apiData.value?.return_destination_airport.city.name, // 'تهران | جمعه 23 شهریور',
+        type: "end",
+        title:
+          new Date(apiData.value?.return_arrival).toLocaleDateString("fa-ir", {
+            dateStyle: "full",
+          }) +
+          " | " +
+          apiData.value?.return_destination_airport.city.name, // 'تهران | جمعه 23 شهریور',
       },
-    ]
-  }
-
-
-})
-
+    ],
+    tour: [
+      {
+        label: "نوع سفر",
+        value: apiData.value?.tour.tour_type,
+      },
+      {
+        label: "مدارک لازم",
+        value: apiData.value?.tour.needed_documents,
+      },
+      {
+        label: " خدمات آژانس",
+        value: apiData.value?.tour.agency_service,
+      },
+      {
+        label: " توضیحات",
+        value: apiData.value?.tour.description,
+      },
+      {
+        label: "مسئولین تور",
+        value: apiData.value?.tour.tour_guide,
+      },
+    ],
+  };
+});
 
 const hotels = ref([
   {
-    title: '2 تخته (هرنفر)',
-    price: '16/600/000'
+    title: "2 تخته (هرنفر)",
+    price: "16/600/000",
   },
   {
-    title: '1 تخته (هرنفر)',
-    price: '16/600/000'
+    title: "1 تخته (هرنفر)",
+    price: "16/600/000",
   },
   {
-    title: 'کودک با تخت (هرنفر)',
-    price: '16/600/000'
+    title: "کودک با تخت (هرنفر)",
+    price: "16/600/000",
   },
   {
-    title: 'کودک بدون تخت (هرنفر)',
-    price: '16/600/000'
+    title: "کودک بدون تخت (هرنفر)",
+    price: "16/600/000",
   },
-])
+]);
+
 
 </script>
 
 <template>
-
   <main class="bg-gray-50 h-full">
-
-
-    <div class="container mx-auto flex gap-4 my-6  h-full items-start">
-
-      <aside class="w-3/12 shrink-0  p-6 rounded-md border bg-white">
-        <h3 class="text-xl">
-          تاریخ تور ها
-        </h3>
-        <div class="flex flex-col gap-2 mt-2 relative ">
-          <div v-for="i in 4" :key="i" :class="i === 1 ? 'border-primary shadow bg-white ' : 'cursor-pointer'"
-            class="border p-2 rounded-lg flex justify-between items-center">
+    <div class="container mx-auto flex gap-4 my-6 h-full items-start">
+      <aside class="w-3/12 shrink-0 p-6 rounded-md border bg-white">
+        <h3 class="text-xl">تاریخ تور ها</h3>
+        <div class="flex flex-col gap-2 mt-2 relative">
+          <div v-for="i in 4" :key="i" :class="i === 1 ? 'border-primary shadow bg-white ' : 'cursor-pointer'
+            " class="border p-2 rounded-lg flex justify-between items-center">
             <div class="text-sm flex flex-col gap-1 py-2 text-right">
               <div>دوشنبه</div>
-              <div class="text-Secondary font-bold">19 شهریور </div>
+              <div class="text-Secondary font-bold">19 شهریور</div>
               <div class="text-gray-700">ساعت 07:30</div>
             </div>
-            <div class="flex-center text-xl  w-10 h-10 shrink-0">
+            <div class="flex-center text-xl w-10 h-10 shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                   <path stroke-dasharray="20" stroke-dashoffset="20" d="M21 12h-17.5">
@@ -275,14 +143,13 @@ const hotels = ref([
             </div>
             <div class="text-sm flex flex-col gap-1 py-2 text-left">
               <div>دوشنبه</div>
-              <div class="text-Secondary font-bold">19 شهریور </div>
+              <div class="text-Secondary font-bold">19 شهریور</div>
               <div class="text-gray-700">ساعت 07:30</div>
             </div>
           </div>
           <div
-            class="w-full h-20 absolute bottom-0 bg-gradient-to-t from-white via-white to-transparent flex flex-col justify-end text-center ">
-            <NuxtLink to="#" class="flex justify-end items-center gap-2 ">
-
+            class="w-full h-20 absolute bottom-0 bg-gradient-to-t from-white via-white to-transparent flex flex-col justify-end text-center">
+            <NuxtLink to="#" class="flex justify-end items-center gap-2">
               مشاهده تمام تور ها
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -291,16 +158,13 @@ const hotels = ref([
             </NuxtLink>
           </div>
         </div>
-        <hr class="my-6">
+        <hr class="my-6" />
         <EasyShoppingWithConsultant />
-
       </aside>
-      <div class="w-9/12  ">
-        <section class="p-6 rounded-md border bg-white flex flex-col gap-6 ">
-          <div v-for="(i, inx) in data.travel" :key="inx" class="flex flex-col gap-3 ">
-
+      <div class="w-9/12">
+        <section class="p-6 rounded-md border bg-white flex flex-col gap-6">
+          <div v-for="(i, inx) in data.travel" :key="inx" class="flex flex-col gap-3">
             <div class="flex">
-
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 shrink-0" viewBox="0 0 24 24">
                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z" />
@@ -314,19 +178,19 @@ const hotels = ref([
                   {{ i.title }}
                 </div>
               </div>
-
             </div>
             <div v-if="i.destAirport && i.srcAirport" lass="">
-              <div class="mr-14 flex gap-1 divide-x-2  divide-x-reverse">
+              <div class="mr-14 flex gap-1 divide-x-2 divide-x-reverse">
                 <div class="w-7/12 shrink-0 flex justify-between">
                   <div class="w-16 shrink-0">
-                    <strong class=" block">{{ i.srcAirport.code }}</strong>
+                    <strong class="block">{{ i.srcAirport.code }}</strong>
                     <p class="text-sm leading-6">
-                      {{ i.srcAirport.title }}</p>
+                      {{ i.srcAirport.title }}
+                    </p>
                   </div>
-                  <div class=" w-full flex items-center p-4 justify-center relative">
+                  <div class="w-full flex items-center p-4 justify-center relative">
                     <div class="w-full border-t-4 border-dotted border-gray-400 h-1" />
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 absolute" style="transform: rotate(225deg);"
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 absolute" style="transform: rotate(225deg)"
                       viewBox="0 0 64 64">
                       <path fill="#acb8bf"
                         d="m7.212 12.752l8.132-8.132l1.98 1.98l-8.132 8.132zm14.209 2.045l8.133-8.13l1.98 1.98l-8.133 8.13zM49.31 54.854l8.134-8.13l1.98 1.981l-8.134 8.13zm-2.031-14.297l8.134-8.13l1.98 1.981l-8.135 8.13z" />
@@ -351,7 +215,7 @@ const hotels = ref([
                     </svg>
                   </div>
                   <div class="w-16 shrink-0">
-                    <strong class=" block">{{ i.destAirport.code }}</strong>
+                    <strong class="block">{{ i.destAirport.code }}</strong>
                     <p class="text-sm leading-6">
                       {{ i.srcAirport.title }}
                     </p>
@@ -363,7 +227,7 @@ const hotels = ref([
                       {{ i.airline.name }}
                     </strong>
                     <div>
-                      <img class="w-12" :src="i.airline.logo" alt="">
+                      <img class="w-12" :src="i.airline.logo" alt="" />
                     </div>
                   </div>
                 </div>
@@ -381,16 +245,12 @@ const hotels = ref([
           </div>
         </section>
 
-        <h2 class="text-2xl mt-6 mb-4 font-bold">
-          لیست هتل ها و قیمت ها
-        </h2>
+        <h2 class="text-2xl mt-6 mb-4 font-bold">لیست هتل ها و قیمت ها</h2>
         <section class="p-6 rounded-md border bg-white flex flex-col gap-6 relative">
-
-
           <div class="relative">
             <div class="flex items-start gap-4">
               <img class="h-36 w-72 object-cover rounded-lg"
-                src="https://last-cdn.com/2023/01/04/6TgjIy1BpnxY32a2PjKdiUqQjlHkQUGelr7x3oIx.jpg" alt="">
+                src="https://last-cdn.com/2023/01/04/6TgjIy1BpnxY32a2PjKdiUqQjlHkQUGelr7x3oIx.jpg" alt="" />
               <div>
                 <h4 class="text-2xl flex flex-col gap-3">
                   Emmy Hotel Taksim
@@ -439,22 +299,16 @@ const hotels = ref([
                   <span> BB</span>
                 </div>
                 <div class="mt-2 text-primary">
-                  <span> 3
-                    شب
-                  </span>
-
+                  <span> 3 شب </span>
                 </div>
-
               </div>
             </div>
             <div class="w-full grid grid-cols-4 mt-4 gap-1 text-center">
               <div v-for="(h, inx) in hotels" :key="inx">
                 <div class="bg-background p-2 rounded-lg mb-2">
-
                   {{ h.title }}
                 </div>
-                <div class="text-gray-700 font-bold ">
-
+                <div class="text-gray-700 font-bold">
                   {{ h.price }}
                   تومان
                 </div>
@@ -462,6 +316,35 @@ const hotels = ref([
             </div>
           </div>
         </section>
+
+        <h2 class="text-2xl mt-6 mb-4 font-bold">اطلاعات تور</h2>
+
+        <div class="w-full">
+          <TabGroup>
+            <TabList class="flex space-x-1 rounded-xl bg-background text-black p-1">
+              <Tab v-for="(tab, inx) in data.tour || []" as="template" :key="inx" v-slot="{ selected }">
+                <button :class="[
+                  'w-full rounded-lg py-2.5 text-sm font-medium leading-5',
+                  'focus:outline-none focus:ring-0',
+                  selected
+                    ? 'bg-primary text-black shadow'
+                    : 'hover:text-primary',
+                ]">
+                  {{ tab.label }}
+                </button>
+              </Tab>
+            </TabList>
+
+            <TabPanels class="mt-2">
+              <TabPanel v-for="(posts, idx) in data.tour || []" :key="idx" :class="[
+                'rounded-xl bg-white p-3',
+                'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
+              ]">
+                <p v-html="posts.value" class="text-sm p-4 leading-6"></p>
+              </TabPanel>
+            </TabPanels>
+          </TabGroup>
+        </div>
       </div>
     </div>
   </main>

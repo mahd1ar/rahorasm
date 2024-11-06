@@ -28,3 +28,5 @@ if(appState.isLoading)
     </NuxtLayout>
   </div>
 </template>
+
+<style></style>

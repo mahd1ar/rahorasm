@@ -12,7 +12,8 @@ interface Info {
 defineProps({
   id: Number,
   title: String,
-  duration: String,
+  duration: Number,
+  airline: String,
   date: String,
   price: String,
   info: {
@@ -69,7 +70,7 @@ const expanded = ref(false)
             <path fill="currentColor" d="M13 6h10v2H13z" class="clr-i-outline clr-i-outline-path-16" />
             <path fill="none" d="M0 0h36v36H0z" />
           </svg>
-          <span> {{ date }} </span>
+          <span> {{ date &&  ' از ' +  new Date(date).toLocaleDateString('fa-IR') }} </span>
         </div>
       </div>
 
@@ -80,7 +81,9 @@ const expanded = ref(false)
             <path fill="currentColor"
               d="M20.56 3.91c.59.59.59 1.54 0 2.12l-3.89 3.89l2.12 9.19l-1.41 1.42l-3.88-7.43L9.6 17l.36 2.47l-1.07 1.06l-1.76-3.18l-3.19-1.77L5 14.5l2.5.37L11.37 11L3.94 7.09l1.42-1.41l9.19 2.12l3.89-3.89c.56-.58 1.56-.58 2.12 0" />
           </svg>
-          <span> 121212 شب </span>
+          <span>
+            {{ airline }}
+             </span>
         </div>
 
         <div class="h-1/2 flex gap-2 items-center p-2">
@@ -152,7 +155,7 @@ const expanded = ref(false)
               از
             </div>
             <strong class="text-dark text-lg">
-              {{ inf.packagePrice }}
+              {{ inf.packagePrice && Intl.NumberFormat('fa-ir', {}).format(+inf.packagePrice) }}
               ت
             </strong>
           </div>

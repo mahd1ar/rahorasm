@@ -36,7 +36,6 @@ function closeSubmenu() {
 
 <template>
 
-
   <nav class="bg-[f8f9fa] border-gray-200 shadow-xl text-dark ">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <NuxtLink to="/" class="  ">
@@ -113,7 +112,7 @@ function closeSubmenu() {
                               </div>
                             </li>
                             <li @click="closeSubmenu" :key="i.id + '01'" v-else>
-                              <NuxtLink  :to=" i.path || '#'" class="block px-4 py-2 hover:bg-white ">
+                              <NuxtLink  :to=" iii.path || '#'" class="block px-4 py-2 hover:bg-white ">
                                 {{ iii.name }}
                               </NuxtLinK>
                             </li>
@@ -135,7 +134,7 @@ function closeSubmenu() {
               </div>
             </template>
 
-            <NuxtLink :to="i.path && '#'" v-else class="block py-2 px-3 text-dark  rounded md:bg-transparent  md:p-0 "
+            <NuxtLink :to="i.path " v-else class="block py-2 px-3 text-dark  rounded md:bg-transparent  md:p-0 "
               aria-current="page">{{ i.name }}</NuxtLink>
 
 

@@ -2,201 +2,33 @@
 // @ts-ignore
 import { Splide, SplideSlide, } from '@splidejs/vue-splide';
 
-export type Root = Root2[]
+const order_by = useRouteQuery<string>('order_by', '')
+const city = useRouteQuery('city', '')
+const max_price = useRouteQuery('range_max', 0, { transform: Number })
+const least_price = useRouteQuery('range_min', 0, { transform: Number })
 
-export interface Root2 {
-  id: number
-  airline: Airline
-  flights: Flight[]
-  title: string
-  description: string
-  tour_type: string
-  needed_documents: string
-  agency_service: string
-  tour_guide: string
-  tour_duration: string
-  is_featured: boolean
-  least_price: string
-  created_at: string
-  edited_at: string
-  destination: number
-}
-
-export interface Airline {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Flight {
-  id: number
-  origin_airport: OriginAirport
-  destination_airport: DestinationAirport
-  return_origin_airport: ReturnOriginAirport
-  return_destination_airport: ReturnDestinationAirport
-  departure: string
-  arrival: string
-  return_departure: string
-  return_arrival: string
-  start_price: string
-  created_at: string
-  edited_at: string
-  tour: number
-}
-
-export interface OriginAirport {
-  id: number
-  city: City
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City {
-  id: number
-  country: Country
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country {
-  id: number
-  continent: Continent
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface DestinationAirport {
-  id: number
-  city: City2
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City2 {
-  id: number
-  country: Country2
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country2 {
-  id: number
-  continent: Continent2
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent2 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface ReturnOriginAirport {
-  id: number
-  city: City3
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City3 {
-  id: number
-  country: Country3
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country3 {
-  id: number
-  continent: Continent3
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent3 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface ReturnDestinationAirport {
-  id: number
-  city: City4
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City4 {
-  id: number
-  country: Country4
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country4 {
-  id: number
-  continent: Continent4
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent4 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
+const duration = useRouteQuery<string>('duration', '')
+const airline = useRouteQuery<string>('airline', '')
 
 
-const priceRange = ref([5, 30])
-const duration = ref([[2, 19], [3, 8], [6, 10]])
-const airlines = ref([
-  {
-    name: "ایران ایرتور",
-    count: 4
-  }, {
-    name: "قشم ایر",
-    count: 17
-  }, {
-    name: "معراج",
-    count: 11
-  }
-])
-
+const debounced_max_price = debouncedRef(max_price, 2000)
+const debounced_least_price = debouncedRef(least_price, 2000)
 
 const route = useRoute()
-const { data, status } = useAPI<Root>('/tour/tours/', {
-  query: route.query
+
+
+const { data, status, error } = useAPI<TourAPI.Root>('/tour/tours/', {
+  watch: [() => route.query],
+  query: {
+    range_min: debounced_least_price,
+    range_max: debounced_max_price,
+    duration: duration.value,
+    airline: airline.value,
+    order_by: order_by.value
+  }
 })
+
 const splidejs = useTemplateRef('splidejs')
-
-
 
 function next() {
 
@@ -212,51 +44,77 @@ function prev() {
   splidejs.value.go(splidejs.value.index - 1)
 }
 
-
 const sortItems = [
-  '  پیشنهاد راه و رسم',
-  'ارزان ترین',
-  '    گران ترین',
-  'کم ترین مدت',
-  'بیشترین مدت',
-  '  گران ترین'
+  { label: '  پیشنهاد راه و رسم', value: 'is_featured' },
+  { label: 'بیشترین قیمت', value: 'max_price' },
+  { label: 'کم ترین قیمت', value: 'least_price' },
+  { label: 'کم ترین مدت', value: 'least_duration' },
+  { label: 'بیشترین مدت', value: 'max_duration' }
 ]
 
-const info = [
-  {
-    "id": 57,
-    "turn": "پنجشنبه 1403/05/06",
-    "retunTime": "چهارشنبه 1403/05/10",
-    "packagePrice": "14/800/000",
-    "path": "/asia-tour-استانبول-1403-05-06-01"
-  },
-  {
-    "id": 102,
-    "turn": "پنجشنبه 1403/05/16",
-    "retunTime": "چهارشنبه 1403/05/20",
-    "packagePrice": "15/900/000",
-    "path": "/asia-tour-استانبول-1403-05-16-02"
-  },
-  {
-    "id": 38,
-    "turn": "دوشنبه 1403/05/26",
-    "retunTime": "چهارشنبه 1403/05/30",
-    "packagePrice": "17/100/000",
-    "path": "/asia-tour-استانبول-1403-05-06-01"
+const { data: filtersSchema, status: filtersStatus } = useAPI<FiltersAPI.Root>('/tour/filters?city=استانبول', {
+  lazy: true, server: false,
+  query: { city: city.value },
+  onResponse(ctx) {
+    if (ctx.response.status === 200) {
+      const p = (ctx.response._data as FiltersAPI.Root).prices
+
+      if (least_price.value)
+        least_price.value = p.least_price || 0
+      if (max_price.value)
+        max_price.value = p.max_price || 1
+
+    }
   }
-]
+})
+
+function sort(val: string) {
+    order_by.value =  val !== order_by.value ? val : ''
+}
+
+
+function checkBoxInput(i: Event, id: string, filterName: string) {
+
+  // @ts-ignore
+  const checked = !!i?.target.checked
+  
+  if (filterName === 'duration') {
+    const d = new Set(duration.value.split(',').filter(Boolean))
+
+    if (!checked)
+      d.delete(id)
+    else
+      d.add(id)
+
+    duration.value = [...d].join(',')
+  }
+
+  if (filterName === 'airline') {
+    const d = new Set(airline.value.split(',').filter(Boolean))
+
+    if (!checked)
+      d.delete(id)
+    else
+      d.add(id)
+
+    airline.value = [...d].join(',')
+
+  }
+}
 
 </script>
 
 <template>
 
+
   <main class="py-6 mb-4">
-<ResponsiveDebugger />
+  
     <section id="main" class="container mx-auto flex flex-col lg:flex-row gap-4 items-start">
 
 
-
-      <aside class=" w-full lg:w-3/12 shrink-0 bg-white  border border-gray-300 rounded-md flex flex-col gap-4 p-3 py-4">
+      <div isLoading v-if="filtersStatus === 'pending'" text="..." />
+      <aside v-else
+        class=" w-full lg:w-3/12 shrink-0 bg-white  border border-gray-300 rounded-md flex flex-col gap-4 p-3 py-4">
 
 
         <FilterCard title="توضیحات تور استانبول">
@@ -269,7 +127,7 @@ const info = [
           </template>
         </FilterCard>
 
-        <FilterCard title="12 تور استانبول برای شما پیدا شد.">
+        <FilterCard v-if="data?.length" :title="data?.length + ` تور ${route.query.city} برای شما پیدا شد.`">
           <template #icon-pre>
             <!-- check icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24">
@@ -289,9 +147,14 @@ const info = [
             </svg>
           </template>
           <template #body>
-            <div class="relative">
-              <span>از <strong v-text="priceRange[0]" /> تا <strong v-text="priceRange[1]" /> تومان </span>
-              <DualSlider v-model="priceRange" />
+            <div v-if="filtersSchema?.prices.max_price && filtersSchema?.prices.least_price" class="relative">
+              <span>از <strong v-text="least_price && Intl.NumberFormat('fa-ir', {}).format(least_price)" />
+                تا <strong v-text="max_price && Intl.NumberFormat('fa-ir', {}).format(+max_price)" /> تومان </span>
+
+
+              <DualSlider :min="filtersSchema.prices.least_price" :max="filtersSchema.prices.max_price"
+                v-model:vmax="max_price" v-model:vmin="least_price" />
+
             </div>
           </template>
         </FilterCard>
@@ -306,13 +169,14 @@ const info = [
           </template>
           <template #body>
             <div class="relative flex flex-col gap-1 pt-2">
-              <div v-for="(i, inx) in duration" :key="inx" class="flex justify-between ">
+              <div v-for="(i, inx) in filtersSchema?.durations || []" :key="inx" class="flex justify-between ">
                 <div class="text-gray-600 flex items-center gap-2">
-                  <input name="group1" type="checkbox" id="reverse-checkbox-1" class="form-checkbox">
-                  <label title="" for="reverse-checkbox-1" class="text-sm">{{ i[0] }} شب</label>
+                  <input @input="(e) => checkBoxInput(e, String( i.duration), 'duration')" name="group1" type="checkbox"
+                    id="reverse-checkbox-1" class="form-checkbox">
+                  <label title="" for="reverse-checkbox-1" class="text-sm">{{ i.duration }} شب</label>
                 </div>
                 <button type="button" class="bg-primary w-10 rounded text-black">
-                  {{ i[1] }}
+                  {{ i.tours_quantity }}
                 </button>
               </div>
             </div>
@@ -329,13 +193,14 @@ const info = [
           </template>
           <template #body>
             <div class="relative flex flex-col gap-1 pt-2">
-              <div v-for="(i, inx) in airlines" :key="inx" class="flex justify-between ">
+              <div v-for="(i, inx) in filtersSchema?.airlines || []" :key="inx" class="flex justify-between ">
                 <div class="text-gray-600 flex items-center gap-2">
-                  <input name="group1" type="checkbox" id="reverse-checkbox-1" class="form-checkbox">
-                  <label title="" for="reverse-checkbox-1" class="text-sm">{{ i.name }} شب</label>
+                  <input @input="(e) => checkBoxInput(e, i.name, 'airline')" name="group1" type="checkbox" id="reverse-checkbox-1"
+                    class="form-checkbox">
+                  <label title="" for="reverse-checkbox-1" class="text-sm">{{ i.name }} </label>
                 </div>
                 <button type="button" class="bg-primary w-10 rounded text-black">
-                  {{ i.count }}
+                  {{ i.tours_quantity }}
                 </button>
               </div>
             </div>
@@ -378,40 +243,42 @@ const info = [
                     height: '6rem',
                   },
                 },
-              }" 
-              @splide:dragged="(e) => {
-                console.log(e.index )
-              }"
-              aria-label="Sort items" class="w-full" ref="splidejs">
+              }" aria-label="Sort items" class="w-full" ref="splidejs">
 
 
 
                 <SplideSlide v-for="i in sortItems" class="w-auto" :key="i">
-                  <button type="button" class=" flex-center py-2 btn whitespace-pre rounded-md block w-full">
-                    {{ i }}
+                  <button type="button" @click="sort(i.value)"
+                    class=" flex-center py-2 btn whitespace-pre rounded-md block w-full"
+                    :class="{ 'bg-red-400 text-white': i.value === order_by }">
+                    {{ i.label }}
                   </button>
                 </SplideSlide>
               </Splide>
             </ClientOnly>
             <span class=" absolute left-0 w-8 h-8 flex-center rounded-full border -translate-x-1/2 bg-white/75">
               <!-- next -->
-              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6z" />
+              </svg>
             </span>
             <span class=" absolute right-0 w-8 h-8 flex-center rounded-full border translate-x-1/2 bg-white/75">
               <!-- prv -->
-              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="rotate-180" ><path fill="currentColor" d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6z"/></svg>
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="rotate-180">
+                <path fill="currentColor" d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6z" />
+              </svg>
             </span>
 
           </div>
         </div>
 
 
-        <LoadingIndicator v-if="status === 'pending'" />
 
+        <LoadingIndicator v-if="status === 'pending'" />
         <template v-else>
 
-          <TravelItemCard v-for="d in data || []" :key="d.id" :id="d.id" :title="d.title" :duration="d.tour_duration"
-            :data="d.start_date"
+          <TravelItemCard v-for="d in data || []" :key="d.id" :id="d.id" :title="d.title" :duration="+d.tour_duration"
+            :airline="d.tour_type" :date="d.start_date"
             :price="d.least_price ? Intl.NumberFormat('fa-ir', {}).format(+d.least_price).replaceAll('٬', '/') : '0'"
             :info="d.flights.map(f => ({
               id: f.id,
@@ -422,6 +289,10 @@ const info = [
               airline: f.origin_airport.city.country.name
             }))" />
         </template>
+
+        <div>
+          {{ error }}
+        </div>
 
         <div class="block text-center p-6" v-if="data && data.length === 0">
           هیچ ایتمی برای نمایش وجود ندارد

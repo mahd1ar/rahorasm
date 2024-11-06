@@ -87,7 +87,7 @@ const handleSubmit2 = async () => {
   // Clear previous messages
   errorMessage.value = "";
   successMessage.value = "";
-
+isLoading.value = (true);
   try {
 
     const userCredentials = {
@@ -101,15 +101,23 @@ const handleSubmit2 = async () => {
     })
 
     console.log(data)
-    $swal.success('ثبت نام با موفقیت انجام شد')
-    navigateTo(redirectTo.value)
+
+    const  userData  = await $fetchUserData()
+    if(userData){
+
+      $swal.success('ثبت نام با موفقیت انجام شد')
+      navigateTo(redirectTo.value)
+    } else {
+
+      $swal.error('خطا در گرفتن اطلاعات کاربر')
+    }
 
   } catch (error) {
     $swal.error('خطا در ثبت نام')
   }
 
   // Set loading state to true before the fetch call
-  isLoading.value = (true);
+  isLoading.value = (false);
 
 }
 

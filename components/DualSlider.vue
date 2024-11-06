@@ -1,8 +1,12 @@
 <script setup lang="ts">
 
-const range = defineModel({
-  type: Array as PropType<number[]>,
-  default: () => [30,70]
+const vmin = defineModel("vmin", {
+  type: Number,
+  default: () => 0
+})
+const vmax = defineModel("vmax", {
+  type: Number,
+  default: () => 1
 })
 
 const props = defineProps({
@@ -20,28 +24,30 @@ let minGap = 0;
 let sliderTrack = useTemplateRef('sliderTrack')
 
 function slideOne() {
-  if (range.value[1] - range.value[0] <= minGap) {
-    range.value[0] = range.value[1] - minGap;
+  if (vmax.value - vmin.value <= minGap) {
+    vmin.value = vmax.value - minGap;
   }
 
   fillColor();
 }
 function slideTwo() {
-  if (range.value[1] - range.value[0] <= minGap) {
-    range.value[1] = range.value[0] + minGap;
+  if (vmax.value - vmin.value <= minGap) {
+    vmax.value = vmin.value + minGap;
   }
 
   fillColor();
 }
 function fillColor() {
+
   const sliderMaxValue = props.max;
 
   if (!sliderMaxValue)
     return
 
-  const percent1 = (range.value[0] / +sliderMaxValue) * 100;
-  const percent2 = (range.value[1] / +sliderMaxValue) * 100;
+  const percent1 = ((vmin.value - props.min) / (sliderMaxValue - props.min)) * 100;
+  const percent2 = ((vmax.value - props.min) / (sliderMaxValue - props.min)) * 100;
 
+  console.log([percent1, percent2])
   sliderTrack.value!.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #1ebfbf ${percent1}% , #1ebfbf ${percent2}%, #dadae5 ${percent2}%)`;
 
 }
@@ -56,18 +62,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <div dir="ltr" class="wrapper" style="font-size: 8px;" >
-    
+  <div dir="ltr" class="wrapper" style="font-size: 8px;">
     <div class="relative w-full h-10">
       <div class="slider-track" ref="sliderTrack"></div>
-      <input type="range" :min :max v-model.number="range[0]" id="slider-1" @input="slideOne()">
-      <input type="range" :min :max v-model.number="range[1]" id="slider-2" @input="slideTwo()">
+      <input :step="500" type="range" :min :max v-model.number="vmin" id="slider-1" @input="slideOne()">
+      <input :step="500" type="range" :min :max v-model.number="vmax" id="slider-2" @input="slideTwo()">
     </div>
   </div>
 </template>
 
 <style scoped>
-
 input[type="range"] {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -143,6 +147,4 @@ input[type="range"]:active::-webkit-slider-thumb {
   background-color: #ffffff;
   border: 1px solid #1ebfbf;
 }
-
-
 </style>

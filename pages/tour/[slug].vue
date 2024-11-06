@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // @ts-ignore
-import { Splide, SplideSlide } from '@splidejs/vue-splide';
+import { Splide, SplideSlide, } from '@splidejs/vue-splide';
 
 export type Root = Root2[]
 
@@ -194,6 +194,24 @@ const route = useRoute()
 const { data, status } = useAPI<Root>('/tour/tours/', {
   query: route.query
 })
+const splidejs = useTemplateRef('splidejs')
+
+
+
+function next() {
+
+  splidejs.value.go(
+    (splidejs.value.index + 1) % splidejs.value.length)
+}
+
+function prev() {
+
+  if (splidejs.value.index === 0)
+    splidejs.value.go(splidejs.value.length)
+
+  splidejs.value.go(splidejs.value.index - 1)
+}
+
 
 const sortItems = [
   '  پیشنهاد راه و رسم',
@@ -231,13 +249,14 @@ const info = [
 </script>
 
 <template>
-  <main class="py-6 mb-4" >
 
-    <section id="main" class="container mx-auto flex gap-4 items-start">
+  <main class="py-6 mb-4">
+<ResponsiveDebugger />
+    <section id="main" class="container mx-auto flex flex-col lg:flex-row gap-4 items-start">
 
 
 
-      <aside class="w-3/12 shrink-0 bg-white  border border-gray-300 rounded-md flex flex-col gap-4 p-3 py-4">
+      <aside class=" w-full lg:w-3/12 shrink-0 bg-white  border border-gray-300 rounded-md flex flex-col gap-4 p-3 py-4">
 
 
         <FilterCard title="توضیحات تور استانبول">
@@ -300,7 +319,7 @@ const info = [
           </template>
         </FilterCard>
 
-        <FilterCard title="مدت اقامت" expandable>
+        <FilterCard title="ایرلاین" expandable>
           <template #icon-pre>
             <!-- airline icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="1.25em" height="1em" viewBox="0 0 640 512">
@@ -326,8 +345,8 @@ const info = [
       </aside>
 
 
-      <div class="w-9/12 flex flex-col gap-4">
-        <div class="flex gap-4">
+      <div class=" w-full lg:w-9/12 flex flex-col gap-4">
+        <div class="flex lg:flex-row flex-col gap-4">
           <span class="inline-flex items-center gap-1 shrink-0">
             <svg xmlns="http://www.w3.org/2000/svg" class="border border-gray-400 " width="1.2em" height="1.2em"
               viewBox="0 0 24 24">
@@ -335,7 +354,7 @@ const info = [
             </svg>
             مرتب سازی بر اساس:
           </span>
-          <div class="gap-2 flex  w-full shrink overflow-hidden relative">
+          <div class="gap-2 flex items-center w-full shrink  relative">
             <div class="w-12 absolute top-0 left-0 h-full z-1 bg-gradient-to-r from-white to-transparent" />
             <ClientOnly>
 
@@ -359,7 +378,14 @@ const info = [
                     height: '6rem',
                   },
                 },
-              }" aria-label="Sort items" class="w-full">
+              }" 
+              @splide:dragged="(e) => {
+                console.log(e.index )
+              }"
+              aria-label="Sort items" class="w-full" ref="splidejs">
+
+
+
                 <SplideSlide v-for="i in sortItems" class="w-auto" :key="i">
                   <button type="button" class=" flex-center py-2 btn whitespace-pre rounded-md block w-full">
                     {{ i }}
@@ -367,6 +393,14 @@ const info = [
                 </SplideSlide>
               </Splide>
             </ClientOnly>
+            <span class=" absolute left-0 w-8 h-8 flex-center rounded-full border -translate-x-1/2 bg-white/75">
+              <!-- next -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="currentColor" d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6z"/></svg>
+            </span>
+            <span class=" absolute right-0 w-8 h-8 flex-center rounded-full border translate-x-1/2 bg-white/75">
+              <!-- prv -->
+              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" class="rotate-180" ><path fill="currentColor" d="M15.41 16.58L10.83 12l4.58-4.59L14 6l-6 6l6 6z"/></svg>
+            </span>
 
           </div>
         </div>
@@ -401,8 +435,8 @@ const info = [
 
 <style scoped>
 main {
-  background: url("/assets/images/tours/hero-bg.svg") no-repeat ;
+  background: url("/assets/images/tours/hero-bg.svg") no-repeat;
   background-position: right top;
-  background-size: cover;
+  background-size: contain;
 }
 </style>

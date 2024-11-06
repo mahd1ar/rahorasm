@@ -32,7 +32,8 @@ export default defineNuxtPlugin(() => {
   const $api = $fetch.create({
     headers,
     credentials: 'include',
-    baseURL: import.meta.dev ? 'http://192.168.1.54:8000' : 'https://rahorasm.msdcorporation.top',
+    // baseURL: import.meta.dev ? 'http://192.168.1.54:8000' : 'https://rahorasm.msdcorporation.top',
+    baseURL:  'https://rahorasm.msdcorporation.top',
     retry: 2,
     onRequest(ctx) {
 

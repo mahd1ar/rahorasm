@@ -80,4 +80,14 @@ const { isHydrating } = useNuxtApp()
         transform: translateY(10px) rotate(-90deg);
     }
 }
+
+.anime-blur-enter-active,
+.anime-blur-leave-active {
+  transition: all 0.4s;
+}
+.anime-blur-enter-from,
+.anime-blur-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}
 </style>

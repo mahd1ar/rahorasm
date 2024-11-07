@@ -58,10 +58,10 @@ const { data: filtersSchema, status: filtersStatus } = useAPI<FiltersAPI.Root>('
   onResponse(ctx) {
     if (ctx.response.status === 200) {
       const p = (ctx.response._data as FiltersAPI.Root).prices
-
-      if (least_price.value)
+      console.log(p)
+      if (!least_price.value)
         least_price.value = p.least_price || 0
-      if (max_price.value)
+      if (!max_price.value)
         max_price.value = p.max_price || 1
 
     }
@@ -112,8 +112,7 @@ function checkBoxInput(i: Event, id: string, filterName: string) {
     <section id="main" class="container mx-auto flex flex-col lg:flex-row gap-4 items-start">
 
 
-      <div isLoading v-if="filtersStatus === 'pending'" text="..." />
-      <aside v-else
+      <aside  
         class=" w-full lg:w-3/12 shrink-0 bg-white  border border-gray-300 rounded-md flex flex-col gap-4 p-3 py-4">
 
 

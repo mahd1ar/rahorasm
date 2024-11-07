@@ -47,7 +47,6 @@ function fillColor() {
   const percent1 = ((vmin.value - props.min) / (sliderMaxValue - props.min)) * 100;
   const percent2 = ((vmax.value - props.min) / (sliderMaxValue - props.min)) * 100;
 
-  console.log([percent1, percent2])
   sliderTrack.value!.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , #1ebfbf ${percent1}% , #1ebfbf ${percent2}%, #dadae5 ${percent2}%)`;
 
 }

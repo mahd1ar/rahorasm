@@ -38,7 +38,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
                         <SplideSlide v-for="i in 7" :key="i">
                             <div class="p-1">
 
-                                <div class="w-full bg-white flex flex-col rounded-lg retro-style overflow-hidden ">
+                                <div class="w-full bg-white flex flex-col rounded-lg retro overflow-hidden ">
                                     <img class="w-64" src="/assets/images/Cards/antalya2.webp" alt="">
                                     <div class="p-4 flex flex-col">
                                         <div class="font-bold text-dark">
@@ -91,7 +91,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
                                     </div>
                                     <div class="bg-background p-2 border-t border-gray-400 flex-center">
                                         <button
-                                            class="bg-primary rounded-3xl retro-style px-3 py-1 inline-block mb-1 font-normal hover:text-white">
+                                            class="bg-primary rounded-3xl retro px-3 py-1 inline-block mb-1 font-normal hover:text-white">
                                             مشاهده تور
                                         </button>
                                     </div>
@@ -116,7 +116,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
                     <div class="flex flex-col h-96 overflow-auto scrollbar-none">
                         <div v-for="i in 4" :key="i" class="p-1">
 
-                            <div class="w-full bg-white flex flex-col rounded-lg retro-style overflow-hidden ">
+                            <div class="w-full bg-white flex flex-col rounded-lg retro overflow-hidden ">
 
                                 <div class="p-4 flex flex-col">
                                     <div class="font-bold text-dark">
@@ -169,7 +169,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
                                 </div>
                                 <div class="bg-background p-2 border-t border-gray-400 flex items-center justify-end">
                                     <button
-                                        class="bg-primary rounded-3xl retro-style px-3 py-1 inline-block mb-1 font-normal text-black hover:text-white">
+                                        class="bg-primary rounded-3xl retro px-3 py-1 inline-block mb-1 font-normal text-black hover:text-white">
                                         مشاهده تور
                                     </button>
                                 </div>
@@ -194,7 +194,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
                                 تور مد نظر با کارشناسان آژانس راه و رسم سفر تماس حاصل نمایید.
                             </div>
                             <div class="text-black flex-center flex-col ">
-                                <div class="bg-primary w-14 h-14 rounded-full flex-center retro-style ">
+                                <div class="bg-primary w-14 h-14 rounded-full flex-center retro ">
                                     <Icon name="material-symbols:call-sharp" size="24px" />
                                 </div>
                                 <div class="mt-14">

@@ -154,7 +154,7 @@ onMounted(() => {
               <label class="text-[#6c757d]">رمز عبور</label>
               <input class='form-controls1' type="password" v-model="password" required />
             </div>
-            <button class="btn w-full p-2 rounded-lg retro-style mb-2" type="submit" :disabled="isLoading">
+            <button class="btn w-full p-2 rounded-lg retro mb-2" type="submit" :disabled="isLoading">
               ثبت و ادامه
             </button>
             <NuxtLink to="/temporyLogin" class="text-center underline lh-lg">

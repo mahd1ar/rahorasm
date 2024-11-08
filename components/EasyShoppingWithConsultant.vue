@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="text-center py-4 px-6 retro-style rounded-xl">
+  <div class="text-center py-4 px-6 retro rounded-xl">
     <h4 class=" text-xl font-bold">
       با مشاور تلفنی آسان بخرید
     </h4>
@@ -14,7 +14,7 @@
       </div>
     </div>
     <div>
-      <button class="btn retro-style rounded-md p-4 w-full py-3 flex items-center gap-2 justify-center" type="button" >
+      <button class="btn retro rounded-md p-4 w-full py-3 flex items-center gap-2 justify-center" type="button" >
         
         
         <div class="phone-animation inline-block" >

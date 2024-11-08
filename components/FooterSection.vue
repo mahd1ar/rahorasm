@@ -124,7 +124,7 @@ const col1 = ref([
             <div class="mt-6 w-full">
               <div class="rounded-md border border-gray-100 p-2 focus-within:ring sm:flex sm:items-center sm:gap-4">
                 <div
-                  class="retro-style mt-1 w-full rounded-lg btn px-4 py-2 text-sm font-bold uppercase tracking-wide text-white transition-none hover:bg-teal-600 sm:mt-0 sm:w-auto sm:shrink-0">
+                  class="retro mt-1 w-full rounded-lg btn px-4 py-2 text-sm font-bold uppercase tracking-wide text-white transition-none hover:bg-teal-600 sm:mt-0 sm:w-auto sm:shrink-0">
                   <div class="mr-auto flex gap-4">
                     <!-- insta -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-8 hover:scale-125 transition-all cursor-pointer"

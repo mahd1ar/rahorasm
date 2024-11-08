@@ -228,7 +228,7 @@ onMounted(() => {
             </div>
 
 
-            <button class="btn w-full p-2 rounded-lg retro-style mb-2 disabled:bg-gray-300 disabled:opacity-50 "
+            <button class="btn w-full p-2 rounded-lg retro mb-2 disabled:bg-gray-300 disabled:opacity-50 "
               type="submit" :disabled="isLoading">
               ثبت و ادامه
             </button>
@@ -250,7 +250,7 @@ onMounted(() => {
               <label class="text-[#6c757d]" for="otp">رمز یکبار مصرف</label>
               <input class='form-controls1' type="password" id="otp" v-model="OTP" required />
             </div>
-            <button class="btn w-full p-2 rounded-lg retro-style mb-2" type="submit" :disabled="isLoading">
+            <button class="btn w-full p-2 rounded-lg retro mb-2" type="submit" :disabled="isLoading">
               ثبت و ادامه
             </button>
             <NuxtLink to="/temporyLogin" class="text-center underline lh-lg">

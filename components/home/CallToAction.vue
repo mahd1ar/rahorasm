@@ -12,7 +12,7 @@
                             کنید.
                             برای کسب اطلاعات بیشتر و رزرو تورها با ما تماس بگیرید.</div>
                         <button
-                            class="retro-style inline-block rounded bg-primary hover:text-white p-1 px-4 card-style mt-2">جهت
+                            class="retro inline-block rounded bg-primary hover:text-white p-1 px-4 card-style mt-2">جهت
                             دانلود پکیج تورهای اروپا کلیک کنید</button>
                     </div>
                     <div class="call-bg w-full md:w-5/12 shrink-0" data-aos="zoom-out-right" data-aos-duration="1500"

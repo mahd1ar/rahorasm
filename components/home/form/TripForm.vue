@@ -59,7 +59,7 @@ const handleSubmit = async (e: Event) => {
   </div>
 
   <div data-aos="fade-right" data-aos-duration="1500" data-aos-delay="50">
-    <form class="test-form rounded px-5 py-3 retro-style bg-background">
+    <form class="test-form rounded px-5 py-3 retro bg-background">
       <h5 class="py-2">
         <span class="pe-1">
           <Icon name="ic:sharp-airplanemode-active" size="24px" class="rotate-45" style="color: gray" />
@@ -100,7 +100,7 @@ const handleSubmit = async (e: Event) => {
             </div>
           </div>
 
-              <button type="submit" class="p-1.5 rounded-lg bg-primary w-full lg:w-2/12 retro-style">جستجو</button>
+              <button type="submit" class="p-1.5 rounded-lg bg-primary w-full lg:w-2/12 retro">جستجو</button>
         </div>
 
       </div>

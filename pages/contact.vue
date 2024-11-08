@@ -176,7 +176,7 @@ async function handleSubmit(e: Event) {
                   class="form-control w-full"></textarea>
               </div>
 
-              <button class=" btn retro-style w-full rounded py-2 text-lg">ثبت</button>
+              <button class=" btn retro w-full rounded py-2 text-lg">ثبت</button>
 
             </div>
           </div>

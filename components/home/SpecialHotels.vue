@@ -41,7 +41,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
           // rewind: true,
         }" aria-label="Special hotels">
           <SplideSlide v-for="i in 2" :key="i" class="p-1" >
-            <div class="w-full bg-white flex flex-col rounded-xl retro-style overflow-hidden ">
+            <div class="w-full bg-white flex flex-col rounded-xl retro overflow-hidden ">
               <!-- <img class="w-full " src="/assets/images/Cards/antalya2.webp" alt=""> -->
               <div class="p-4 flex flex-col">
                 <div class="font-bold">
@@ -89,7 +89,7 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide';
               </div>
               <div class="bg-background p-2 border-t border-gray-400 flex-center">
                 <button
-                  class="bg-primary rounded-3xl retro-style px-3 py-1 inline-block mb-1 font-normal hover:text-white">
+                  class="bg-primary rounded-3xl retro px-3 py-1 inline-block mb-1 font-normal hover:text-white">
                   مشاهده تور
                 </button>
               </div>

@@ -10,7 +10,7 @@ const isOprn = ref(true)
 </script>
 
 <template>
-  <div class="px-4 py-2 retro-style rounded-md bg-[#f8f9fa]">
+  <div class="px-4 py-2 retro rounded-md bg-[#f8f9fa]">
     <div class="flex items-center gap-2">
 
       <slot name="icon-pre" />

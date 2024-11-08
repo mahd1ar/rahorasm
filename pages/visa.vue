@@ -61,7 +61,7 @@ const disclosureData = ref(
         </div>
 
           <div class="w-full ">
-            <div class="   bg-white  retro-style ">
+            <div class="   bg-white  retro ">
 
               <Disclosure ref="dis" v-slot="{ open }" v-for="(i,inx) in disclosureData" :key="inx">
                 <DisclosureButton 

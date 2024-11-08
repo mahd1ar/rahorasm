@@ -21,7 +21,7 @@ const isOpen = ref(false)
 </script>
 
 <template>
-    <div class="bg-background  retro-style rounded-lg">
+    <div class="bg-background  retro rounded-lg">
         <form class="flex-center flex-col  ">
 
             <span class="font-bold text-black p-2 text-xl ">
@@ -38,7 +38,7 @@ const isOpen = ref(false)
                 <input @click="isOpen = true" type="text" class="w-full px-0 focus:ring-0  focus:outline-none border-none py-1 text-sm "
                     placeholder="کشور مقصد">
             </div>
-            <button class="bg-primary mt-4 mb-2 text-white  hover:text-black py-1 block retro-style w-full rounded">
+            <button class="bg-primary mt-4 mb-2 text-white  hover:text-black py-1 block retro w-full rounded">
                 جستجو
             </button>
 

@@ -20,16 +20,18 @@ export default {
         background: '#ededf1d4'
       }
     },
-     fontFamily: {
-        yekan: ['yekan', 'sans-serif'],
-        shabnam: ['Shabnam', 'sans-serif'],
-        poppins: ['Poppins', 'sans-serif']
-      },
+    fontFamily: {
+      yekan: ['yekan', 'sans-serif'],
+      shabnam: ['Shabnam', 'sans-serif'],
+      poppins: ['Poppins', 'sans-serif']
+    },
   },
   plugins: [
     // require('@tailwindcss/forms')
     require('tailwindcss-no-scrollbar'),
-    require('@tailwindcss/forms'),    
+    require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
   ],
 }
 

@@ -12,11 +12,7 @@ const reservation = reactive([
   {
     id: 1,
     name: 'Basic Tee',
-    hotel: {
-      id: 1,
-      name: '',
-      image: ''
-    },
+    href: '#',
     price: '$32.00',
     color: 'Sienna',
     inStock: true,
@@ -37,11 +33,7 @@ const reservation = reactive([
   {
     id: 2,
     name: 'Basic Tee',
-    hotel: {
-      id: 1,
-      name: '',
-      image: ''
-    },
+    href: '#',
     price: '$32.00',
     color: 'Black',
     inStock: false,
@@ -63,11 +55,7 @@ const reservation = reactive([
   {
     id: 3,
     name: 'Nomad Tumbler',
-    hotel: {
-      id: 1,
-      name: '',
-      image: ''
-    },
+    href: '#',
     price: '$35.00',
     color: 'White',
     inStock: true,
@@ -111,8 +99,6 @@ watchDeep(reservation, (nval) => {
   })
 
 
-},{
-  immediate: true
 })
 
 function openUser(itemIndex: number, roomIndex: number) {
@@ -189,8 +175,9 @@ onMounted(() => {
                 <div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                   <div>
                     <div class="flex justify-between">
-                      <h3 class="font-medium text-gray-700 hover:text-gray-800">
-                        {{ item.name }}
+                      <h3 class="">
+                        <a :href="item.href" class="font-medium text-gray-700 hover:text-gray-800">{{ item.name
+                          }}</a>
                       </h3>
                     </div>
                     <div class="mt-1 flex text-sm">
@@ -204,7 +191,7 @@ onMounted(() => {
                   <div class="mt-4 sm:mt-0 sm:pr-9">
                     <label :for="`quantity-${itemIdx}`" class="sr-only">Quantity, {{ item.name }}</label>
                     <select :id="`quantity-${itemIdx}`" :name="`quantity-${itemIdx}`" v-model.number="item.count"
-                      class="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm">
+                      class="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
                       <option value="1">1</option>
                       <option value="2">2</option>
                       <option value="3">3</option>
@@ -228,40 +215,35 @@ onMounted(() => {
 
                 <div class="flex flex-col gap-2">
 
-                  <button type="button" v-for="(i, index) in item.users" :key="index" @click="openUser(itemIdx, index)"
-                    class="p-2 border rounded  text-sm shadow flex items-center gap-2 h-12 group" :class="[
+                  <div v-for="(i, index) in item.users" :key="index" @click="openUser(itemIdx, index)"
+                    class="p-2 border rounded  text-sm shadow flex items-center gap-2" :class="[
                       i.isValid ? 'border-emerald-500 bg-emerald-50 text-emerald-700' :
-                        index === 0 || item.users.at(index-1)?.isValid ? 'border-gray-500 bg-gray-50 text-gray-700' :
-                          'border-gray-500 bg-gray-50 text-gray-700 opacity-70 pointer-events-none'
+                        index === 0 || item.users.at(index-1)?.isValid ? 'border-yellow-500 bg-yellow-50 text-yellow-700' :
+                          'border-gray-500 bg-gray-50 text-gray-700 opacity-75'
                     ]">
                     <Icon size="28px" name="material-symbols-light:person-alert-rounded" class=" flex-shrink-0" :class="[
-                      i.isValid ? 'text-emerald-500' : 'text-gray-500'
+                      i.isValid ? 'text-emerald-500' :
+                        index === 0 ? 'text-yellow-500'
+                          : 'text-gray-500'
                     ]" />
-                    <div  class="w-full text-right">
-                      <strong v-if="i.isValid">{{ i.name }} </strong>
-                      <div v-else>
-                        اطلاعات نفر
-                        <strong>
-                          
-                          {{ nth[index] }}
-                        </strong>
-                        را وارد کنید
-                        
-                      </div>
+                    <div v-if="i.isValid" class="w-full">
+                      <strong>{{ i.name }} </strong>
                     </div>
-                    <div 
-                      class="bg-white p-0.5 mr-auto flex-center shrink-0 rounded "
-                      :class="[
-                        i.isValid ? 'group-hover:bg-emerald-500 group-hover:text-emerald-50 text-emerald-500' : 'group-hover:bg-gray-500 group-hover:text-gray-50 text-gray-500'
-                      ]"
-                      v-if="i.isValid || index === 0 || item.users.at(index-1)?.isValid"
-                      >
+                    <div v-else>
+                      اطلاعات نفر
+                      <strong>
 
-                      <Icon size="28px" :name="
-                      i.isValid ? 'material-symbols-light:person-edit' :
-                      'material-symbols-light:ads-click-rounded'" class="  flex-shrink-0 " />
+                        {{ nth[index] }}
+                      </strong>
+                      را وارد کنید
+
                     </div>
-                  </button>
+                    <button type="button"
+                      class="bg-white p-0.5 mr-auto flex-center shrink-0 rounded hover:bg-yellow-500 hover:text-yellow-50 text-yellow-500">
+
+                      <Icon size="28px" name="material-symbols-light:ads-click-rounded" class="  flex-shrink-0 " />
+                    </button>
+                  </div>
                 </div>
 
        
@@ -283,19 +265,19 @@ onMounted(() => {
 
           <dl class="mt-6 space-y-4">
             <div class="flex items-center justify-between">
-              <dt class="text-sm text-gray-600">
-                تعداد مسافر
-              </dt>
-              <dd class="text-sm font-medium text-gray-900">{{ reservation.reduce((a, b) => a + b.count, 0) }}</dd>
+              <dt class="text-sm text-gray-600">Subtotal</dt>
+              <dd class="text-sm font-medium text-gray-900">$99.00</dd>
             </div>
-            
             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
-              <dt class="text-sm text-gray-600">
-              تعداد اتاق ها
+              <dt class="flex items-center text-sm text-gray-600">
+                <span>Shipping estimate</span>
+                <a href="#" class="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
+                  <span class="sr-only">Learn more about how shipping is calculated</span>
+                  <QuestionMarkCircleIcon class="h-5 w-5" aria-hidden="true" />
+                </a>
               </dt>
-              <dd class="text-sm font-medium text-gray-900">{{ reservation.length }}</dd>
+              <dd class="text-sm font-medium text-gray-900">$5.00</dd>
             </div>
-            
             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
               <dt class="flex text-sm text-gray-600">
                 <span>Tax estimate</span>
@@ -314,9 +296,7 @@ onMounted(() => {
 
           <div class="mt-6">
             <button type="submit"
-              class="w-full rounded-md border border-transparent bg-primary px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-50">
-            رزرو تور
-            </button>
+              class="w-full rounded-md border border-transparent bg-indigo-600 px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50">Checkout</button>
           </div>
         </section>
       </form>

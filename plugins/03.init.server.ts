@@ -1,7 +1,7 @@
 import type { NavbarItem } from "~/stores/appState"
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-
+    console.log("Server init")
     const { $api, $fetchUserData } = useNuxtApp()
     const appState = useAppState()
 

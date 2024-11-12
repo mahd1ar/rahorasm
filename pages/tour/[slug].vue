@@ -12,7 +12,11 @@ import { Splide, SplideSlide, } from '@splidejs/vue-splide';
 
 
 const order_by = useRouteQuery<string>('order_by', '')
+
 const city = useRouteQuery('city', '')
+const country = useRouteQuery('country', '')
+const continent = useRouteQuery('continent', '')
+
 const max_price = useRouteQuery('range_max', 0, { transform: Number })
 const least_price = useRouteQuery('range_min', 0, { transform: Number })
 
@@ -34,6 +38,11 @@ const route = useRoute()
 const { data, status, error } = useAPI<TourAPI.Root>('/tour/tours/', {
   watch: [() => route.query],
   query: {
+    
+    city: city.value || undefined,
+    country: country.value || undefined,
+    continent: continent.value || undefined,
+
     range_min: debounced_least_price,
     range_max: debounced_max_price,
     duration: duration.value,
@@ -141,7 +150,7 @@ function applyFilters() {
 
 
 
-const isOpen = ref(true)
+const isOpen = ref(false)
 
 function closeModal() {
   isOpen.value = false
@@ -266,7 +275,7 @@ onMounted(() => {
 
       <div class=" w-full lg:w-9/12 flex flex-col gap-4">
         <div class="flex lg:flex-row flex-col gap-4">
-          <button @click="openModal" type="button" class="retro bg-white flex justify-center items-center gap-2 p-2 font-bold  hover:text-teal-600 " >
+          <button @click="openModal" type="button" class="retro bg-white flex lg:hidden justify-center items-center gap-2 p-2 font-bold  hover:text-teal-600 " >
             <span class="text-xl" >
              <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h6v6h-6zm10 0h6v6h-6zm-10 10h6v6h-6zm10 3h6m-3 -3v6"></path></svg>
             </span>

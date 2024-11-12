@@ -1,5 +1,8 @@
 <script setup lang="ts">
 
+import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue'
+import { ChevronDownIcon } from '@heroicons/vue/20/solid'
+
 import { vOnClickOutside } from '@vueuse/components'
 
 const appState = useAppState()
@@ -31,6 +34,34 @@ function closeSubmenu() {
     l3.value = ''
  
 }
+
+const menuButtons = reactive([
+  [{
+    label: 'ناحیه کاربری',
+    icon: 'user',
+    href: '/u',
+  },
+  {
+    label: 'سفر ها',
+    icon: 'ticket',
+    href: '/u/trips',
+  },
+  {
+    label: 'پرداخت ها',
+    icon: 'dollar',
+    href: '/u/invoice',
+  },
+  {
+    label: 'امنیت',
+    icon: 'lock',
+    href: '/u/passwd',
+  }],
+[{
+    label: 'خروج',
+    icon: 'logout',
+    href: '/logout',
+  }]
+])
 
 </script>
 
@@ -145,13 +176,66 @@ function closeSubmenu() {
 
       <div class="text-gray-600 flex gap-1 items-center " >
         
-        <div v-if="appState.isAuth" class="flex-center gap-2" to="/signup"  >
-            {{ appState.user.name || 'null' }}
-            <div class="w-6 h-6 p-1 bg-gray-200 rounded-full" >
+
+
+
+  <Menu v-if="appState.isAuth" as="div" class="relative inline-block text-left">
+      
+        <MenuButton 
+          class="inline-flex w-full items-center justify-center rounded-md  px-4 py-2 text-sm font-medium text-black hover:bg-primary/20 gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+        >
+          {{ appState.user.name || 'null' }}
+          <!-- <ChevronDownIcon
+            class="-mr-1 ml-2 h-5 w-5 text-violet-200 hover:text-violet-100"
+            aria-hidden="true"
+          /> -->
+
+          <div class="w-7 h-7 p-1 bg-gray-900 text-white text-xl flex-center rounded-full" >
 
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.578 15.482c-1.415.842-5.125 2.562-2.865 4.715C4.816 21.248 6.045 22 7.59 22h8.818c1.546 0 2.775-.752 3.878-1.803c2.26-2.153-1.45-3.873-2.865-4.715a10.66 10.66 0 0 0-10.844 0M16.5 6.5a4.5 4.5 0 1 1-9 0a4.5 4.5 0 0 1 9 0" color="currentColor"/></svg>
+            
             </div>
+
+        </MenuButton>
+      
+
+      <transition
+        enter-active-class="transition duration-100 ease-out"
+        enter-from-class="transform scale-95 opacity-0"
+        enter-to-class="transform scale-100 opacity-100"
+        leave-active-class="transition duration-75 ease-in"
+        leave-from-class="transform scale-100 opacity-100"
+        leave-to-class="transform scale-95 opacity-0"
+      >
+        <MenuItems
+          class="absolute left-0 mt-2 w-56 origin-top-left divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-10"
+        >
+          <div v-for="(g,inx) in menuButtons" :key="inx" class="px-1 py-1">
+            <MenuItem v-for="(i) in g" :key="i.label" v-slot="{ active }">
+              <button
+              @click="() => {
+                $router.push(i.href)
+              }"
+                :class="[
+                  active ? 'bg-primary text-white' : 'text-gray-900',
+                  'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                ]"
+              >
+               
+                {{ i.label }}
+              </button>
+            </MenuItem>
+
           </div>
+          
+        </MenuItems>
+      </transition>
+    </Menu>
+
+
+
+
+
         <template v-else >
 
           <NuxtLink class="" to="/login">

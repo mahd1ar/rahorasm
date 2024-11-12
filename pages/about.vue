@@ -50,9 +50,12 @@ const {data,error} = useAPI<Root[]>('/api/aboutus/')
         </div>
 
       </section>
-      <section class="mt-4 grid grid-cols-3">
-        <div v-for="i in data || []" :key="i.id"class="retro rounded-md p-6 flex-col flex gap-4 text-center">
-          <Icon :name="i.icon" />
+      <section class="mt-4 grid grid-cols-3 gap-4 ">
+        <div v-for="i in data || []" :key="i.id"class="retro rounded-md p-6 flex-col flex gap-4 text-center ">
+          <div class="flex-center text-Secondary" >
+
+            <Icon :name="i.icon" size="32px" />
+          </div>
           <h3 class="font-bold text-xl" >{{ i.title }}</h3>
           <p>{{ i.desc }}</p>
         </div>

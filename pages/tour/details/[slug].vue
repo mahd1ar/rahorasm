@@ -7,6 +7,17 @@ const { data: apiData } = useAPI<TourDetailsAPI.Root>(
   "/tour/flight/" + param.value
 );
 
+const { data: fligthsData } = useAPI<{
+  departure: string
+  return_departure: string
+  id: number
+}[]>(
+  "/tour/flights/" + param.value, {
+  server: false,
+  lazy: true
+}
+);
+
 const data = computed(() => {
   if (!apiData.value) {
     return {};
@@ -91,43 +102,124 @@ const data = computed(() => {
         value: apiData.value?.tour.tour_guide,
       },
     ],
+    hotels: [
+      ...apiData.value?.hotel_prices.map(i => ({
+        name: i.hotel.name,
+        rating: i.hotel.star || 0,
+        city: i.hotel.city.name,
+        duration: apiData.value?.tour.tour_duration,
+        prices: [
+          {
+            title: "2 تخته (هرنفر)",
+            price: i.two_bed_price,
+          },
+          {
+            title: "1 تخته (هرنفر)",
+            price: i.one_bed_price,
+          },
+          {
+            title: "کودک با تخت (هرنفر)",
+            price: i.child_with_bed_price
+          },
+          {
+            title: "کودک بدون تخت (هرنفر)",
+            price: i.child_no_bed_price
+          },
+
+        ]
+      }))
+
+
+    ]
   };
+
 });
 
-const hotels = ref([
-  {
-    title: "2 تخته (هرنفر)",
-    price: "16/600/000",
-  },
-  {
-    title: "1 تخته (هرنفر)",
-    price: "16/600/000",
-  },
-  {
-    title: "کودک با تخت (هرنفر)",
-    price: "16/600/000",
-  },
-  {
-    title: "کودک بدون تخت (هرنفر)",
-    price: "16/600/000",
-  },
-]);
 
+
+const modelIsOpen = ref(false);
+
+function openModal(v: boolean) {
+
+  modelIsOpen.value = true
+}
 
 </script>
 
-<template>
+<template> 
+
   <main class="bg-gray-50 h-full">
+
+    <DialogBox element-id="modal" v-model="modelIsOpen" @closeModal="openModal">
+      <template #header>
+        <h3 class="text-xl">تاریخ تور ها</h3>
+      </template>
+
+      <template #content>
+        <aside class="w-full shrink-0 p-6 rounded-md border ">
+
+          <div class="flex flex-col gap-2 mt-2 relative">
+            <NuxtLink :to="'/tour/details/' + i.id" v-for="(i, inx) in fligthsData" :key="inx" :class="i.id === param ? 'border-primary shadow bg-white ' : 'cursor-pointer'
+              " class="border p-2 rounded-lg flex justify-between items-center bg-white">
+              <div v-if="i.departure" class="text-sm flex flex-col gap-1 py-2 text-right">
+                <div>{{ i.departure && new Date(i.departure).toLocaleDateString("fa-ir", { weekday: "long" }) }}</div>
+                <div class="text-Secondary font-bold">{{ new Date(i.departure).toLocaleDateString("fa-ir", {
+                  day:
+                    "numeric", month: "long" }) }}</div>
+                <div class="text-gray-700">
+
+                  ساعت
+                  {{ new Date(i.departure).toLocaleTimeString("fa-ir", { hour: "numeric", minute: "numeric" }) }}
+                </div>
+              </div>
+              <div class="flex-center text-xl w-10 h-10 shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path stroke-dasharray="20" stroke-dashoffset="20" d="M21 12h-17.5">
+                      <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.2s" values="20;0" />
+                    </path>
+                    <path stroke-dasharray="12" stroke-dashoffset="12" d="M3 12l7 7M3 12l7 -7">
+                      <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.2s" dur="0.2s" values="12;0" />
+                    </path>
+                  </g>
+                </svg>
+              </div>
+              <div v-if="i.return_departure" class="text-sm flex flex-col gap-1 py-2 text-left">
+                <div>{{ new Date(i.return_departure).toLocaleDateString("fa-ir", { weekday: "long" }) }}</div>
+                <div class="text-Secondary font-bold">{{ new Date(i.return_departure).toLocaleDateString("fa-ir", {
+                  day:
+                    "numeric", month: "long" }) }}</div>
+                <div class="text-gray-700">
+                  ساعت
+                  {{ new Date(i.return_departure).toLocaleTimeString("fa-ir", { hour: "numeric", minute: "numeric" }) }}
+
+                </div>
+              </div>
+            </NuxtLink>
+
+          </div>
+
+        </aside>
+      </template>
+    </DialogBox>
+
     <div class="container mx-auto flex gap-4 my-6 h-full items-start">
       <aside class="hidden lg:block w-3/12 shrink-0 p-6 rounded-md border bg-white">
         <h3 class="text-xl">تاریخ تور ها</h3>
         <div class="flex flex-col gap-2 mt-2 relative">
-          <div v-for="i in 4" :key="i" :class="i === 1 ? 'border-primary shadow bg-white ' : 'cursor-pointer'
+          <NuxtLink :to="'/tour/details/' + i.id" v-for="(i, inx) in fligthsData" :key="inx" :class="i.id === param ? 'border-Secondary shadow bg-white ' : 'cursor-pointer'
             " class="border p-2 rounded-lg flex justify-between items-center">
-            <div class="text-sm flex flex-col gap-1 py-2 text-right">
-              <div>دوشنبه</div>
-              <div class="text-Secondary font-bold">19 شهریور</div>
-              <div class="text-gray-700">ساعت 07:30</div>
+            <div v-if="i.departure" class="text-sm flex flex-col gap-1 py-2 text-right">
+              <div>{{ i.departure && new Date(i.departure).toLocaleDateString("fa-ir", { weekday: "long" }) }}</div>
+              <div class="text-Secondary font-bold">{{ new Date(i.departure).toLocaleDateString("fa-ir", {
+                day:
+                  "numeric",
+                month: "long" }) }}</div>
+              <div class="text-gray-700">
+
+                ساعت
+                {{ new Date(i.departure).toLocaleTimeString("fa-ir", { hour: "numeric", minute: "numeric" }) }}
+              </div>
             </div>
             <div class="flex-center text-xl w-10 h-10 shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -141,21 +233,31 @@ const hotels = ref([
                 </g>
               </svg>
             </div>
-            <div class="text-sm flex flex-col gap-1 py-2 text-left">
-              <div>دوشنبه</div>
-              <div class="text-Secondary font-bold">19 شهریور</div>
-              <div class="text-gray-700">ساعت 07:30</div>
+            <div v-if="i.return_departure" class="text-sm flex flex-col gap-1 py-2 text-left">
+              <div>{{ new Date(i.return_departure).toLocaleDateString("fa-ir", { weekday: "long" }) }}</div>
+              <div class="text-Secondary font-bold">{{ new Date(i.return_departure).toLocaleDateString("fa-ir", {
+                day:
+                  "numeric", month: "long" }) }}</div>
+              <div class="text-gray-700">
+                ساعت
+                {{ new Date(i.return_departure).toLocaleTimeString("fa-ir", { hour: "numeric", minute: "numeric" }) }}
+
+              </div>
             </div>
-          </div>
-          <div
-            class="w-full h-20 absolute bottom-0 bg-gradient-to-t from-white via-white to-transparent flex flex-col justify-end text-center">
-            <NuxtLink to="#" class="flex justify-end items-center gap-2">
+          </NuxtLink>
+          <div v-if="fligthsData && fligthsData.length >= 4"
+            class="w-full h-20  absolute bottom-0 bg-gradient-to-t from-white via-white to-transparent flex flex-col justify-end text-center">
+            <button type="button" @click="openModal(true)" class="group flex justify-end items-center text-sm gap-2">
+
               مشاهده تمام تور ها
-              <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="m5 12l6-6m-6 6l6 6m-6-6h14" />
-              </svg>
-            </NuxtLink>
+
+              <span class="group-hover:-translate-x-1 inline-block transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2" d="m5 12l6-6m-6 6l6 6m-6-6h14" />
+                </svg>
+              </span>
+            </button>
           </div>
         </div>
         <hr class="my-6" />
@@ -165,12 +267,20 @@ const hotels = ref([
         <section class="p-4 lg:p-6 rounded-md border bg-white flex flex-col gap-6">
           <div v-for="(i, inx) in data.travel" :key="inx" class="flex flex-col gap-3">
             <div class="flex">
-              <svg v-if="i.type !== 'residence'" xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0" viewBox="0 0 24 24">
+              <svg v-if="i.type !== 'residence'" xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0"
+                viewBox="0 0 24 24">
                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z" />
               </svg>
 
-              <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0" viewBox="0 0 24 24"><g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd"><path d="M7.25 10a4.75 4.75 0 1 1 9.5 0a4.75 4.75 0 0 1-9.5 0M12 6.75a3.25 3.25 0 1 0 0 6.5a3.25 3.25 0 0 0 0-6.5"/><path d="M3.524 8.857a8.29 8.29 0 0 1 8.26-7.607h.432a8.29 8.29 0 0 1 8.26 7.607a8.94 8.94 0 0 1-1.99 6.396l-4.793 5.861a2.187 2.187 0 0 1-3.386 0l-4.793-5.861a8.94 8.94 0 0 1-1.99-6.396m8.26-6.107A6.79 6.79 0 0 0 5.02 8.98a7.44 7.44 0 0 0 1.656 5.323l4.793 5.862a.687.687 0 0 0 1.064 0l4.793-5.862A7.44 7.44 0 0 0 18.98 8.98a6.79 6.79 0 0 0-6.765-6.23z"/></g></svg>
+              <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0" viewBox="0 0 24 24">
+                <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
+                  <path
+                    d="M7.25 10a4.75 4.75 0 1 1 9.5 0a4.75 4.75 0 0 1-9.5 0M12 6.75a3.25 3.25 0 1 0 0 6.5a3.25 3.25 0 0 0 0-6.5" />
+                  <path
+                    d="M3.524 8.857a8.29 8.29 0 0 1 8.26-7.607h.432a8.29 8.29 0 0 1 8.26 7.607a8.94 8.94 0 0 1-1.99 6.396l-4.793 5.861a2.187 2.187 0 0 1-3.386 0l-4.793-5.861a8.94 8.94 0 0 1-1.99-6.396m8.26-6.107A6.79 6.79 0 0 0 5.02 8.98a7.44 7.44 0 0 0 1.656 5.323l4.793 5.862a.687.687 0 0 0 1.064 0l4.793-5.862A7.44 7.44 0 0 0 18.98 8.98a6.79 6.79 0 0 0-6.765-6.23z" />
+                </g>
+              </svg>
 
               <div class="flex mr-4 sm:mr-10 gap-2 sm:gap-6 sm:text-base text-sm">
                 <strong v-if="i.type === 'start'" class="text-primary">شروع سفر:</strong>
@@ -192,8 +302,8 @@ const hotels = ref([
                   </div>
                   <div class="w-full flex items-center p-4 justify-center relative">
                     <div class="w-full border-t-4 border-dotted border-gray-400 h-1" />
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 sm:w-10 absolute" style="transform: rotate(225deg)"
-                      viewBox="0 0 64 64">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 sm:w-10 absolute"
+                      style="transform: rotate(225deg)" viewBox="0 0 64 64">
                       <path fill="#acb8bf"
                         d="m7.212 12.752l8.132-8.132l1.98 1.98l-8.132 8.132zm14.209 2.045l8.133-8.13l1.98 1.98l-8.133 8.13zM49.31 54.854l8.134-8.13l1.98 1.981l-8.134 8.13zm-2.031-14.297l8.134-8.13l1.98 1.981l-8.135 8.13z" />
                       <path fill="#42ade2"
@@ -256,72 +366,61 @@ const hotels = ref([
         </section>
 
         <h2 class="text-2xl mt-6 mb-4 font-bold">لیست هتل ها و قیمت ها</h2>
-        <section class="p-6 rounded-md border bg-white flex flex-col gap-6 relative">
-          <div class="relative">
-            <div class="flex flex-col sm:flex-row items-start gap-4">
-              <img class="h-36 w-72 object-cover rounded-lg"
-                src="https://last-cdn.com/2023/01/04/6TgjIy1BpnxY32a2PjKdiUqQjlHkQUGelr7x3oIx.jpg" alt="" />
-              <div>
-                <h4 class="text-2xl flex flex-col gap-3">
-                  Emmy Hotel Taksim
-                  <!-- stars -->
-                  <div class="text-yellow-500 text-2xl flex gap-1">
-                    <!-- filled -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                      <path fill="currentColor" fill-rule="evenodd"
-                        d="M12.908 1.581a1 1 0 0 0-1.816 0l-2.87 6.22l-6.801.807a1 1 0 0 0-.562 1.727l5.03 4.65l-1.335 6.72a1 1 0 0 0 1.469 1.067L12 19.426l5.977 3.346a1 1 0 0 0 1.47-1.068l-1.335-6.718l5.029-4.651a1 1 0 0 0-.562-1.727L15.777 7.8z"
-                        clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                      <path fill="currentColor" fill-rule="evenodd"
-                        d="M12.908 1.581a1 1 0 0 0-1.816 0l-2.87 6.22l-6.801.807a1 1 0 0 0-.562 1.727l5.03 4.65l-1.335 6.72a1 1 0 0 0 1.469 1.067L12 19.426l5.977 3.346a1 1 0 0 0 1.47-1.068l-1.335-6.718l5.029-4.651a1 1 0 0 0-.562-1.727L15.777 7.8z"
-                        clip-rule="evenodd" />
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                      <path fill="currentColor" fill-rule="evenodd"
-                        d="M12.908 1.581a1 1 0 0 0-1.816 0l-2.87 6.22l-6.801.807a1 1 0 0 0-.562 1.727l5.03 4.65l-1.335 6.72a1 1 0 0 0 1.469 1.067L12 19.426l5.977 3.346a1 1 0 0 0 1.47-1.068l-1.335-6.718l5.029-4.651a1 1 0 0 0-.562-1.727L15.777 7.8z"
-                        clip-rule="evenodd" />
-                    </svg>
-                    <!-- outlined -->
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                      <g fill="none">
-                        <path fill="currentColor"
-                          d="m12 2l3.104 6.728l7.358.873l-5.44 5.03l1.444 7.268L12 18.28L5.534 21.9l1.444-7.268L1.538 9.6l7.359-.873z"
-                          opacity="0.16" />
-                        <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                          d="m12 2l3.104 6.728l7.358.873l-5.44 5.03l1.444 7.268L12 18.28L5.534 21.9l1.444-7.268L1.538 9.6l7.359-.873z" />
-                      </g>
-                    </svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                      <g fill="none">
-                        <path fill="currentColor"
-                          d="m12 2l3.104 6.728l7.358.873l-5.44 5.03l1.444 7.268L12 18.28L5.534 21.9l1.444-7.268L1.538 9.6l7.359-.873z"
-                          opacity="0.16" />
-                        <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                          d="m12 2l3.104 6.728l7.358.873l-5.44 5.03l1.444 7.268L12 18.28L5.534 21.9l1.444-7.268L1.538 9.6l7.359-.873z" />
-                      </g>
-                    </svg>
+        <section>
+
+          <div v-for="i in data.hotels" :key="i.id" class="p-6 rounded-md border bg-white flex flex-col gap-6 relative">
+            <div class="relative">
+              <div class="flex flex-col sm:flex-row items-start gap-4">
+                <img class="h-36 w-72 object-cover rounded-lg"
+                  src="https://last-cdn.com/2023/01/04/6TgjIy1BpnxY32a2PjKdiUqQjlHkQUGelr7x3oIx.jpg" alt="" />
+                <div>
+                  <h4 class="text-2xl flex flex-col gap-3">
+                    <span> {{ i.name }}</span>
+                    <!-- stars -->
+                    <div class="text-yellow-500 text-2xl flex gap-1">
+                      
+                      <!-- filled -->
+                      <svg v-for="fs in i.rating" :key="fs" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                        <path fill="currentColor" fill-rule="evenodd"
+                          d="M12.908 1.581a1 1 0 0 0-1.816 0l-2.87 6.22l-6.801.807a1 1 0 0 0-.562 1.727l5.03 4.65l-1.335 6.72a1 1 0 0 0 1.469 1.067L12 19.426l5.977 3.346a1 1 0 0 0 1.47-1.068l-1.335-6.718l5.029-4.651a1 1 0 0 0-.562-1.727L15.777 7.8z"
+                          clip-rule="evenodd" />
+                      </svg>
+                 
+                      
+                      <!-- outlined -->
+                      <svg v-if="i.rating < 5" v-for="o in (5 - i.rating)" :key="o" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                        <g fill="none">
+                          <path fill="currentColor"
+                            d="m12 2l3.104 6.728l7.358.873l-5.44 5.03l1.444 7.268L12 18.28L5.534 21.9l1.444-7.268L1.538 9.6l7.359-.873z"
+                            opacity="0.16" />
+                          <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
+                            d="m12 2l3.104 6.728l7.358.873l-5.44 5.03l1.444 7.268L12 18.28L5.534 21.9l1.444-7.268L1.538 9.6l7.359-.873z" />
+                        </g>
+                      </svg>
+                      
+                    </div>
+                    <!-- end of stars -->
+                  </h4>
+                  <div class="mt-2 text-gray-600">
+                    <span> {{ i.city }} </span>
+                    <span> {{ i.duration }}</span>
                   </div>
-                  <!-- end of stars -->
-                </h4>
-                <div class="mt-2 text-gray-600">
-                  <span> استانبول</span>
-                  <span> BB</span>
-                </div>
-                <div class="mt-2 text-primary">
-                  <span> 3 شب </span>
+                  <div class="mt-2 text-primary">
+                    <span> 3 شب </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="w-full grid grid-cols-2 md:grid-cols-4 mt-4 gap-6 md:gap-1 text-center">
-              <div v-for="(h, inx) in hotels" :key="inx">
-                <div class="bg-background p-2 rounded-lg mb-2">
-                  {{ h.title }}
-                </div>
-                <div class="text-gray-700 font-bold">
-                  {{ h.price }}
-                  تومان
-                </div>
+              <div class="w-full grid grid-cols-2 md:grid-cols-4 mt-4 gap-6 md:gap-1 text-center">
+                <div v-for="(h, inx) in i.prices" :key="inx">
+                  <div class="bg-background p-2 rounded-lg mb-2">
+                    {{ h.title }}
+                  </div>
+                  <div class="text-gray-700 font-bold">
+                    {{ h.price }}
+                    تومان
+                  </div>
+                  <BedroomCount />
+                                  </div>
               </div>
             </div>
           </div>

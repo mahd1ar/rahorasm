@@ -7,7 +7,8 @@ import {
   UserCircleIcon,
   UsersIcon,
   DocumentCurrencyDollarIcon,
-  TicketIcon
+  TicketIcon,
+  PencilIcon
 } from '@heroicons/vue/24/outline'
 
 
@@ -15,15 +16,17 @@ const secondaryNavigation = [
   { name: 'عمومی', href: '/u', icon: UserCircleIcon, },
   { name: 'سفر ها', href: '/u/trips', icon: TicketIcon, },
   { name: 'پرداخت ها', href: '/u/invoice', icon: DocumentCurrencyDollarIcon, },
+  { name: 'ویرایش اطلاعات', href: '/u/edit', icon: PencilIcon, },
   { name: 'امنیت', href: '/u/passwd', icon: FingerPrintIcon, },
-  { name: 'Plan', href: '/', icon: CubeIcon, },
-  { name: 'Team members', href: '/', icon: UsersIcon, },
+  // { name: 'Plan', href: '/', icon: CubeIcon, },
+  // { name: 'Team members', href: '/', icon: UsersIcon, },
 ]
 
 </script>
 
 <template>
   <div dir="rtl" class="min-h-screen grid grid-cols-1 w-full">
+    <NuxtLoadingIndicator />
     <div class="h-full flex-col flex w-full">
       <NavbarSectionCop class="" />
       <div class=" w-full h-full ">

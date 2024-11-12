@@ -2,16 +2,19 @@
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
 
 definePageMeta({
+  // FIXME define auth middleware
   layout: 'profile',
   pageTransition: { name: 'anime-blur', mode: 'out-in' },
 })
 
+const appState = useAppState()
 
 const automaticTimezoneEnabled = ref(true)
 
 const name = ref('Tom Cook')
 const email = ref('jHb5M@example.com')
 const phone_number = ref('+1 (555) 123-4567')
+
 
 
 </script>
@@ -33,21 +36,21 @@ const phone_number = ref('+1 (555) 123-4567')
           <div class="pt-6 sm:flex">
             <dt class="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6"> نام و نام خانوادگی</dt>
             <dd class="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-              <div class="text-gray-900">{{ name }}</div>
+              <div class="text-gray-900">{{ appState.user.name }}</div>
               <button type="button" class="font-semibold text-Secondary hover:text-indigo-500">Update</button>
             </dd>
           </div>
           <div class="pt-6 sm:flex">
             <dt class="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6"> آدرس ایمیل </dt>
             <dd class="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-              <div class="text-gray-900">{{ email }}</div>
+              <div class="text-gray-900">{{ '-' }}</div>
               <button type="button" class="font-semibold text-Secondary hover:text-indigo-500">Update</button>
             </dd>
           </div>
           <div class="pt-6 sm:flex">
             <dt class="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">تلفن همراه</dt>
             <dd class="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-              <div class="text-gray-900">{{ phone_number }}</div>
+              <div class="text-gray-900">{{ appState.user.phone }}</div>
               <button type="button" class="font-semibold text-Secondary hover:text-indigo-500">Update</button>
             </dd>
           </div>

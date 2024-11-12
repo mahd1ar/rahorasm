@@ -16,6 +16,8 @@ const appState = useAppState()
 const accessTocken = useCookie(COOKIES.Access)
 const refreshTocken = useCookie(COOKIES.Refresh)
 
+const go = useRouteQuery<string>('go', '/')
+
 const username = ref(import.meta.dev ? '09129740477' : "");
 const password = ref(import.meta.dev ? '09129740477' : '');
 const errorMessage = ref("");
@@ -83,7 +85,7 @@ const handleSubmit = async () => {
       
       if (data){
 
-        navigateTo('/');
+        navigateTo(go.value);
       
         $swal.success({ title: ' خوش آمدید  ' + appState.user.name , 'message' : '' , confirmButtonText : 'بستن'} )
 

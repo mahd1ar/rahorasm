@@ -4,7 +4,7 @@ definePageMeta({
   layout: 'profile',
   pageTransition: { name: 'anime-blur', mode: 'out-in' },
 })
-const { $swal,$api } = useNuxtApp()
+const { $swal,$api, $router } = useNuxtApp()
 const password = ref("")
 const confirmPassword = ref("")
 
@@ -30,13 +30,20 @@ function validate(){
 function changePassword() {
   if(!validate()) return
 
-  $api('/auth/password/',{
-    method:'POST',
+  $api('/auth/user-profile',{
+    method:'PUT',
     body: {
-      password:password.value,confirm_password:confirmPassword.value
+      password:password.value
     }
     }).then(() => {
-      $swal.success("رمز عبور با موفقیت تغییر کرد")
+      
+      $swal.success({title: "رمز عبور با موفقیت تغییر کرد",message: 'لطفا دوباره وارد شوید'})
+      
+      $router.push({
+        path: '/signout',
+        query:{go: '/u/profile'}
+      })
+
     }).catch((err) => {
       $swal.error({
         message: err.message,
@@ -64,11 +71,11 @@ function changePassword() {
             <ul role="list" class=" text-sm leading-6">
               <li class="flex flex-col justify-between gap-x-6 py-6">
                 <label class="font-medium text-gray-900"> پسورد جدید</label>
-                <input v-model="password" class="form-input" type="text" name="" id="">
+                <input type="password" v-model="password" class="form-input"  name="" id="">
               </li>
               <li class="flex flex-col justify-between gap-x-6 py-6">
                 <label class="font-medium text-gray-900">تکرار پسورد</label>
-                <input v-model="confirmPassword" class="form-input" type="text" name="" id="">
+                <input type="password" v-model="confirmPassword" class="form-input"  name="" id="">
               </li>
             </ul>
     

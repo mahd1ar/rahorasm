@@ -12,11 +12,40 @@ const col1 = ref([
   'اسپانیا',
 ])
 
+export interface Root {
+  columns: Column[]
+  contact: Contact
+}
+
+ interface Column {
+  title: string
+  body: Body[]
+}
+
+ interface Body {
+  title: string
+  link: string
+}
+
+ interface Contact {
+  title: string
+  address: string
+  work_time: string
+  phone: string
+  email: string
+  instagram: string
+  telegram: string
+  whatsapp: string
+}
+
+
+const { data } = useAPI<Root>('/api/footer',{server: false,lazy:false})
 
 </script>
 
 <template>
   <footer class="bg-gradient-to-b from-white bg-background border-t">
+
     <div class="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
       <div class="lg:grid lg:grid-cols-2">
         <div class="border-b border-gray-100 py-8 lg:order-last lg:border-b-0 lg:border-s lg:py-16 lg:ps-16">
@@ -168,52 +197,54 @@ const col1 = ref([
           <div class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-3">
 
 
-            <div>
-              <p class="font-medium text-gray-900">جاذبه های گردشگری
+            <div v-for="(i,inx) in data?.columns || []" :key="inx">
+              <p class="font-medium text-gray-900"> {{ i.title }}
               </p>
 
               <ul class="mt-6 space-y-4 text-sm">
-                <li v-for="i in col1" :key="i">
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    جاذبه های گردشگری
-                    {{ i }}
-                  </a>
+                <li v-for="ii in i.body" :key="i">
+                  <NuxtLink :to="ii.link" class="text-gray-700 transition hover:opacity-75">
+             
+                    {{ ii.title }}
+                  </NuxtLink>
                 </li>
 
               </ul>
             </div>
 
+<template v-if="false" >
 
-            <div>
-              <p class="font-medium text-gray-900">
-                اطلاعات
-                هتل ها
-              </p>
+  <div>
+    <p class="font-medium text-gray-900">
+      اطلاعات
+      هتل ها
+    </p>
 
-              <ul class="mt-6 space-y-4 text-sm">
-                <li v-for="i in col1" :key="i">
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    هتل های
-                    {{ i }}
-                  </a>
-                </li>
-              </ul>
-            </div>
+    <ul class="mt-6 space-y-4 text-sm">
+      <li v-for="i in col1" :key="i">
+        <a href="#" class="text-gray-700 transition hover:opacity-75">
+          هتل های
+          {{ i }}
+        </a>
+      </li>
+    </ul>
+  </div>
 
-            <div>
-              <p class="font-medium text-gray-900">پربازدید ترین تورها</p>
+  <div>
+    <p class="font-medium text-gray-900">پربازدید ترین تورها</p>
 
-              <ul class="mt-6 space-y-4 text-sm">
-                <li v-for="i in col1" :key="i">
-                  <a href="#" class="text-gray-700 transition hover:opacity-75">
-                    تورهای
-                    {{ i }}
-                  </a>
-                </li>
+    <ul class="mt-6 space-y-4 text-sm">
+      <li v-for="i in col1" :key="i">
+        <a href="#" class="text-gray-700 transition hover:opacity-75">
+          تورهای
+          {{ i }}
+        </a>
+      </li>
 
 
-              </ul>
-            </div>
+    </ul>
+  </div>
+</template>
           </div>
 
           <div class="mt-8 border-t border-gray-100 pt-8">

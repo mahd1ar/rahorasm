@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {
   Disclosure,
   DisclosureButton,
@@ -14,82 +14,54 @@ import {
 import { StarIcon } from '@heroicons/vue/20/solid'
 import { HeartIcon, MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
 
-const hotel1 = "https://images.unsplash.com/photo-1455587734955-081b22074882?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aG90ZWx8ZW58MHx8MHx8fDA%3D"
-const hotel2 = "https://plus.unsplash.com/premium_photo-1687960116497-0dc41e1808a2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGhvdGVsfGVufDB8fDB8fHww"
 
-const product = {
-  name: 'هتل لی لا اِمبینس یا کرون پلازا دهلی | leela ambience / crowne plaza rohini Hotel delhi',
-  price: '$140',
-  rating: 4,
-  images: [
-    {
-      id: 1,
-      name: 'Angled view',
-      src: hotel1,
-      alt: 'Angled front view with bag zipped and handles upright.',
-    },
-    {
-      id: 2,
-      name: 'Angled view 2',
-      src: hotel2,
-      alt: 'Angled front view with bag zipped and handles upright.',
-    },
-    // More images...
-  ],
-  colors: [
-    { name: 'Washed Black', bgColor: 'bg-gray-700', selectedColor: 'ring-gray-700' },
-    { name: 'White', bgColor: 'bg-white', selectedColor: 'ring-gray-400' },
-    { name: 'Washed Gray', bgColor: 'bg-gray-500', selectedColor: 'ring-gray-500' },
-  ],
-  description: `
-    <p>The Zip Tote Basket is the perfect midpoint between shopping tote and comfy backpack. With convertible straps, you can hand carry, should sling, or backpack this convenient and spacious bag. The zip top and durable canvas construction keeps your goods protected for all-day use.</p>
-  `,
-  details: [
-    {
-      name: 'امکانات هتل',
-      items: [
-        'Multiple strap configurations',
-        'Spacious interior with top zip',
-        'Leather handle and tabs',
-        'Interior dividers',
-        'Stainless strap loops',
-        'Double stitched construction',
-        'Water-resistant',
-      ],
-    },
-    {
-      name: 'امکانات اتاق',
-      items: [
-        'Multiple strap configurations',
-        'Spacious interior with top zip',
-        'Leather handle and tabs',
-        'Interior dividers',
-        'Stainless strap loops',
-        'Double stitched construction',
-        'Water-resistant',
-      ],
-    },
-    {
-      name: 'امکانات تفریحی',
-      items: [
-        'Multiple strap configurations',
-        'Spacious interior with top zip',
-        'Leather handle and tabs',
-        'Interior dividers',
-        'Stainless strap loops',
-        'Double stitched construction',
-        'Water-resistant',
-      ],
-    },
-    // More sections...
-  ],
-}
 
-const selectedColor = ref(product.colors[0])
+const param = useRouteParams('id', 1, { transform: Number }) 
+
+const { data: apiData,error } = useAPI<HotelDetailsAPI.Root>('/hotels/' + param.value)
+
+const product = computed(() => {
+
+  return{
+   name: apiData.value?.name,
+   price: '$140',
+   rating: apiData.value?.star || 0,
+   images: apiData.value?.images.map(i => ({src: i.image, alt: i.alt,id:i.id})),
+   colors: [
+     { name: 'Washed Black', bgColor: 'bg-gray-700', selectedColor: 'ring-gray-700' },
+     { name: 'White', bgColor: 'bg-white', selectedColor: 'ring-gray-400' },
+     { name: 'Washed Gray', bgColor: 'bg-gray-500', selectedColor: 'ring-gray-500' },
+   ],
+   description: apiData.value?.description,
+   details: [
+    
+     {
+       name: 'امکانات هتل',
+       items: apiData.value?.hotel_facilities.map(i => i.name)
+     },
+     {
+       name: 'امکانات اتاق',
+       items: apiData.value?.room_facilities.map(i => i.name),
+     },
+     {
+       name: 'امکانات تفریحی',
+       items: apiData.value?.recreational_facilities.map(i => i.name),
+     },
+     {
+       name: 'امکانات ورزشی',
+       items: apiData.value?.sport_facilities.map(i => i.name),
+     },
+     // More sections...
+   ],
+ }
+})
+
+// const selectedColor = ref(product.colors[0])
 </script>
 
 
 <template>
+  {{ error }}
   <div class="bg-white">
     <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6  lg:max-w-7xl lg:px-8">
       <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
@@ -143,7 +115,7 @@ const selectedColor = ref(product.colors[0])
 
           <form class="mt-6">
   
-            <div class="mt-10 flex">
+            <div class="mt-10 flex" v-if="false" >
               <button type="submit" class="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-teal-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full">Add to bag</button>
 
               <button type="button" class="ml-4 flex items-center justify-center rounded-md px-3 py-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500">

@@ -13,3 +13,11 @@ export function remove<T>(items: Array<T>, fn: (n: T) => boolean) {
         }
     }
 }
+
+export function stripHTML(str: string) {
+    return str.replace(/(<([^>]+)>)/gi, '');
+}
+
+export function HtmlToExcerpt(str: string) {
+    return stripHTML(str).substring(0, 100)
+}

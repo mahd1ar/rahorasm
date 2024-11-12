@@ -2,11 +2,18 @@
 import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/vue/20/solid'
 const h1 = "https://images.unsplash.com/photo-1549294413-26f195200c16?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
+const { $swal } = useNuxtApp()
 const firstInput = useTemplateRef('firstInput')
 
 const isOpen = ref(false)
 const selectedItemIndex = ref<number>(0)
 const selectedRoomIndex = ref<number>(0)
+const tempPassengerInput = reactive({
+  name: '',
+  ssn: '',
+  passportNumber: '',
+  birthday: '',
+})
 
 const reservation = reactive([
   {
@@ -111,25 +118,70 @@ watchDeep(reservation, (nval) => {
   })
 
 
-},{
+}, {
   immediate: true
 })
 
 function openUser(itemIndex: number, roomIndex: number) {
-  
+
   isOpen.value = true
   selectedItemIndex.value = itemIndex
   selectedRoomIndex.value = roomIndex
 }
 
-function cancelEditing() {
-  isOpen.value = false
-  reservation[selectedItemIndex.value].users[selectedRoomIndex.value].isValid = false
+function validatePassenger() {
+  if (!tempPassengerInput.name) {
+    $swal.error('نام و نام خانوادگی را وارد کنید')
+    return false
+  }
+
+  if (!tempPassengerInput.ssn) {
+    $swal.error('کد ملی را وارد کنید')
+    return false
+  }
+
+  if (!tempPassengerInput.passportNumber) {
+    $swal.error('شماره پاسپورت را وارد کنید')
+  }
+
+  if (!tempPassengerInput.birthday) {
+    $swal.error('تاریخ تولد را وارد کنید')
+  }
+
+  return true
 }
 
-onMounted(() => {
-  firstInput.value?.focus()
+function cancelEditing() {
+  isOpen.value = false
+  tempPassengerInput.name = ""
+  tempPassengerInput.ssn = ""
+  tempPassengerInput.passportNumber = ""
+  tempPassengerInput.birthday = ""
+}
+
+
+function saveEditing() {
+
+  if (!validatePassenger())
+    return
+
+  reservation[selectedItemIndex.value].users[selectedRoomIndex.value].name = tempPassengerInput.name
+  reservation[selectedItemIndex.value].users[selectedRoomIndex.value].ssn = tempPassengerInput.ssn
+  reservation[selectedItemIndex.value].users[selectedRoomIndex.value].passportNumber = tempPassengerInput.passportNumber
+  reservation[selectedItemIndex.value].users[selectedRoomIndex.value].birthday = tempPassengerInput.birthday
+  isOpen.value = false
+}
+
+
+watchImmediate(isOpen, (nval) => {
+  if (nval)
+    setTimeout(() => {
+      Object.assign(tempPassengerInput, reservation[selectedItemIndex.value].users[selectedRoomIndex.value])
+      firstInput.value?.focus()
+    }, 300);
 })
+
+
 
 </script>
 
@@ -141,29 +193,29 @@ onMounted(() => {
       </template>
 
       <template #content>
-        <div>
-          <form >
+        <div class="">
+          <form>
 
-            <fieldset class="text-gray-900 flex flex-col gap-2 mt-4" >
+            <fieldset class="text-gray-900 flex flex-col gap-2 mt-4 ">
               <legend class="sr-only">مسافران</legend>
               <div class="flex justify-between">
                 <label for="name"> نام و نام خانوادگی </label>
-                <input ref="firstInput" type="text" id="name"  v-model="reservation[selectedItemIndex].users[selectedRoomIndex].name">
+                <input ref="firstInput" type="text" id="name" v-model="tempPassengerInput.name">
               </div>
-  
+
               <div class="flex justify-between">
                 <label for="ssn"> شماره ملی </label>
-                <input type="text" id="ssn"  v-model="reservation[selectedItemIndex].users[selectedRoomIndex].ssn">
+                <input type="text" id="ssn" v-model="tempPassengerInput.ssn">
               </div>
 
               <div class="flex justify-between">
                 <label for="passport"> شماره پاسپورت </label>
-                <input type="text" id="passport"  v-model="reservation[selectedItemIndex].users[selectedRoomIndex].passportNumber">
+                <input type="text" id="passport" v-model="tempPassengerInput.passportNumber">
               </div>
 
               <div class="flex justify-between">
                 <label for="birthday"> تاریخ تولد </label>
-                <input type="datetime-local" id="birthday"  v-model="reservation[selectedItemIndex].users[selectedRoomIndex].birthday">
+                <input type="datetime-local" id="birthday" v-model="tempPassengerInput.birthday">
               </div>
             </fieldset>
 
@@ -173,7 +225,11 @@ onMounted(() => {
     </DialogBox>
 
     <div class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Shopping Cart</h1>
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+        رزرو {{ reservation[0].hotel.name }} برای
+        تور
+        فبلان
+      </h1>
       <form class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" class="lg:col-span-7">
           <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
@@ -205,16 +261,7 @@ onMounted(() => {
                     <label :for="`quantity-${itemIdx}`" class="sr-only">Quantity, {{ item.name }}</label>
                     <select :id="`quantity-${itemIdx}`" :name="`quantity-${itemIdx}`" v-model.number="item.count"
                       class="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm">
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                      <option value="5">5</option>
-                      <option value="6">6</option>
-                      <option value="7">7</option>
-                      <option value="8">8</option>
-                      <option value="9">9</option>
-                      <option value="10">10</option>
+                      <option v-for="i in 10" :value="i">{{ i }}</option>
                     </select>
 
                     <div class="absolute left-0 top-0">
@@ -231,40 +278,36 @@ onMounted(() => {
                   <button type="button" v-for="(i, index) in item.users" :key="index" @click="openUser(itemIdx, index)"
                     class="p-2 border rounded  text-sm shadow flex items-center gap-2 h-12 group" :class="[
                       i.isValid ? 'border-emerald-500 bg-emerald-50 text-emerald-700' :
-                        index === 0 || item.users.at(index-1)?.isValid ? 'border-gray-500 bg-gray-50 text-gray-700' :
+                        index === 0 || item.users.at(index - 1)?.isValid ? 'border-gray-500 bg-gray-50 text-gray-700' :
                           'border-gray-500 bg-gray-50 text-gray-700 opacity-70 pointer-events-none'
                     ]">
-                    <Icon size="28px" name="material-symbols-light:person-alert-rounded" class=" flex-shrink-0" :class="[
-                      i.isValid ? 'text-emerald-500' : 'text-gray-500'
-                    ]" />
-                    <div  class="w-full text-right">
+                    <Icon size="28px" :name="i.isValid ? 'material-symbols-light:person-check-rounded' :
+                      'material-symbols-light:person-alert-rounded'" class=" flex-shrink-0" :class="[
+                        i.isValid ? 'text-emerald-500' : 'text-gray-500'
+                      ]" />
+                    <div class="w-full text-right">
                       <strong v-if="i.isValid">{{ i.name }} </strong>
                       <div v-else>
                         اطلاعات نفر
                         <strong>
-                          
+
                           {{ nth[index] }}
                         </strong>
                         را وارد کنید
-                        
+
                       </div>
                     </div>
-                    <div 
-                      class="bg-white p-0.5 mr-auto flex-center shrink-0 rounded "
-                      :class="[
-                        i.isValid ? 'group-hover:bg-emerald-500 group-hover:text-emerald-50 text-emerald-500' : 'group-hover:bg-gray-500 group-hover:text-gray-50 text-gray-500'
-                      ]"
-                      v-if="i.isValid || index === 0 || item.users.at(index-1)?.isValid"
-                      >
+                    <div class="bg-white p-0.5 mr-auto flex-center shrink-0 rounded " :class="[
+                      i.isValid ? 'group-hover:bg-emerald-500 group-hover:text-emerald-50 text-emerald-500' : 'group-hover:bg-gray-500 group-hover:text-gray-50 text-gray-500'
+                    ]" v-if="i.isValid || index === 0 || item.users.at(index - 1)?.isValid">
 
-                      <Icon size="28px" :name="
-                      i.isValid ? 'material-symbols-light:person-edit' :
-                      'material-symbols-light:ads-click-rounded'" class="  flex-shrink-0 " />
+                      <Icon size="28px" :name="i.isValid ? 'material-symbols-light:person-edit' :
+                        'material-symbols-light:ads-click-rounded'" class="  flex-shrink-0 " />
                     </div>
                   </button>
                 </div>
 
-       
+
 
                 <p class="mt-4 flex gap-2 items-center text-sm text-gray-700">
                   <CheckIcon v-if="item.inStock" class="h-5 w-5 flex-shrink-0 text-green-500" aria-hidden="true" />
@@ -288,14 +331,14 @@ onMounted(() => {
               </dt>
               <dd class="text-sm font-medium text-gray-900">{{ reservation.reduce((a, b) => a + b.count, 0) }}</dd>
             </div>
-            
+
             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
               <dt class="text-sm text-gray-600">
-              تعداد اتاق ها
+                تعداد اتاق ها
               </dt>
               <dd class="text-sm font-medium text-gray-900">{{ reservation.length }}</dd>
             </div>
-            
+
             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
               <dt class="flex text-sm text-gray-600">
                 <span>Tax estimate</span>
@@ -315,7 +358,9 @@ onMounted(() => {
           <div class="mt-6">
             <button type="submit"
               class="w-full rounded-md border border-transparent bg-primary px-4 py-3 text-base font-medium text-white shadow-sm hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-gray-50">
-            رزرو تور
+              نهایی کردن
+              رزرو تور
+
             </button>
           </div>
         </section>

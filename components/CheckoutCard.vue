@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/vue/20/solid'
+import { isValidNationalCode } from '~/utils';
 const h1 = "https://images.unsplash.com/photo-1549294413-26f195200c16?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
 const { $swal } = useNuxtApp()
@@ -36,7 +37,6 @@ const reservation = reactive([
         ssn: '',
         passportNumber: '',
         birthday: '',
-        isValid: true
       }
     ],
     imageAlt: "Front of men's Basic Tee in sienna.",
@@ -62,7 +62,6 @@ const reservation = reactive([
         ssn: '',
         passportNumber: '',
         birthday: '',
-        isValid: false
       }
     ],
     imageAlt: "Front of men's Basic Tee in black.",
@@ -86,7 +85,6 @@ const reservation = reactive([
         ssn: '',
         passportNumber: '',
         birthday: '',
-        isValid: false
       }
     ],
     imageAlt: 'Insulated bottle with white base and black snap lid.',
@@ -107,7 +105,6 @@ watchDeep(reservation, (nval) => {
             ssn: '',
             passportNumber: '',
             birthday: '',
-            isValid: false
           })
         }
       } else
@@ -139,13 +136,20 @@ function validatePassenger() {
     $swal.error('کد ملی را وارد کنید')
     return false
   }
-
+  
   if (!tempPassengerInput.passportNumber) {
     $swal.error('شماره پاسپورت را وارد کنید')
+    return false
   }
-
+  
   if (!tempPassengerInput.birthday) {
     $swal.error('تاریخ تولد را وارد کنید')
+    return false
+  }
+  
+  if(!isValidNationalCode(tempPassengerInput.ssn)){
+    $swal.error('کد ملی وارد شده صحیح نمی باشد')
+    return false
   }
 
   return true
@@ -215,14 +219,25 @@ watchImmediate(isOpen, (nval) => {
 
               <div class="flex justify-between">
                 <label for="birthday"> تاریخ تولد </label>
-                <input type="datetime-local" id="birthday" v-model="tempPassengerInput.birthday">
+                <!-- <input type="datetime-local" id="birthday" v-model="tempPassengerInput.birthday"> -->
+              
+                <FarsiDate v-model="tempPassengerInput.birthday"  />
               </div>
             </fieldset>
 
           </form>
         </div>
       </template>
+
+      <template #buttons>
+        <button type="button" class=" w-full bg-primary rounded-3xl text-white py-2 disabled:grayscale" 
+        :disabled="Object.entries(tempPassengerInput).map(i => i[1]).filter(Boolean).length < 4" @click="saveEditing">
+          ذخیره کردن اطلاعات مسافر
+        </button>
+        </template>
     </DialogBox>
+
+     
 
     <div class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
       <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -277,16 +292,16 @@ watchImmediate(isOpen, (nval) => {
 
                   <button type="button" v-for="(i, index) in item.users" :key="index" @click="openUser(itemIdx, index)"
                     class="p-2 border rounded  text-sm shadow flex items-center gap-2 h-12 group" :class="[
-                      i.isValid ? 'border-emerald-500 bg-emerald-50 text-emerald-700' :
-                        index === 0 || item.users.at(index - 1)?.isValid ? 'border-gray-500 bg-gray-50 text-gray-700' :
+                      i.name ? 'border-emerald-500 bg-emerald-50 text-emerald-700' :
+                        index === 0 || item.users.at(index - 1)?.name ? 'border-gray-500 bg-gray-50 text-gray-700' :
                           'border-gray-500 bg-gray-50 text-gray-700 opacity-70 pointer-events-none'
                     ]">
-                    <Icon size="28px" :name="i.isValid ? 'material-symbols-light:person-check-rounded' :
+                    <Icon size="28px" :name="i.name ? 'material-symbols-light:person-check-rounded' :
                       'material-symbols-light:person-alert-rounded'" class=" flex-shrink-0" :class="[
-                        i.isValid ? 'text-emerald-500' : 'text-gray-500'
+                        i.name ? 'text-emerald-500' : 'text-gray-500'
                       ]" />
                     <div class="w-full text-right">
-                      <strong v-if="i.isValid">{{ i.name }} </strong>
+                      <strong v-if="i.name">{{ i.name }} </strong>
                       <div v-else>
                         اطلاعات نفر
                         <strong>
@@ -298,10 +313,10 @@ watchImmediate(isOpen, (nval) => {
                       </div>
                     </div>
                     <div class="bg-white p-0.5 mr-auto flex-center shrink-0 rounded " :class="[
-                      i.isValid ? 'group-hover:bg-emerald-500 group-hover:text-emerald-50 text-emerald-500' : 'group-hover:bg-gray-500 group-hover:text-gray-50 text-gray-500'
-                    ]" v-if="i.isValid || index === 0 || item.users.at(index - 1)?.isValid">
+                      i.name ? 'group-hover:bg-emerald-500 group-hover:text-emerald-50 text-emerald-500' : 'group-hover:bg-gray-500 group-hover:text-gray-50 text-gray-500'
+                    ]" v-if="i.name || index === 0 || item.users.at(index - 1)?.name">
 
-                      <Icon size="28px" :name="i.isValid ? 'material-symbols-light:person-edit' :
+                      <Icon size="28px" :name="i.name ? 'material-symbols-light:person-edit' :
                         'material-symbols-light:ads-click-rounded'" class="  flex-shrink-0 " />
                     </div>
                   </button>

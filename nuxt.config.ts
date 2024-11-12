@@ -6,15 +6,21 @@ export default defineNuxtConfig({
     head: {
       link: [
         {
-           href : "https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css" ,rel : "stylesheet", type : "text/css" 
+          href: "https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css",
+          rel: "stylesheet",
+          type: "text/css"
+        },
+        {
+          rel: "stylesheet",
+          href: "https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css"
         }
       ]
     }
   },
-   devServer: {
+  devServer: {
     port: 3036
   },
-  modules: ['@nuxtjs/tailwindcss', '@nuxt/icon', '@pinia/nuxt',  '@vueuse/nuxt'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxt/icon', '@pinia/nuxt', '@vueuse/nuxt'],
   tailwindcss: {
     cssPath: '~/assets/css/tailwind.scss'
   },

@@ -1,12 +1,10 @@
 <script setup lang="ts">
-const { isHydrating } = useNuxtApp()
-
 
 </script>
 
 
 <template>
-    <main :style="isHydrating && 'transform: scale(0.9);transform-origin: top;opacity: 0.7;'">
+    <main >
         <ResponsiveDebugger />
 
         <section class="py-3 container px-4 mx-auto">

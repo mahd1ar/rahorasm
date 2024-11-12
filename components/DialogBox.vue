@@ -87,7 +87,7 @@ watchDebounced(isOpen, (value) => {
               :class="[!isNull && 'p-6' ,
                        border ? 'border-gray-500' : 'border-gray-600/20']"
             >
-              <button v-if="isOpen" type="submit" class="absolute top-4 left-4 text-white bg-Secondary p-2 rounded-lg anime-pop opacity-0" @click="closeModal">
+              <button v-if="isOpen" type="submit" class="absolute top-4 left-4 bg-white/50 text-Secondary p-2 rounded-lg anime-pop opacity-0" @click="closeModal">
                 <svg width="20" height="20" viewBox="0 0 20 20"><path fill="currentColor" d="M10 8.586L2.929 1.515L1.515 2.929L8.586 10l-7.071 7.071l1.414 1.414L10 11.414l7.071 7.071l1.414-1.414L11.414 10l7.071-7.071l-1.414-1.414L10 8.586z" /></svg>
               </button>
               <DialogTitle

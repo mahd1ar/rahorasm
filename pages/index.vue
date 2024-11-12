@@ -4,8 +4,7 @@
 
 
 <template>
-    <main >
-        <ResponsiveDebugger />
+    <main>
 
         <section class="py-3 container px-4 mx-auto">
             <div class="flex items-center homeImg">
@@ -24,13 +23,13 @@
             </div>
         </section>
 
- <HomeSpecialAdvise />
+        <HomeSpecialAdvise />
 
         <HomeCallToAction />
 
         <HomeFourCellGrid />
 
-        <HomeSpecialHotels /> 
+        <HomeSpecialHotels />
     </main>
 </template>
 
@@ -81,11 +80,12 @@
 
 .anime-blur-enter-active,
 .anime-blur-leave-active {
-  transition: all 0.4s;
+    transition: all 0.4s;
 }
+
 .anime-blur-enter-from,
 .anime-blur-leave-to {
-  opacity: 0;
-  filter: blur(1rem);
+    opacity: 0;
+    filter: blur(1rem);
 }
 </style>

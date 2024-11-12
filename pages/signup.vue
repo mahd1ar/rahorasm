@@ -169,7 +169,6 @@ onMounted(() => {
 <template>
 
   <main class="py-4">
-    <ResponsiveDebugger />
     <div class="max-w-2xl mx-auto p-6 sm:p-0">
       <div class="flex justify-center flex-col sm:flex-row">
         <div

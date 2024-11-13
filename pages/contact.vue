@@ -20,7 +20,7 @@ function setFormData() {
     phone: "",
     email: "",
     subject: "",
-    description: "",
+    decription: "",
   })
 }
 
@@ -29,7 +29,7 @@ const formData = reactive({
   phone: "",
   email: "",
   subject: "",
-  description: "",
+  decription: "",
 });
 
 const errors = ref('');
@@ -41,31 +41,44 @@ onMounted(() => {
 });
 
 
-async function handleSubmit(e: Event) {
-  e.preventDefault();
+async function handleSubmit() {
 
   isLoading.value = true
 
   // Validation
-  const phoneRegex = /((0?9)|(\+?989))\d{9}/g;
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  if (!phoneRegex.test(formData.phone)) {
-    errors.value = "لطفا شماره همراه معتبر وارد نمایید";
-
+  if ((formData.phone).length < 8) {
+    $swal.error({
+      title: "خطا",
+      message: "لطفا شماره همراه معتبر وارد نمایید",
+      confirmButtonText: "باشه",
+    });
     return
   }
 
   if (!emailRegex.test(formData.email)) {
-    errors.value = "آدرس ایمیل معتبر نمی باشد";
+    $swal.error({
+      title: "خطا",
+      message: "لطفا آدرس ایمیل معتبر وارد نمایید",
+      confirmButtonText: "باشه",
+    });
+    return
+  }
 
+  if (!formData.decription.trim()) {
+    $swal.error({
+      title: "خطا",
+      message: "لطفا متن پیام خود را وارد نمایید",
+      confirmButtonText: "باشه",
+    });
     return
   }
 
   try {
-    let isValid = true;
 
-    const response = await $api<any>("/travelForm", {
+    const response = await $api<any>("/auth/contact-us", {
       method: 'POST',
       body: formData,
     });
@@ -75,11 +88,23 @@ async function handleSubmit(e: Event) {
       confirmButtonText: "باشه",
     });
 
+    // reset form
+    formData.name = "";
+    formData.phone = "";
+    formData.email = "";
+    formData.subject = "";
+    formData.decription = "";
+
     console.log("Contact Form Submitted Successfully:", response.data);
     // Optionally, you can handle success feedback to the user here (e.g., displaying a message)
   } catch (error) {
     console.error("Error submitting contact form:", error);
     // Optionally, you can handle error feedback to the user here
+    $swal.error({
+      title: "خطا",
+      message: "خطا در ارسال پیام",
+      confirmButtonText: "باشه",
+    })
   }
 
   isLoading.value = (false);
@@ -93,13 +118,14 @@ async function handleSubmit(e: Event) {
 <template>
 
   <div class="pt-5 container mx-auto">
-    <div class="align-center flex items-center">
+    <div class="align-center flex flex-col-reverse items-center md:flex-row ">
       <div class="lg:w-1/2 w-full">
-        <form @submit="handleSubmit" class=" flex flex-col border-2 border-black rounded-lg p-4"
+        <form @submit.prevent="handleSubmit" class=" flex flex-col border-2 border-black rounded-lg p-4"
           style="background-color: #ededf1d4 !important;">
           <h5 class="py-2 flex text-lg font-bold">
 
             تماس با ما
+
           </h5>
 
 
@@ -125,8 +151,8 @@ async function handleSubmit(e: Event) {
                     </path>
                   </svg>
                 </span>
-                <input placeholder="شماره تماس" autocomplete="off" name="phone" required type="text"
-                  class="form-control" value="">
+                <input placeholder="شماره تماس" v-model="formData.phone" autocomplete="off" name="phone" required
+                  type="text" class="form-control">
               </div>
               <div class="flex gap-4">
                 <span class="p-1 pt-2">
@@ -139,7 +165,7 @@ async function handleSubmit(e: Event) {
                   </svg>
                 </span>
                 <input placeholder="آدرس ایمیل" autocomplete="off" name="email" required type="text"
-                  class="form-control" value="">
+                  class="form-control" v-model="formData.email">
               </div>
               <div class="flex gap-4">
                 <span class="p-1 pt-2">
@@ -153,11 +179,13 @@ async function handleSubmit(e: Event) {
                       stroke-width="32"></circle>
                     <circle cx="80" cy="368" r="16" fill="none" stroke-linecap="round" stroke-linejoin="round"
                       stroke-width="32"></circle>
-                  </svg></span><select name="subject" class="form-control ">
-                  <option value="">انتخاب موضوع</option>
-                  <option value="تورهای لحظه آخری">ثبت نام تورهای لحظه آخری</option>
-                  <option value="پیشنهادات">پیشنهادات</option>
-                  <option value="انتقادات">انتقادات</option>
+                  </svg>
+                </span>
+                <select name="subject" class="form-control" v-model="formData.subject">
+                  <option value="" disabled>انتخاب موضوع</option>
+                  <option value="TourRegistration">ثبت نام تورهای لحظه آخری</option>
+                  <option value="Suggestions">پیشنهادات</option>
+                  <option value="Complaints">انتقادات</option>
                 </select>
               </div>
               <div class="flex gap-4">
@@ -173,7 +201,8 @@ async function handleSubmit(e: Event) {
                   </svg>
                 </span>
                 <textarea rows="4" placeholder="پیام خود را وارد کنید" autocomplete="off" name="description"
-                  class="form-control w-full"></textarea>
+                  class="form-control w-full" v-model="formData.decription">
+                </textarea>
               </div>
 
               <button class=" btn retro w-full rounded py-2 text-lg">ثبت</button>
@@ -187,7 +216,7 @@ async function handleSubmit(e: Event) {
       </div>
     </div>
 
-    <div class="my-5 flex gap-4">
+    <div class="my-5 flex gap-4 md:flex-row flex-col">
       <div v-for="i in data || []" :key="i.id" class="lg:w-3/13 w-full border border-gray-200 rounded"
         style="background: rgb(248, 249, 250);">
         <div class="mb-2 card-style py-3 min-height animation card bg-light text-dark">

@@ -28,14 +28,15 @@ const expanded = ref(false)
 <template>
   <div>
 
-    <div class="bg-[#fcfcfd] divide-x-2 divide-x-reverse flex  h-20 border border-gray-300 rounded-md">
-      <div class="lg:w-3/12 flex-center">
+    <div
+      class="bg-[#fcfcfd] divide-x-2 divide-x-reverse lg:flex lg:gap-0 gap-2 grid col-span-2 lg:h-20 border border-gray-300 rounded-md">
+      <div class="col-span-2 lg:w-3/12 flex-center bg-gray-50">
         <strong class="p-3 text-center">
           {{ title }}
         </strong>
       </div>
 
-      <div class="lg:w-3/12 divide-y-2  flex flex-col text-gray-800">
+      <div class="  lg:w-3/12 divide-y-2  flex flex-col text-gray-800">
         <div class="h-1/2 flex gap-2 items-center p-2">
           <!-- moon icon -->
           <svg xmlns="http://www.w3.org/2000/svg" width="0.95em" height="0.95em" viewBox="0 0 32 32">
@@ -70,11 +71,11 @@ const expanded = ref(false)
             <path fill="currentColor" d="M13 6h10v2H13z" class="clr-i-outline clr-i-outline-path-16" />
             <path fill="none" d="M0 0h36v36H0z" />
           </svg>
-          <span> {{ date &&  ' از ' +  new Date(date).toLocaleDateString('fa-IR') }} </span>
+          <span> {{ date && ' از ' + new Date(date).toLocaleDateString('fa-IR') }} </span>
         </div>
       </div>
 
-      <div class="lg:w-4/12 divide-y-2  flex flex-col text-gray-800">
+      <div class=" lg:w-4/12 divide-y-2  flex flex-col text-gray-800">
         <div class="h-1/2 flex gap-2 items-center p-2">
           <!-- plane icon -->
           <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -83,7 +84,7 @@ const expanded = ref(false)
           </svg>
           <span>
             {{ airline }}
-             </span>
+          </span>
         </div>
 
         <div class="h-1/2 flex gap-2 items-center p-2">
@@ -105,9 +106,9 @@ const expanded = ref(false)
         </div>
       </div>
 
-      <div class="lg:w-2/12 divide-y-2  flex flex-col flex-center text-gray-800">
+      <div class="col-span-2 lg:w-2/12 divide-y-2  flex flex-col flex-center text-gray-800">
         <button @click="expanded = !expanded" type="button"
-          class="btn p-2 px-4 rounded flex-center flex-col text-sm tracking-wide">
+          class="btn p-2 px-4 rounded flex-center flex-col text-sm tracking-wide w-full lg:w-auto">
           تاریخ های تور
           <span>
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -141,12 +142,12 @@ const expanded = ref(false)
             <div>
               <span class="block font-normal text-gray-600"> تاریخ رفت :</span>
 
-              <strong> {{  inf.retunTime ? new Date(inf.retunTime).toLocaleDateString()  : '' }} </strong>
+              <strong> {{ inf.retunTime ? new Date(inf.retunTime).toLocaleDateString() : '' }} </strong>
             </div>
             <div>
               <span class="block font-normal text-gray-600"> برگشت رفت: </span>
 
-              <strong> {{ inf.turn ? new Date(inf.turn).toLocaleDateString()  : '' }} </strong>
+              <strong> {{ inf.turn ? new Date(inf.turn).toLocaleDateString() : '' }} </strong>
             </div>
           </div>
           <div class="lg:w-3/12  flex flex-col  justify-center">

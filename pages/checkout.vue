@@ -2,7 +2,6 @@
 
 <template>
   <div>
-    Page: checkout
     <CheckoutCard />
   </div>
 </template>

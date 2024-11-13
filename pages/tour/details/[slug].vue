@@ -1,7 +1,12 @@
 <script setup lang="ts">
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
+import { COOKIES, type Reservation } from "~/data/types";
 
 const param = useRouteParams("slug", 1, { transform: Number });
+const reservation = useCookie<Reservation>(COOKIES.Reservation);
+const router = useRouter()
+const appState = useAppState()
+const { $swal } = useNuxtApp()
 
 const { data: apiData } = useAPI<TourDetailsAPI.Root>(
   "/tour/flight/" + param.value
@@ -20,7 +25,7 @@ const { data: fligthsData } = useAPI<{
 
 const data = computed(() => {
   if (!apiData.value) {
-    return {};
+    return null;
   }
 
   return {
@@ -112,30 +117,51 @@ const data = computed(() => {
           {
             title: "2 تخته (هرنفر)",
             price: i.two_bed_price,
+            id: i.id,
           },
           {
             title: "1 تخته (هرنفر)",
             price: i.one_bed_price,
+            id: i.id,
           },
           {
             title: "کودک با تخت (هرنفر)",
-            price: i.child_with_bed_price
+            price: i.child_with_bed_price,
+            id: i.id,
           },
           {
             title: "کودک بدون تخت (هرنفر)",
-            price: i.child_no_bed_price
+            price: i.child_no_bed_price,
+            id: i.id,
           },
 
         ]
       }))
-
-
     ]
   };
-
 });
 
 
+
+
+
+
+let lastBedroomId: null | number = null;
+let hotelIndex: null | number = null;
+const counts = ref([0, 0, 0, 0])
+function checkId(id: number, count: number, inxed: number, hIndex: number) {
+
+  if (!lastBedroomId)
+    lastBedroomId = id
+
+  if (lastBedroomId === id) {
+
+    counts.value[inxed] = count
+  } else {
+    counts.value = [0, 0, 0, 0]
+  }
+  hotelIndex = hIndex
+}
 
 const modelIsOpen = ref(false);
 
@@ -144,9 +170,72 @@ function openModal(v: boolean) {
   modelIsOpen.value = true
 }
 
+
+function storeReserve() {
+
+  const x: Reservation = {
+    tourId: apiData.value!.tour.id,
+    tourtitle: apiData.value!.tour.title,
+    hotelId: apiData.value!.hotel_prices[hotelIndex!].hotel.id,
+    hotelImages: apiData.value!.hotel_prices[hotelIndex!].hotel.images.at(0)!,
+    hotelName: apiData.value!.hotel_prices[hotelIndex!].hotel.name,
+    roomId: lastBedroomId,
+    counts: [
+      {
+        title: "2 تخته (هرنفر)",
+        count: counts.value[0],
+        price: apiData.value!.hotel_prices[hotelIndex!].two_bed_price,
+        identitication: 'two_bed_price',
+        users: []
+      },
+      {
+        title: "1 تخته (هرنفر)",
+        count: counts.value[1],
+        price: apiData.value!.hotel_prices[hotelIndex!].one_bed_price,
+        identitication: 'one_bed_price',
+        users: []
+      },
+      {
+        title: "کودک با تخت (هرنفر)",
+        count: counts.value[2],
+        price: apiData.value!.hotel_prices[hotelIndex!].child_with_bed_price,
+        identitication: 'child_with_bed_price',
+        users: []
+      },
+      {
+        title: "کودک بدون تخت (هرنفر)",
+        count: counts.value[3],
+        price: apiData.value!.hotel_prices[hotelIndex!].child_no_bed_price,
+        identitication: 'child_no_bed_price',
+        users: []
+      }
+    ]
+  }
+
+  reservation.value = x
+
+  if (appState.isAuth)
+    router.push('/checkout')
+  else {
+
+    $swal.about({
+      title: 'توجه',
+      message: 'برای ادامه رزرو باید وارد شوید'
+    })
+
+    router.push({
+      path: '/login',
+      query: {
+        go: '/checkout'
+      }
+    })
+  }
+
+}
+
 </script>
 
-<template> 
+<template>
 
   <main class="bg-gray-50 h-full">
 
@@ -159,13 +248,14 @@ function openModal(v: boolean) {
         <aside class="w-full shrink-0 p-6 rounded-md border ">
 
           <div class="flex flex-col gap-2 mt-2 relative">
-            <NuxtLink :to="'/tour/details/' + i.id" v-for="(i, inx) in fligthsData" :key="inx" :class="i.id === param ? 'border-primary shadow bg-white ' : 'cursor-pointer'
+            <NuxtLink :to="'/tour/details/' + i.id" v-for="(i, inx) in fligthsData" :key="inx" :class="i.id === param ? 'border-Secondary border-2 shadow bg-white ' : 'cursor-pointer'
               " class="border p-2 rounded-lg flex justify-between items-center bg-white">
               <div v-if="i.departure" class="text-sm flex flex-col gap-1 py-2 text-right">
                 <div>{{ i.departure && new Date(i.departure).toLocaleDateString("fa-ir", { weekday: "long" }) }}</div>
                 <div class="text-Secondary font-bold">{{ new Date(i.departure).toLocaleDateString("fa-ir", {
                   day:
-                    "numeric", month: "long" }) }}</div>
+                    "numeric", month: "long"
+                }) }}</div>
                 <div class="text-gray-700">
 
                   ساعت
@@ -188,7 +278,8 @@ function openModal(v: boolean) {
                 <div>{{ new Date(i.return_departure).toLocaleDateString("fa-ir", { weekday: "long" }) }}</div>
                 <div class="text-Secondary font-bold">{{ new Date(i.return_departure).toLocaleDateString("fa-ir", {
                   day:
-                    "numeric", month: "long" }) }}</div>
+                    "numeric", month: "long"
+                }) }}</div>
                 <div class="text-gray-700">
                   ساعت
                   {{ new Date(i.return_departure).toLocaleTimeString("fa-ir", { hour: "numeric", minute: "numeric" }) }}
@@ -214,7 +305,8 @@ function openModal(v: boolean) {
               <div class="text-Secondary font-bold">{{ new Date(i.departure).toLocaleDateString("fa-ir", {
                 day:
                   "numeric",
-                month: "long" }) }}</div>
+                month: "long"
+              }) }}</div>
               <div class="text-gray-700">
 
                 ساعت
@@ -237,7 +329,8 @@ function openModal(v: boolean) {
               <div>{{ new Date(i.return_departure).toLocaleDateString("fa-ir", { weekday: "long" }) }}</div>
               <div class="text-Secondary font-bold">{{ new Date(i.return_departure).toLocaleDateString("fa-ir", {
                 day:
-                  "numeric", month: "long" }) }}</div>
+                  "numeric", month: "long"
+              }) }}</div>
               <div class="text-gray-700">
                 ساعت
                 {{ new Date(i.return_departure).toLocaleTimeString("fa-ir", { hour: "numeric", minute: "numeric" }) }}
@@ -265,7 +358,7 @@ function openModal(v: boolean) {
       </aside>
       <div class="w-full lg:w-9/12">
         <section class="p-4 lg:p-6 rounded-md border bg-white flex flex-col gap-6">
-          <div v-for="(i, inx) in data.travel" :key="inx" class="flex flex-col gap-3">
+          <div v-for="(i, inx) in data?.travel || []" :key="inx" class="flex flex-col gap-3">
             <div class="flex">
               <svg v-if="i.type !== 'residence'" xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0"
                 viewBox="0 0 24 24">
@@ -368,7 +461,8 @@ function openModal(v: boolean) {
         <h2 class="text-2xl mt-6 mb-4 font-bold">لیست هتل ها و قیمت ها</h2>
         <section>
 
-          <div v-for="i in data.hotels" :key="i.id" class="p-6 rounded-md border bg-white flex flex-col gap-6 relative">
+          <div v-for="(i, inxx) in data?.hotels || []" :key="inxx"
+            class="p-6 rounded-md border bg-white flex flex-col gap-6 relative">
             <div class="relative">
               <div class="flex flex-col sm:flex-row items-start gap-4">
                 <img class="h-36 w-72 object-cover rounded-lg"
@@ -378,17 +472,19 @@ function openModal(v: boolean) {
                     <span> {{ i.name }}</span>
                     <!-- stars -->
                     <div class="text-yellow-500 text-2xl flex gap-1">
-                      
+
                       <!-- filled -->
-                      <svg v-for="fs in i.rating" :key="fs" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                      <svg v-for="fs in i.rating" :key="fs" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                        viewBox="0 0 24 24">
                         <path fill="currentColor" fill-rule="evenodd"
                           d="M12.908 1.581a1 1 0 0 0-1.816 0l-2.87 6.22l-6.801.807a1 1 0 0 0-.562 1.727l5.03 4.65l-1.335 6.72a1 1 0 0 0 1.469 1.067L12 19.426l5.977 3.346a1 1 0 0 0 1.47-1.068l-1.335-6.718l5.029-4.651a1 1 0 0 0-.562-1.727L15.777 7.8z"
                           clip-rule="evenodd" />
                       </svg>
-                 
-                      
+
+
                       <!-- outlined -->
-                      <svg v-if="i.rating < 5" v-for="o in (5 - i.rating)" :key="o" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                      <svg v-if="i.rating < 5" v-for="o in (5 - i.rating)" :key="o" xmlns="http://www.w3.org/2000/svg"
+                        width="1em" height="1em" viewBox="0 0 24 24">
                         <g fill="none">
                           <path fill="currentColor"
                             d="m12 2l3.104 6.728l7.358.873l-5.44 5.03l1.444 7.268L12 18.28L5.534 21.9l1.444-7.268L1.538 9.6l7.359-.873z"
@@ -397,7 +493,7 @@ function openModal(v: boolean) {
                             d="m12 2l3.104 6.728l7.358.873l-5.44 5.03l1.444 7.268L12 18.28L5.534 21.9l1.444-7.268L1.538 9.6l7.359-.873z" />
                         </g>
                       </svg>
-                      
+
                     </div>
                     <!-- end of stars -->
                   </h4>
@@ -419,8 +515,18 @@ function openModal(v: boolean) {
                     {{ h.price }}
                     تومان
                   </div>
-                  <BedroomCount />
-                                  </div>
+                  <BedroomCount @update="$d => { checkId(h.id, $d, inx, inxx) }" />
+                </div>
+              </div>
+              <div v-if="counts.reduce((a, b) => b += a, 0) !== 0" class="w-full flex justify-end p-2">
+                <button type="button" @click="storeReserve"
+                  class="bg-Secondary px-3 text-pink-100 py-4 rounded  mr-auto w-full md:w-auto flex gap-4">
+                  نهایی کردن رزرو
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 16 16">
+                    <path fill="none" stroke="currentColor" d="M9.5 4.5L6 8l3.5 3.5" />
+                  </svg>
+
+                </button>
               </div>
             </div>
           </div>
@@ -428,7 +534,7 @@ function openModal(v: boolean) {
 
         <h2 class="text-2xl mt-6 mb-4 font-bold">اطلاعات تور</h2>
 
-        <div class="w-full">
+        <div v-if="data" class="w-full">
           <TabGroup>
             <TabList class="flex space-x-1 rounded-xl bg-background text-black p-1">
               <Tab v-for="(tab, inx) in data.tour || []" as="template" :key="inx" v-slot="{ selected }">

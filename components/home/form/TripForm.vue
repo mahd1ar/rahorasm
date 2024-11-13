@@ -12,6 +12,8 @@ const budget = ref("");
 const response = ref<any>([]);
 const isLoading = ref(false);
 
+const { $swal, $router } = useNuxtApp()
+
 const handleSubmit = async (e: Event) => {
   e.preventDefault();
   isLoading.value = (true);
@@ -44,6 +46,24 @@ const handleSubmit = async (e: Event) => {
   };
 };
 
+function search() {
+
+  if (destination.value === '' || days.value === '' || budget.value === '') {
+    $swal.about('لطفا تمامی فیلد ها را پر کنید');
+    return;
+  }
+
+  $router.push({
+    path: '/tour/tours',
+    query: {
+      city: destination.value,
+      duration: days.value,
+      range_min: budget.value
+    }
+  })
+
+}
+
 </script>
 
 <template>
@@ -59,7 +79,9 @@ const handleSubmit = async (e: Event) => {
   </div>
 
   <div data-aos="fade-right" data-aos-duration="1500" data-aos-delay="50">
-    <form class="test-form rounded px-5 py-3 retro bg-background">
+
+
+    <form @submit.prevent="search" class="test-form rounded px-5 py-3 retro bg-background">
       <h5 class="py-2">
         <span class="pe-1">
           <Icon name="ic:sharp-airplanemode-active" size="24px" class="rotate-45" style="color: gray" />
@@ -67,7 +89,7 @@ const handleSubmit = async (e: Event) => {
         </span>
         <span class="text-2xl">سفرت رو با ما برنامه ریزی کن</span>
       </h5>
-      <div class="mt-3" >
+      <div class="mt-3">
         <div class="flex flex-col lg:flex-row gap-3 content-between items-center w-full">
           <div class="w-full lg:w-3/12">
             <div class="flex bg-white p-1 items-center rounded gap-2">
@@ -75,8 +97,9 @@ const handleSubmit = async (e: Event) => {
                 <Icon name="ic:outline-location-on" style="color: gray" />
 
               </div>
-              <input placeholder="شهر مقصد" autocomplete="off" type="text" id="destination" class="w-full focus:outline-none border-none focus:border-none focus:ring-gray-200"
-                value="" />
+              <input placeholder="شهر مقصد" autocomplete="off" type="text" id="destination"
+                class="w-full focus:outline-none border-none focus:border-none focus:ring-gray-200"
+                v-model="destination" />
             </div>
           </div>
           <div class="w-full lg:w-3/12">
@@ -85,8 +108,12 @@ const handleSubmit = async (e: Event) => {
 
                 <Icon name="hugeicons:moon-02" style="color: gray" />
               </div>
-              <input placeholder="تعداد شب" autocomplete="off" type="number" id="days" class="w-full focus:outline-none border-none focus:border-none focus:ring-gray-200"
-                v-model="days" />
+              <select placeholder="تعداد شب" autocomplete="off" id="days"
+                class="w-full focus:outline-none border-none focus:border-none focus:ring-gray-200"
+                v-model.number="days">
+                <option class="" value="" disabled selected> تعداد شب</option>
+                <option v-for="i in 10" :value="i">{{ i }} شب</option>
+              </select>
             </div>
           </div>
           <div class="w-full lg:w-3/12 ">
@@ -95,12 +122,18 @@ const handleSubmit = async (e: Event) => {
                 <Icon name="material-symbols:filter-alt-outline-sharp" style="color: gray" />
               </span>
 
-              <input placeholder="قیمت از" autocomplete="off" type="number" id="budget" class="w-full focus:outline-none border-none focus:border-none focus:ring-gray-200"
-                v-model="budget" />
+              <select placeholder="قیمت از" autocomplete="off" type="number" id="budget"
+                class="w-full focus:outline-none border-none focus:border-none focus:ring-gray-200"
+                v-model.number="budget">
+                <option class="" value="" disabled selected> قیمت از</option>
+                <option v-for="i in [1, 2, 4, 8, 10]" :value="i * 10_000_00">
+                  میلیون
+                  {{ i * 10_000_000 }} </option>
+              </select>
             </div>
           </div>
 
-              <button type="submit" class="p-1.5 rounded-lg bg-primary w-full lg:w-2/12 retro">جستجو</button>
+          <button type="submit" class="p-1.5 rounded-lg bg-primary w-full lg:w-2/12 retro">جستجو</button>
         </div>
 
       </div>
@@ -112,8 +145,6 @@ const handleSubmit = async (e: Event) => {
 </template>
 
 <style scoped>
-
-
 [type=number] {
   direction: rtl;
 }
@@ -127,5 +158,4 @@ const handleSubmit = async (e: Event) => {
   overflow-y: auto;
   background-color: aliceblue;
 }
-
 </style>

@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { CheckIcon, ClockIcon, QuestionMarkCircleIcon, XMarkIcon } from '@heroicons/vue/20/solid'
+import { COOKIES, type Reservation } from '~/data/types';
 import { isValidNationalCode } from '~/utils';
-const h1 = "https://images.unsplash.com/photo-1549294413-26f195200c16?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 
-const { $swal } = useNuxtApp()
+const { $swal, $api, $router } = useNuxtApp()
 const firstInput = useTemplateRef('firstInput')
 
 const isOpen = ref(false)
@@ -11,91 +11,20 @@ const selectedItemIndex = ref<number>(0)
 const selectedRoomIndex = ref<number>(0)
 const tempPassengerInput = reactive({
   name: '',
+  en_name: '',
   ssn: '',
   passportNumber: '',
   birthday: '',
 })
 
-const reservation = reactive([
-  {
-    id: 1,
-    name: 'Basic Tee',
-    hotel: {
-      id: 1,
-      name: '',
-      image: ''
-    },
-    price: '$32.00',
-    color: 'Sienna',
-    inStock: true,
-    size: 'Large',
-    imageSrc: h1,
-    count: 3,
-    users: [
-      {
-        name: 'omom',
-        ssn: '',
-        passportNumber: '',
-        birthday: '',
-      }
-    ],
-    imageAlt: "Front of men's Basic Tee in sienna.",
-  },
-  {
-    id: 2,
-    name: 'Basic Tee',
-    hotel: {
-      id: 1,
-      name: '',
-      image: ''
-    },
-    price: '$32.00',
-    color: 'Black',
-    inStock: false,
-    leadTime: '3–4 weeks',
-    size: 'Large',
-    imageSrc: h1,
-    count: 3,
-    users: [
-      {
-        name: '',
-        ssn: '',
-        passportNumber: '',
-        birthday: '',
-      }
-    ],
-    imageAlt: "Front of men's Basic Tee in black.",
-  },
-  {
-    id: 3,
-    name: 'Nomad Tumbler',
-    hotel: {
-      id: 1,
-      name: '',
-      image: ''
-    },
-    price: '$35.00',
-    color: 'White',
-    inStock: true,
-    imageSrc: h1,
-    count: 3,
-    users: [
-      {
-        name: '',
-        ssn: '',
-        passportNumber: '',
-        birthday: '',
-      }
-    ],
-    imageAlt: 'Insulated bottle with white base and black snap lid.',
-  },
-])
+
+const reservationData = useCookie<Reservation>(COOKIES.Reservation);
 
 const nth = ['اول', 'دوم', 'سوم', 'چهارم', 'پنجم', 'ششم', 'هفتم', 'هشتم', 'نهم'] as const
 
-watchDeep(reservation, (nval) => {
+watchDeep(reservationData, (nval) => {
 
-  nval.forEach(i => {
+  nval.counts.forEach(i => {
     if (i.count !== i.users.length) {
 
       if (i.count > i.users.length) {
@@ -105,6 +34,7 @@ watchDeep(reservation, (nval) => {
             ssn: '',
             passportNumber: '',
             birthday: '',
+            en_name: ''
           })
         }
       } else
@@ -136,18 +66,18 @@ function validatePassenger() {
     $swal.error('کد ملی را وارد کنید')
     return false
   }
-  
+
   if (!tempPassengerInput.passportNumber) {
     $swal.error('شماره پاسپورت را وارد کنید')
     return false
   }
-  
+
   if (!tempPassengerInput.birthday) {
     $swal.error('تاریخ تولد را وارد کنید')
     return false
   }
-  
-  if(!isValidNationalCode(tempPassengerInput.ssn)){
+
+  if (!isValidNationalCode(tempPassengerInput.ssn)) {
     $swal.error('کد ملی وارد شده صحیح نمی باشد')
     return false
   }
@@ -158,6 +88,7 @@ function validatePassenger() {
 function cancelEditing() {
   isOpen.value = false
   tempPassengerInput.name = ""
+  tempPassengerInput.en_name = ""
   tempPassengerInput.ssn = ""
   tempPassengerInput.passportNumber = ""
   tempPassengerInput.birthday = ""
@@ -169,29 +100,49 @@ function saveEditing() {
   if (!validatePassenger())
     return
 
-  reservation[selectedItemIndex.value].users[selectedRoomIndex.value].name = tempPassengerInput.name
-  reservation[selectedItemIndex.value].users[selectedRoomIndex.value].ssn = tempPassengerInput.ssn
-  reservation[selectedItemIndex.value].users[selectedRoomIndex.value].passportNumber = tempPassengerInput.passportNumber
-  reservation[selectedItemIndex.value].users[selectedRoomIndex.value].birthday = tempPassengerInput.birthday
+  reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value].name = tempPassengerInput.name
+  reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value].en_name = tempPassengerInput.en_name
+  reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value].ssn = tempPassengerInput.ssn
+  reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value].passportNumber = tempPassengerInput.passportNumber
+  reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value].birthday = tempPassengerInput.birthday
   isOpen.value = false
 }
 
+function deleteFromReservation(i: number) {
+  if (window.confirm("آیا از حذف این مورد اطمینان دارید؟")) {
+    reservationData.value.counts[i].count = 0
+    reservationData.value.counts[i].users.splice(0, reservationData.value.counts[i].users.length)
+  }
+  if (reservationData.value.counts.every(i => i.count === 0))
+    $router.push('/')
+}
 
-watchImmediate(isOpen, (nval) => {
+
+watch(isOpen, (nval) => {
   if (nval)
     setTimeout(() => {
-      Object.assign(tempPassengerInput, reservation[selectedItemIndex.value].users[selectedRoomIndex.value])
+      Object.assign(tempPassengerInput, reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value])
       firstInput.value?.focus()
     }, 300);
 })
 
+
+function handelSubmit() {
+  console.log(reservationData.value)
+  $api('/reserve/new/', { method: "POST", body: reservationData.value })
+    .then(res => {
+      console.log(res)
+      $swal.success("رزرو شما با موفقیت ثبت شد")
+    })
+    .catch(() => $swal.error("خطا در ثبت رزرو"))
+}
 
 
 </script>
 
 <template>
   <div class="bg-white">
-    <DialogBox v-model="isOpen" element-id="xx" @close="cancelEditing">
+    <DialogBox v-model="isOpen" element-id="xx" @canceled="cancelEditing">
       <template #header>
         <div>ویرایش اطلاعات مسافر</div>
       </template>
@@ -208,6 +159,18 @@ watchImmediate(isOpen, (nval) => {
               </div>
 
               <div class="flex justify-between">
+                <label for="en_name"> نام و نام خانوادگی به انگلیسی </label>
+                <input ref="firstInput" type="text" id="en_name" v-model="tempPassengerInput.en_name">
+              </div>
+
+              <div class="flex justify-between">
+                <label for="birthday"> تاریخ تولد </label>
+                <!-- <input type="datetime-local" id="birthday" v-model="tempPassengerInput.birthday"> -->
+
+                <FarsiDate v-model="tempPassengerInput.birthday" />
+              </div>
+
+              <div class="flex justify-between">
                 <label for="ssn"> شماره ملی </label>
                 <input type="text" id="ssn" v-model="tempPassengerInput.ssn">
               </div>
@@ -217,12 +180,6 @@ watchImmediate(isOpen, (nval) => {
                 <input type="text" id="passport" v-model="tempPassengerInput.passportNumber">
               </div>
 
-              <div class="flex justify-between">
-                <label for="birthday"> تاریخ تولد </label>
-                <!-- <input type="datetime-local" id="birthday" v-model="tempPassengerInput.birthday"> -->
-              
-                <FarsiDate v-model="tempPassengerInput.birthday"  />
-              </div>
             </fieldset>
 
           </form>
@@ -230,29 +187,37 @@ watchImmediate(isOpen, (nval) => {
       </template>
 
       <template #buttons>
-        <button type="button" class=" w-full bg-primary rounded-3xl text-white py-2 disabled:grayscale" 
-        :disabled="Object.entries(tempPassengerInput).map(i => i[1]).filter(Boolean).length < 4" @click="saveEditing">
+        <button type="button" class=" w-full bg-primary rounded-3xl text-white py-2 disabled:grayscale"
+          :disabled="Object.entries(tempPassengerInput).map(i => i[1]).filter(Boolean).length < 4" @click="saveEditing">
           ذخیره کردن اطلاعات مسافر
         </button>
-        </template>
+      </template>
     </DialogBox>
 
-     
 
-    <div class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
+
+    <div v-if="reservationData" class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
       <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-        رزرو {{ reservation[0].hotel.name }} برای
-        تور
-        فبلان
+        رزرو
+
+        <span class="underline ">
+          {{ reservationData.hotelName }}
+        </span>
+
+        برای
+
+
+        {{ reservationData.tourtitle }}
       </h1>
-      <form class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
+      <form @submit.prevent="handelSubmit" class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" class="lg:col-span-7">
           <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
 
           <ul role="list" class="divide-y divide-gray-200 border-b border-t border-gray-200">
-            <li v-for="(item, itemIdx) in reservation" :key="item.id" class="flex py-6 sm:py-10">
+            <li v-for="(item, itemIdx) in reservationData.counts" :key="itemIdx" class="flex py-6 sm:py-10"
+              v-show="item.count > 0">
               <div class="flex-shrink-0">
-                <img :src="item.imageSrc" :alt="item.imageAlt"
+                <img :src="reservationData.hotelImages.image" :alt="reservationData.hotelImages.alt"
                   class="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48" />
               </div>
 
@@ -261,26 +226,30 @@ watchImmediate(isOpen, (nval) => {
                   <div>
                     <div class="flex justify-between">
                       <h3 class="font-medium text-gray-700 hover:text-gray-800">
-                        {{ item.name }}
+                        {{ item.title }}
                       </h3>
                     </div>
                     <div class="mt-1 flex text-sm">
-                      <p class="text-gray-500">{{ item.color }}</p>
+                      <!-- <p class="text-gray-500">{{ item.color }}</p>
                       <p v-if="item.size" class="mr-4 border-r border-gray-200 pr-4 text-gray-500">{{ item.size }}
-                      </p>
+                      </p> -->
                     </div>
-                    <p class="mt-1 text-sm font-medium text-gray-900">{{ item.price }}</p>
+                    <p class="mt-1 text-sm font-medium text-gray-900">{{
+                      Intl.NumberFormat('fa-ir').format(+item.price) }}
+                      تومان
+                    </p>
                   </div>
 
                   <div class="mt-4 sm:mt-0 sm:pr-9">
-                    <label :for="`quantity-${itemIdx}`" class="sr-only">Quantity, {{ item.name }}</label>
+                    <label :for="`quantity-${itemIdx}`" class="sr-only">Quantity, {{ item.count }}</label>
                     <select :id="`quantity-${itemIdx}`" :name="`quantity-${itemIdx}`" v-model.number="item.count"
                       class="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary sm:text-sm">
                       <option v-for="i in 10" :value="i">{{ i }}</option>
                     </select>
 
                     <div class="absolute left-0 top-0">
-                      <button type="button" class="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500">
+                      <button @click="deleteFromReservation(itemIdx)" type="button"
+                        class="-m-2 inline-flex p-2 text-gray-400 hover:text-gray-500">
                         <span class="sr-only">Remove</span>
                         <XMarkIcon class="h-5 w-5" aria-hidden="true" />
                       </button>
@@ -288,7 +257,7 @@ watchImmediate(isOpen, (nval) => {
                   </div>
                 </div>
 
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2 mt-4">
 
                   <button type="button" v-for="(i, index) in item.users" :key="index" @click="openUser(itemIdx, index)"
                     class="p-2 border rounded  text-sm shadow flex items-center gap-2 h-12 group" :class="[
@@ -324,11 +293,11 @@ watchImmediate(isOpen, (nval) => {
 
 
 
-                <p class="mt-4 flex gap-2 items-center text-sm text-gray-700">
-                  <CheckIcon v-if="item.inStock" class="h-5 w-5 flex-shrink-0 text-green-500" aria-hidden="true" />
-                  <ClockIcon v-else class="h-5 w-5 flex-shrink-0 text-gray-300" aria-hidden="true" />
-                  <span>{{ item.inStock ? 'In stock' : `Ships in ${item.leadTime}` }}</span>
-                </p>
+                <!-- <p class="mt-4 flex gap-2 items-center text-sm text-gray-700">
+                  <CheckIcon class="h-5 w-5 flex-shrink-0 text-green-500" aria-hidden="true" />
+                  <ClockIcon class="h-5 w-5 flex-shrink-0 text-gray-300" aria-hidden="true" />
+                  <span>{{ item. ? 'In stock' : `Ships in ${item.leadTime}` }}</span>
+                </p> -->
               </div>
             </li>
           </ul>
@@ -337,36 +306,50 @@ watchImmediate(isOpen, (nval) => {
         <!-- Order summary -->
         <section aria-labelledby="summary-heading"
           class="mt-16 rounded-lg bg-gray-50 px-4 py-6 sm:p-6 lg:col-span-5 lg:mt-0 lg:p-8">
-          <h2 id="summary-heading" class="text-lg font-medium text-gray-900">Order summary</h2>
+          <h2 id="summary-heading" class="text-lg font-medium text-gray-900">
+            خلاصه سفارش
+          </h2>
 
           <dl class="mt-6 space-y-4">
             <div class="flex items-center justify-between">
               <dt class="text-sm text-gray-600">
                 تعداد مسافر
               </dt>
-              <dd class="text-sm font-medium text-gray-900">{{ reservation.reduce((a, b) => a + b.count, 0) }}</dd>
+              <dd class="text-sm font-medium text-gray-900">{{ reservationData.counts.reduce((a, b) => a + b.count, 0)
+                }}
+              </dd>
             </div>
 
             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
               <dt class="text-sm text-gray-600">
                 تعداد اتاق ها
               </dt>
-              <dd class="text-sm font-medium text-gray-900">{{ reservation.length }}</dd>
+              <dd class="text-sm font-medium text-gray-900">{{ reservationData.counts.filter(a => a.count).length }}
+              </dd>
             </div>
 
             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
               <dt class="flex text-sm text-gray-600">
-                <span>Tax estimate</span>
+                <span>
+                  مالیات
+                </span>
                 <a href="#" class="ml-2 flex-shrink-0 text-gray-400 hover:text-gray-500">
                   <span class="sr-only">Learn more about how tax is calculated</span>
                   <QuestionMarkCircleIcon class="h-5 w-5" aria-hidden="true" />
                 </a>
               </dt>
-              <dd class="text-sm font-medium text-gray-900">$8.32</dd>
+              <dd class="text-sm font-medium text-gray-900">-</dd>
             </div>
             <div class="flex items-center justify-between border-t border-gray-200 pt-4">
-              <dt class="text-base font-medium text-gray-900">Order total</dt>
-              <dd class="text-base font-medium text-gray-900">$112.32</dd>
+              <dt class="text-base font-medium text-gray-900">
+                هزینه ی کل
+              </dt>
+              <dd class="text-base font-medium text-gray-900">
+                {{ Intl.NumberFormat('fa-ir').format(reservationData.counts.reduce((a, b) => a + (b.count * +b.price),
+                  0))
+                }}
+                تومان
+              </dd>
             </div>
           </dl>
 
@@ -380,6 +363,11 @@ watchImmediate(isOpen, (nval) => {
           </div>
         </section>
       </form>
+    </div>
+    <div class="mx-auto font-sm text-gray-500 p-10 w-full flex flex-col justify-center items-center text-center" v-else>
+      <strong>رزروی وجود ندارد</strong>
+
+      <NuxtLink class="btn rounded-full w-auto p-1 px-4 mt-4" to="/">بازگشت به صفحه اصلی</NuxtLink>
     </div>
   </div>
 </template>

@@ -26,16 +26,16 @@ export default defineNuxtPlugin(() => {
   if (accessToken.value) {
     headers.push(['Authorization', `Bearer ${accessToken.value}`])
   }
-  // const baseURL = import.meta.dev ? 'http://192.168.1.54:8000' : 'https://rahorasm.msdcorporation.top';
-  const baseURL = 'https://rahorasm.msdcorporation.top';
-  
+  const baseURL = import.meta.dev ? 'http://192.168.1.54:8000' : 'https://rahorasm.msdcorporation.top';
+  // const baseURL = 'https://rahorasm.msdcorporation.top';
+
   const $api = $fetch.create({
     headers,
     credentials: 'include',
     baseURL,
     retry: 2,
     onRequest(ctx) {
-      
+
       if (accessToken.value) {
         ctx.options.headers.delete('Authorization')
         ctx.options.headers.delete('authorization')
@@ -83,8 +83,8 @@ export default defineNuxtPlugin(() => {
 
         } catch (error) {
           console.error("Token refresh failed:", error);
-        accessToken.value = null
-        refreshToken.value = null
+          accessToken.value = null
+          refreshToken.value = null
         }
       }
 
@@ -98,7 +98,7 @@ export default defineNuxtPlugin(() => {
 
   })
 
-  
+
   // Expose to useNuxtApp().$api
   return {
     provide: {

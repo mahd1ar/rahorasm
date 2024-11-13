@@ -29,7 +29,7 @@ const phone_number = ref('+1 (555) 123-4567')
         </h2>
         <p class="mt-1 text-sm leading-6 text-gray-500">
           اين اطلاعات به صورت عمومي نمايش داده مي شود پس مراقب آنچه را به اشتراک مي گذاريد باشيد.
-        
+
         </p>
 
         <dl class="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
@@ -57,7 +57,7 @@ const phone_number = ref('+1 (555) 123-4567')
         </dl>
       </div>
 
-      <div>
+      <div class="hidden">
         <h2 class="text-base font-semibold leading-7 text-gray-900">Bank accounts</h2>
         <p class="mt-1 text-sm leading-6 text-gray-500">Connect bank accounts to your account.</p>
 
@@ -73,11 +73,12 @@ const phone_number = ref('+1 (555) 123-4567')
         </ul>
 
         <div class="flex border-t border-gray-100 pt-6">
-          <button type="button" class="text-sm font-semibold leading-6 text-Secondary hover:text-indigo-500"><span aria-hidden="true">+</span> Add another bank</button>
+          <button type="button" class="text-sm font-semibold leading-6 text-Secondary hover:text-indigo-500"><span
+              aria-hidden="true">+</span> Add another bank</button>
         </div>
       </div>
 
-      <div>
+      <div class="hidden">
         <h2 class="text-base font-semibold leading-7 text-gray-900">Integrations</h2>
         <p class="mt-1 text-sm leading-6 text-gray-500">Connect applications to your account.</p>
 
@@ -89,13 +90,15 @@ const phone_number = ref('+1 (555) 123-4567')
         </ul>
 
         <div class="flex border-t border-gray-100 pt-6">
-          <button type="button" class="text-sm font-semibold leading-6 text-Secondary hover:text-indigo-500"><span aria-hidden="true">+</span> Add another application</button>
+          <button type="button" class="text-sm font-semibold leading-6 text-Secondary hover:text-indigo-500"><span
+              aria-hidden="true">+</span> Add another application</button>
         </div>
       </div>
 
-      <div>
+      <div class="hidden">
         <h2 class="text-base font-semibold leading-7 text-gray-900">Language and dates</h2>
-        <p class="mt-1 text-sm leading-6 text-gray-500">Choose what language and date format to use throughout your account.</p>
+        <p class="mt-1 text-sm leading-6 text-gray-500">Choose what language and date format to use throughout your
+          account.</p>
 
         <dl class="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
           <div class="pt-6 sm:flex">
@@ -113,10 +116,13 @@ const phone_number = ref('+1 (555) 123-4567')
             </dd>
           </div>
           <SwitchGroup as="div" class="flex pt-6">
-            <SwitchLabel as="dt" class="flex-none pr-6 font-medium text-gray-900 sm:w-64" passive>Automatic timezone</SwitchLabel>
+            <SwitchLabel as="dt" class="flex-none pr-6 font-medium text-gray-900 sm:w-64" passive>Automatic timezone
+            </SwitchLabel>
             <dd class="flex flex-auto items-center justify-end">
-              <Switch v-model="automaticTimezoneEnabled" :class="[automaticTimezoneEnabled ? 'bg-sectext-Secondary' : 'bg-gray-200', 'flex w-8 cursor-pointer rounded-full p-px ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sectext-Secondary']">
-                <span aria-hidden="true" :class="[automaticTimezoneEnabled ? 'translate-x-3.5' : 'translate-x-0', 'h-4 w-4 transform rounded-full bg-white shadow-sm ring-1 ring-gray-900/5 transition duration-200 ease-in-out']" />
+              <Switch v-model="automaticTimezoneEnabled"
+                :class="[automaticTimezoneEnabled ? 'bg-sectext-Secondary' : 'bg-gray-200', 'flex w-8 cursor-pointer rounded-full p-px ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sectext-Secondary']">
+                <span aria-hidden="true"
+                  :class="[automaticTimezoneEnabled ? 'translate-x-3.5' : 'translate-x-0', 'h-4 w-4 transform rounded-full bg-white shadow-sm ring-1 ring-gray-900/5 transition duration-200 ease-in-out']" />
               </Switch>
             </dd>
           </SwitchGroup>
@@ -125,4 +131,3 @@ const phone_number = ref('+1 (555) 123-4567')
     </div>
   </main>
 </template>
-

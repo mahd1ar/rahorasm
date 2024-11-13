@@ -1447,7 +1447,7 @@
 
 "@majidh1/jalalidatepicker@^0.9.6":
   version "0.9.6"
-  resolved "https://registry.yarnpkg.com/@majidh1/jalalidatepicker/-/jalalidatepicker-0.9.6.tgz#1ff4563ee554dd1140c594ee15abcc165d6fc96f"
+  resolved "https://registry.npmjs.org/@majidh1/jalalidatepicker/-/jalalidatepicker-0.9.6.tgz"
   integrity sha512-RhkmYBoondfRsbf8oNi8q5h5mntfdjkOopk0qIQoYanT9jZ71Qnm1GvgEiHOtMgZJNYUoCPqH714bV7nyb1VtA==
 
 "@mapbox/node-pre-gyp@^1.0.5":

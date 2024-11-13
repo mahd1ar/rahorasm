@@ -14,7 +14,7 @@ import {
 
 const secondaryNavigation = [
   { name: 'عمومی', href: '/u', icon: UserCircleIcon, },
-  { name: 'سفر ها', href: '/u/trips', icon: TicketIcon, },
+  { name: 'رزرو ها', href: '/u/trips', icon: TicketIcon, },
   { name: 'پرداخت ها', href: '/u/invoice', icon: DocumentCurrencyDollarIcon, },
   { name: 'ویرایش اطلاعات', href: '/u/edit', icon: PencilIcon, },
   { name: 'امنیت', href: '/u/passwd', icon: FingerPrintIcon, },

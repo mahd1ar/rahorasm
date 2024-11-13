@@ -9,25 +9,27 @@ const refreshToken = useCookie(COOKIES.Refresh)
 const accessToken = useCookie(COOKIES.Access)
 
 useIntervalFn(async () => {
-if(appState.isLoading)
-{
-  // call for refresh token
-  try {
-    const data = await $api<{access: string,refresh: string}>('/token/refresh/',{method:'POST',body:{refresh:refreshToken.value}})
-    
-    if('access' in data) {
-      accessToken.value = data.access
-    }
+  if (appState.isLoading) {
+    if (!refreshToken.value)
+      return
 
-    if('refresh' in data) {
-      refreshToken.value = data.refresh
+    // call for refresh token
+    try {
+      const data = await $api<{ access: string, refresh: string }>('/token/refresh/', { method: 'POST', body: { refresh: refreshToken.value } })
+
+      if ('access' in data) {
+        accessToken.value = data.access
+      }
+
+      if ('refresh' in data) {
+        refreshToken.value = data.refresh
+      }
+
+    } catch (error) {
+      console.error(error)
     }
-    
-  } catch (error) {
-    console.error(error)
   }
-}
-},1000 * 60)
+}, 1000 * 60)
 
 </script>
 

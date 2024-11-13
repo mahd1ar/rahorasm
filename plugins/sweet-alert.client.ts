@@ -13,7 +13,7 @@ export default defineNuxtPlugin((nuxtApp) => {
                 error: (n: Toast) => {
                     if (typeof n === 'string')
                         n = { message: n }
-                    
+
                     Swal.fire({
                         title: n.title || 'خطا',
                         text: n.message,
@@ -24,22 +24,22 @@ export default defineNuxtPlugin((nuxtApp) => {
                 success: (n: Toast) => {
                     if (typeof n === 'string')
                         n = { message: n }
-                    
+
                     Swal.fire({
                         title: n.title || 'با موفقیت انجام شد',
                         text: n.message,
                         icon: 'success',
                         confirmButtonText: n.confirmButtonText || 'باشه'
                     })
-                    
+
                 },
-                
+
                 about: (n: Toast) => {
                     if (typeof n === 'string')
                         n = { message: n }
-                    
+
                     Swal.fire({
-                        title: n.title || 'با موفقیت انجام شد',
+                        title: n.title || 'توجه',
                         text: n.message,
                         icon: 'info',
                         confirmButtonText: n.confirmButtonText || 'باشه'

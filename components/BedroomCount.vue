@@ -3,24 +3,35 @@
 const { $swal } = useNuxtApp()
 
 const count = ref(0)
+
+const emit = defineEmits<{
+  update: [value: number]
+}>()
+
 const isSelecred = ref(false)
 
 
 function countDown() {
   if (count.value > 1) count.value--
-  else
+  else {
+    count.value = 0
     isSelecred.value = false
+  }
+
+  emit('update', count.value)
 }
 
 function countUp() {
   if (count.value < 10) count.value++
   else
     $swal.error("حداکثر تعداد اتاق 10 است")
+  emit('update', count.value)
 }
 
 function select() {
   isSelecred.value = true
   count.value = 1
+  emit('update', count.value)
 }
 
 </script>

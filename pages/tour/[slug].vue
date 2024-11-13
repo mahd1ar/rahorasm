@@ -10,6 +10,7 @@ import {
 // @ts-ignore
 import { Splide, SplideSlide, } from '@splidejs/vue-splide';
 
+const { $api } = useNuxtApp()
 
 const order_by = useRouteQuery<string>('order_by', '')
 
@@ -28,28 +29,17 @@ const airlineTmp = ref("")
 const least_priceTmp = ref(0)
 const max_priceTmp = ref(0)
 
-
-const debounced_max_price = debouncedRef(max_price, 2000)
-const debounced_least_price = debouncedRef(least_price, 2000)
-
 const route = useRoute()
 
 
-const { data, status, error } = useAPI<TourAPI.Root>('/tour/tours/', {
-  watch: [() => route.query],
-  query: {
-    
-    city: city.value || undefined,
-    country: country.value || undefined,
-    continent: continent.value || undefined,
-
-    range_min: debounced_least_price,
-    range_max: debounced_max_price,
-    duration: duration.value,
-    airline: airline.value,
-    order_by: order_by.value
-  }
+const { data, status, error, refresh } = useAsyncData('tour_with_filters', () => {
+  console.log(route.query)
+  return $api<TourAPI.Root>('/tour/tours/', {
+    query: { ...route.query },
+    cache: 'no-cache'
+  })
 })
+
 
 const splidejs = useTemplateRef('splidejs')
 
@@ -76,14 +66,14 @@ const sortItems = [
   { label: 'بیشترین مدت', value: 'max_duration' }
 ]
 
-const { data: filtersSchema, status: filtersStatus } = useAPI<FiltersAPI.Root>('/tour/filters?city=استانبول', {
+const { data: filtersSchema, status: filtersStatus, refresh: filterRefresh } = useAPI<FiltersAPI.Root>('/tour/filters?city=استانبول', {
   lazy: true, server: false,
   query: { city: city.value },
   onResponse(ctx) {
     if (ctx.response.status === 200) {
       const p = (ctx.response._data as FiltersAPI.Root).prices
       console.log(p)
-      
+
       if (!least_price.value)
         least_price.value = p.least_price || 0
 
@@ -92,8 +82,8 @@ const { data: filtersSchema, status: filtersStatus } = useAPI<FiltersAPI.Root>('
 
       if (!least_priceTmp.value)
         least_priceTmp.value = p.least_price || 0
-      
-        if (!max_priceTmp.value)
+
+      if (!max_priceTmp.value)
         max_priceTmp.value = p.max_price || 1
 
     }
@@ -148,8 +138,6 @@ function applyFilters() {
   closeModal()
 }
 
-
-
 const isOpen = ref(false)
 
 function closeModal() {
@@ -160,12 +148,25 @@ function openModal() {
 }
 
 onMounted(() => {
-  
-  if(least_price.value)
+
+  if (least_price.value)
     least_priceTmp.value = least_price.value
-  if(max_price.value)
+  if (max_price.value)
     max_priceTmp.value = max_price.value
 })
+
+
+watch(city, () => {
+  filterRefresh()
+  refresh()
+}, { immediate: false })
+
+watchDebounced([durationTmp, airlineTmp, least_price, max_price], () => {
+
+
+  filterRefresh()
+  refresh()
+}, { debounce: 500, immediate: false })
 
 </script>
 
@@ -273,14 +274,19 @@ onMounted(() => {
       </aside>
 
 
+
       <div class=" w-full lg:w-9/12 flex flex-col gap-4">
         <div class="flex lg:flex-row flex-col gap-4">
-          <button @click="openModal" type="button" class="retro bg-white flex lg:hidden justify-center items-center gap-2 p-2 font-bold  hover:text-teal-600 " >
-            <span class="text-xl" >
-             <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h6v6h-6zm10 0h6v6h-6zm-10 10h6v6h-6zm10 3h6m-3 -3v6"></path></svg>
+          <button @click="openModal" type="button"
+            class="retro bg-white flex lg:hidden justify-center items-center gap-2 p-2 font-bold  hover:text-teal-600 ">
+            <span class="text-xl">
+              <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round"
+                stroke-linejoin="round" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 4h6v6h-6zm10 0h6v6h-6zm-10 10h6v6h-6zm10 3h6m-3 -3v6"></path>
+              </svg>
             </span>
             فیلتر
-         ها
+            ها
 
           </button>
           <span class="inline-flex items-center gap-1 shrink-0">
@@ -386,9 +392,15 @@ onMounted(() => {
               leave-to="opacity-0 translate-x-full">
               <DialogPanel
                 class="w-full max-w-md transform rounded-2xl rounded-r-none bg-[#fff3cd] p-6 text-left align-middle shadow-xl transition-all">
-                <DialogTitle as="h3" class="text-lg flex justify-between text-right font-medium leading-6 text-gray-900">
+                <DialogTitle as="h3"
+                  class="text-lg flex justify-between text-right font-medium leading-6 text-gray-900">
                   <button @click="closeModal" type="button" class="hover:text-gray-500 text-2xl">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 12 16"><path fill="currentColor" d="M10 12.5a.47.47 0 0 1-.35-.15l-8-8c-.2-.2-.2-.51 0-.71s.51-.2.71 0l7.99 8.01c.2.2.2.51 0 .71c-.1.1-.23.15-.35.15Z"/><path fill="currentColor" d="M2 12.5a.47.47 0 0 1-.35-.15c-.2-.2-.2-.51 0-.71l8-7.99c.2-.2.51-.2.71 0s.2.51 0 .71l-8.01 7.99c-.1.1-.23.15-.35.15"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 12 16">
+                      <path fill="currentColor"
+                        d="M10 12.5a.47.47 0 0 1-.35-.15l-8-8c-.2-.2-.2-.51 0-.71s.51-.2.71 0l7.99 8.01c.2.2.2.51 0 .71c-.1.1-.23.15-.35.15Z" />
+                      <path fill="currentColor"
+                        d="M2 12.5a.47.47 0 0 1-.35-.15c-.2-.2-.2-.51 0-.71l8-7.99c.2-.2.51-.2.71 0s.2.51 0 .71l-8.01 7.99c-.1.1-.23.15-.35.15" />
+                    </svg>
                   </button>
                   فیلترها
 
@@ -459,8 +471,8 @@ onMounted(() => {
                           <div v-for="(i, inx) in filtersSchema?.durations || []" :key="inx"
                             class="flex justify-between ">
                             <div class="text-gray-600 flex items-center gap-2">
-                              <input @input="(e) => checkBoxInput(e, String(i.duration), 'duration', true)" name="group1"
-                                type="checkbox" id="reverse-checkbox-1" class="form-checkbox">
+                              <input @input="(e) => checkBoxInput(e, String(i.duration), 'duration', true)"
+                                name="group1" type="checkbox" id="reverse-checkbox-1" class="form-checkbox">
                               <label title="" for="reverse-checkbox-1" class="text-sm">{{ i.duration }} شب</label>
                             </div>
                             <button type="button" class="bg-primary w-10 rounded text-black">

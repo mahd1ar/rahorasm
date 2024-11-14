@@ -1,12 +1,22 @@
 <script setup lang="ts">
 
 const router = useRoute()
+const { $api } = useNuxtApp()
 
-const { data } = useAPI<HotelsListAPI.Root>('/hotels', {
-  query: {
-    ...router.query
-  },
-  // server: false,lazy:true
+const { data , refresh } = useAsyncData<HotelsListAPI.Root>('/hotels', () => {
+
+  return $api<HotelsListAPI.Root>('/hotels', {
+    
+    query: {
+      ...router.query,
+    },
+    cache: 'no-cache'
+  })
+})
+
+
+watch(router, () => {
+  refresh()
 })
 
 

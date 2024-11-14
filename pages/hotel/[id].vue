@@ -163,6 +163,12 @@ const product = computed(() => {
           </section>
         </div>
       </div>
+
+      <p class=" p-4 mt-6  border-t" v-html="apiData?.description" >
+        
+      </p>
+      <pre>
+      </pre>
     </div>
   </div>
 </template>

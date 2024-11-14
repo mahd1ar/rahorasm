@@ -113,6 +113,7 @@ const data = computed(() => {
         rating: i.hotel.star || 0,
         city: i.hotel.city.name,
         duration: apiData.value?.tour.tour_duration,
+        image: i.hotel.images.at(0)?.image || "",
         prices: [
           {
             title: "2 تخته (هرنفر)",
@@ -465,11 +466,12 @@ function storeReserve() {
             class="p-6 rounded-md border bg-white flex flex-col gap-6 relative">
             <div class="relative">
               <div class="flex flex-col sm:flex-row items-start gap-4">
-                <img class="h-36 w-72 object-cover rounded-lg"
-                  src="https://last-cdn.com/2023/01/04/6TgjIy1BpnxY32a2PjKdiUqQjlHkQUGelr7x3oIx.jpg" alt="" />
+                <img v-if="i.image" class="h-36 w-72 object-cover rounded-lg"
+                  :src="i.image" alt="" />
                 <div>
                   <h4 class="text-2xl flex flex-col gap-3">
                     <span> {{ i.name }}</span>
+        
                     <!-- stars -->
                     <div class="text-yellow-500 text-2xl flex gap-1">
 

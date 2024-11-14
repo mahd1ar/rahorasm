@@ -25,8 +25,9 @@
   name: string
 }
 
+const param = useRouteParams('slug', 1, { transform: Number })
 
-const { data } = useAPI<Root>('/blog/posts/1')
+const { data } = useAPI<Root>('/blog/posts/' + param.value)
 
 </script>
 

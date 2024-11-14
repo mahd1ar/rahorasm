@@ -26,8 +26,8 @@ export default defineNuxtPlugin(() => {
   if (accessToken.value) {
     headers.push(['Authorization', `Bearer ${accessToken.value}`])
   }
-  const baseURL = import.meta.dev ? 'http://192.168.1.54:8000' : 'https://rahorasm.msdcorporation.top';
-  // const baseURL = 'https://rahorasm.msdcorporation.top';
+  // const baseURL = import.meta.dev ? 'http://192.168.1.54:8000' : 'https://rahorasm.msdcorporation.top';
+  const baseURL = 'https://rahorasm.msdcorporation.top';
 
   const $api = $fetch.create({
     headers,

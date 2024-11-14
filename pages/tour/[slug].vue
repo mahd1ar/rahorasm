@@ -95,10 +95,10 @@ function sort(val: string) {
 }
 
 
-function checkBoxInput(i: Event, id: string, filterName: string, isTmp = false) {
+function checkBoxInput(e: Event, id: string, filterName: string, isTmp = false) {
 
   // @ts-ignore
-  const checked = !!i?.target.checked
+  const checked = !!e?.target.checked
 
   if (filterName === 'duration') {
     const d = new Set(duration.value.split(',').filter(Boolean))
@@ -161,7 +161,7 @@ watch(city, () => {
   refresh()
 }, { immediate: false })
 
-watchDebounced([durationTmp, airlineTmp, least_price, max_price], () => {
+watchDebounced([duration, airline, least_price, max_price], () => {
 
 
   filterRefresh()
@@ -259,7 +259,7 @@ watchDebounced([durationTmp, airlineTmp, least_price, max_price], () => {
             <div class="relative flex flex-col gap-1 pt-2">
               <div v-for="(i, inx) in filtersSchema?.airlines || []" :key="inx" class="flex justify-between ">
                 <div class="text-gray-600 flex items-center gap-2">
-                  <input @input="(e) => checkBoxInput(e, i.name, 'airline')" name="group1" type="checkbox"
+                  <input @input="(e) => checkBoxInput(e, String( i.id), 'airline')" name="group1" type="checkbox"
                     id="reverse-checkbox-1" class="form-checkbox">
                   <label title="" for="reverse-checkbox-1" class="text-sm">{{ i.name }} </label>
                 </div>
@@ -496,7 +496,7 @@ watchDebounced([durationTmp, airlineTmp, least_price, max_price], () => {
                           <div v-for="(i, inx) in filtersSchema?.airlines || []" :key="inx"
                             class="flex justify-between ">
                             <div class="text-gray-600 flex items-center gap-2">
-                              <input @input="(e) => checkBoxInput(e, i.name, 'airline', true)" name="group1"
+                              <input @input="(e) => checkBoxInput(e, String( i.id), 'airline', true)" name="group1"
                                 type="checkbox" id="reverse-checkbox-1" class="form-checkbox">
                               <label title="" for="reverse-checkbox-1" class="text-sm">{{ i.name }} </label>
                             </div>

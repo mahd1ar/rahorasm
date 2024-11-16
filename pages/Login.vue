@@ -11,11 +11,11 @@ export interface Root {
 
 const usernameInput = useTemplateRef('username-input')
 
-const { $api, $fetchUserData, $swal } = useNuxtApp()
+const { $api, $swal } = useNuxtApp()
 const appState = useAppState()
 const accessTocken = useCookie(COOKIES.Access)
 const refreshTocken = useCookie(COOKIES.Refresh)
-
+const {load} = useGetUserData()
 const go = useRouteQuery<string>('go', '/')
 
 const username = ref(import.meta.dev ? '09129740477' : "");
@@ -81,7 +81,7 @@ const handleSubmit = async () => {
 
       await timeout(400)
 
-      const data = await $fetchUserData()
+      const data = await load()
       
       if (data){
 
@@ -158,9 +158,9 @@ onMounted(() => {
             <button class="btn w-full p-2 rounded-lg retro mb-2" type="submit" :disabled="isLoading">
               ثبت و ادامه
             </button>
-            <NuxtLink to="/temporyLogin" class="text-center underline lh-lg">
+            <!-- <NuxtLink to="/temporyLogin" class="text-center underline lh-lg">
               ورود با کد یکبار مصرف
-            </NuxtLink>
+            </NuxtLink> -->
           </form>
 
           <div class="flex justify-between my-3 mt-auto text-gray-800 ">

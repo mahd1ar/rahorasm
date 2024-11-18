@@ -252,9 +252,9 @@ onMounted(() => {
             <button class="btn w-full p-2 rounded-lg retro mb-2" type="submit" :disabled="isLoading">
               ثبت و ادامه
             </button>
-            <NuxtLink to="/temporyLogin" class="text-center underline lh-lg">
+            <!-- <NuxtLink to="/temporyLogin" class="text-center underline lh-lg">
               ورود با کد یکبار مصرف
-            </NuxtLink>
+            </NuxtLink> -->
           </form>
 
           <div class="flex justify-between my-3 mt-auto text-gray-800 ">

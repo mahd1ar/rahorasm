@@ -2,7 +2,11 @@
 import { COOKIES } from '~/data/types';
 import { timeout } from '~/utils';
 
-
+type JWT_CREDENTIALS = {
+  access: string
+  message: string
+  refresh: string
+}
 export interface Root {
   refresh?: string
   access?: string
@@ -11,9 +15,9 @@ export interface Root {
 
 const usernameInput = useTemplateRef('name_')
 
-const { $api, $fetchUserData, $swal } = useNuxtApp()
-
-const redirectTo = useRouteParams<string>('go','/')
+const { $api, $swal } = useNuxtApp()
+const { load } = useGetUserData()
+const redirectTo = useRouteParams<string>('go', '/')
 
 const mode = ref<1 | 2>(1)
 const username = ref("");
@@ -26,26 +30,29 @@ const errorMessage = ref("");
 const successMessage = ref("");
 const isLoading = ref(false);
 
+const accessToken = useCookie(COOKIES.Access)
+const refreshToken = useCookie(COOKIES.Refresh)
+
 function convertToEnglishNumbers(input: string): string {
   const farsiToEnglish = {
-    '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4', 
+    '۰': '0', '۱': '1', '۲': '2', '۳': '3', '۴': '4',
     '۵': '5', '۶': '6', '۷': '7', '۸': '8', '۹': '9'
   };
 
   const arabicToEnglish = {
-    '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4', 
+    '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
     '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9'
   };
-//@ts-ignore
-return input.replace(/[۰-۹]/g, char => farsiToEnglish[char])
-//@ts-ignore
-              .replace(/[٠-٩]/g, char => arabicToEnglish[char]);
+  //@ts-ignore
+  return input.replace(/[۰-۹]/g, char => farsiToEnglish[char])
+    //@ts-ignore
+    .replace(/[٠-٩]/g, char => arabicToEnglish[char]);
 }
 
 function validate() {
 
   if (mode.value === 1) {
-const usernameValue = convertToEnglishNumbers(username.value)
+    const usernameValue = convertToEnglishNumbers(username.value)
     if (!usernameValue.startsWith('09')) {
 
       errorMessage.value = 'شماره موبایل باید با 09 شروع بشود'
@@ -87,7 +94,7 @@ const handleSubmit2 = async () => {
   // Clear previous messages
   errorMessage.value = "";
   successMessage.value = "";
-isLoading.value = (true);
+  isLoading.value = (true);
   try {
 
     const userCredentials = {
@@ -95,15 +102,25 @@ isLoading.value = (true);
       otp: OTP.value
     };
 
-    const data = await $api('/auth/signup/validate', {
+
+
+    const response = await $api<JWT_CREDENTIALS>('/auth/signup/validate', {
       body: userCredentials,
       method: 'POST'
     })
 
-    console.log(data)
+    if (!response.access || !response.refresh) {
+      $swal.error(response.message || 'خطا در ثبت نام')
+      return
+    }
 
-    const  userData  = await $fetchUserData()
-    if(userData){
+    accessToken.value = response.access
+    refreshToken.value = response.refresh
+
+    await timeout(1000)
+
+    const userData = await load()
+    if (userData) {
 
       $swal.success('ثبت نام با موفقیت انجام شد')
       navigateTo(redirectTo.value)
@@ -227,8 +244,8 @@ onMounted(() => {
             </div>
 
 
-            <button class="btn w-full p-2 rounded-lg retro mb-2 disabled:bg-gray-300 disabled:opacity-50 "
-              type="submit" :disabled="isLoading">
+            <button class="btn w-full p-2 rounded-lg retro mb-2 disabled:bg-gray-300 disabled:opacity-50 " type="submit"
+              :disabled="isLoading">
               ثبت و ادامه
             </button>
 

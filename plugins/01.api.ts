@@ -12,25 +12,23 @@ type DjangoJWTRefreshResponde = {
 
 export default defineNuxtPlugin(() => {
 
-  const headers: [string, string][] = []
-
-  if (import.meta.server) {
-    const cookie = useRequestHeader('cookie')
-    if (cookie) { headers.push(['cookie', cookie]) }
-  }
 
   // JWT Section
   const accessToken = useCookie(COOKIES.Access);
   const refreshToken = useCookie(COOKIES.Refresh);
 
-  if (accessToken.value) {
-    headers.push(['Authorization', `Bearer ${accessToken.value}`])
-  }
+  // if (import.meta.server) {
+  //   console.log("[api] server")
+  //   const cookie = useRequestHeader('cookie')
+  //   if (cookie) { headers.push(['cookie', cookie]) }
+  // }
+
+
+  
   // const baseURL = import.meta.dev ? 'http://192.168.1.54:8000' : 'https://rahorasm.msdcorporation.top';
   const baseURL = 'https://rahorasm.msdcorporation.top';
 
   const $api = $fetch.create({
-    headers,
     credentials: 'include',
     baseURL,
     retry: 2,
@@ -40,6 +38,9 @@ export default defineNuxtPlugin(() => {
         ctx.options.headers.delete('Authorization')
         ctx.options.headers.delete('authorization')
         ctx.options.headers.append('Authorization', `Bearer ${accessToken.value}`)
+      } else {
+        ctx.options.headers.delete('Authorization')
+        ctx.options.headers.delete('authorization')
       }
 
     },

@@ -11,11 +11,11 @@ export interface Root {
 
 const usernameInput = useTemplateRef('username-input')
 
-const { $api, $fetchUserData, $swal } = useNuxtApp()
+const { $api, $swal } = useNuxtApp()
 const appState = useAppState()
 const accessTocken = useCookie(COOKIES.Access)
 const refreshTocken = useCookie(COOKIES.Refresh)
-
+const {load} = useGetUserData()
 const go = useRouteQuery<string>('go', '/')
 
 const username = ref(import.meta.dev ? '09129740477' : "");
@@ -81,7 +81,7 @@ const handleSubmit = async () => {
 
       await timeout(400)
 
-      const data = await $fetchUserData()
+      const data = await load()
       
       if (data){
 

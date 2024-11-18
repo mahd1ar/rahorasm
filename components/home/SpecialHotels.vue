@@ -31,18 +31,15 @@ defineProps({
           focus: 'center',
           direction: 'rtl',
           perPage: 4,
-          // breakpoints: {
-          //         1023: {
-          //           perPage: 3,
-          //           gap: '.7rem',
-          //           height: '6rem',
-          //         },
-          //         480: {
-          //           perPage: 1,
-          //           gap: '.7rem',
-          //           height: '6rem',
-          //         },
-          //       },
+          breakpoints: {
+            mediaQuery: 'min',
+            768: {
+              perPage: 2,
+            },
+            430: {
+              perPage: 1,
+            },
+          },
           autoScroll: {
             speed: 0.75,
           },

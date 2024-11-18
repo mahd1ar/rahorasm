@@ -553,7 +553,7 @@ const { data } = useAPI<Root>('/tour/home')
             city: i.city.name,
             href: '/hotel/' + i.id || '#'
         })) || []" v-if="data?.featured_hotels" />
-        />
+    
     </main>
 </template>
 

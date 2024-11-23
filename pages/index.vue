@@ -535,15 +535,15 @@ const { data } = useAPI<Root>('/tour/home')
             title: i.title,
             duration: i.tour_duration,
             airline: i.flights.at(0)?.airline.name || '',
-            price: i.least_price,
-            href: '#',
+            price: Intl.NumberFormat('fa-ir').format(+i.least_price || 0),
+            href: '/tour/details/' + i.flights?.at(0)?.id,
             image: i.image
         })) || []" :europe_items="data?.latest_europe_tours.map(i => ({
             title: i.title,
             duration: i.tour_duration,
             airline: i.flights.at(0)?.airline.name || '',
-            price: i.least_price,
-            href: '#',
+            price: Intl.NumberFormat('fa-ir').format( +i.least_price || 0 ),
+            href: '/tour/details/' + i.flights?.at(0)?.id,
             image: i.image
         })) || []" />
 

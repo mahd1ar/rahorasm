@@ -117,11 +117,11 @@ defineProps({
 
                                     </div>
                                 </div>
-                                <div class="bg-background p-2 border-t border-gray-400 flex-center">
-                                    <button
-                                        class="bg-primary rounded-3xl retro px-3 py-1 inline-block mb-1 font-normal hover:text-white">
+                                <div class="bg-background  p-2 border-t border-gray-400 flex-center">
+                                    <NuxtLink :to="i.href"
+                                        class="bg-primary rounded-3xl retro px-3 py-1 inline-block mb-1 font-normal hover:text-black">
                                         مشاهده تور
-                                    </button>
+                                    </NuxtLink>
                                 </div>
                             </div>
                         </div>
@@ -206,10 +206,10 @@ defineProps({
                                 </div>
                             </div>
                             <div class="bg-background p-2 border-t border-gray-400 flex items-center justify-end">
-                                <button
+                                <NuxtLink :to="i.href"
                                     class="bg-primary rounded-3xl retro px-3 py-1 inline-block mb-1 font-normal text-black hover:text-white">
                                     مشاهده تور
-                                </button>
+                                </NuxtLink>
                             </div>
                         </div>
                     </div>

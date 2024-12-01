@@ -55,6 +55,7 @@ export const useGetUserData = () => {
         return true
       }
     } catch (error) {
+      console.error("[DEBUG] Error getting data")
       console.error(error)
       return false
     }

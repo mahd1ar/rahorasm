@@ -32,16 +32,18 @@ export default defineNuxtPlugin(() => {
     credentials: 'include',
     baseURL,
     retry: 2,
+    retryDelay: 100,
+    retryStatusCodes: [401, 408, 409, 425, 429, 500, 502, 503, 504],
     onRequest(ctx) {
-
-      if (accessToken.value) {
-        ctx.options.headers.delete('Authorization')
-        ctx.options.headers.delete('authorization')
+      
+      console.log("[DEBUG]: sending request to : " + ctx.request.toString()  )
+      
+      ctx.options.headers.delete('Authorization')
+      ctx.options.headers.delete('authorization')
+      
+      if (accessToken.value)
         ctx.options.headers.append('Authorization', `Bearer ${accessToken.value}`)
-      } else {
-        ctx.options.headers.delete('Authorization')
-        ctx.options.headers.delete('authorization')
-      }
+       
 
     },
     onResponseError(ctx) {
@@ -64,7 +66,8 @@ export default defineNuxtPlugin(() => {
           if (!refreshToken.value)
             return
 
-          console.log('getting a new token')
+          console.log('[DEBUG]: 401: getting a new token')
+          
 
           const newResponse =
             await $fetch<DjangoJWTRefreshResponde>(baseURL + '/token/refresh/', {
@@ -75,9 +78,9 @@ export default defineNuxtPlugin(() => {
             });
 
           if ('access' in newResponse) {
+            console.log("[DEBUG]: new token is issued")
             accessToken.value = newResponse.access
             refreshToken.value = newResponse.refresh
-            console.log("new token is issued")
           }
 
 

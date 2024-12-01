@@ -115,6 +115,12 @@ const statuses = {
                 </Menu> -->
               </div>
             </li>
+
+            <li v-if="data?.length === 0" class="flex-center w-full  p-6 text-gray-400" >
+              <strong>
+                هیچ رزروی انجام نشده
+              </strong>
+            </li>
           </ul>
 
 

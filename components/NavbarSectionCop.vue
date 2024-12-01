@@ -71,14 +71,14 @@ const menuButtons = reactive([
 </script>
 
 <template>
-
   <nav class="bg-[f8f9fa] border-gray-200 shadow-xl text-dark ">
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
       <NuxtLink to="/" class="  ">
         <LogoComponent />
       </NuxtLink>
-      <button data-collapse-toggle="navbar-multi-level" type="button" @click="navIsOpen = !navIsOpen"
-        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+
+      <button v-show="navIsOpen" data-collapse-toggle="navbar-multi-level" type="button" @click="navIsOpen = !navIsOpen"
+        class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
         aria-controls="navbar-multi-level" aria-expanded="false">
         <span class="sr-only">Open main menu</span>
         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
@@ -86,6 +86,7 @@ const menuButtons = reactive([
             d="M1 1h15M1 7h15M1 13h15" />
         </svg>
       </button>
+
 
       <div class=" ml-auto w-full md:block md:w-auto  px-6" :class="navIsOpen ? 'block' : 'hidden'"
         id="navbar-multi-level">
@@ -174,9 +175,9 @@ const menuButtons = reactive([
               </div>
             </template>
 
-            <NuxtLink :to="i.path" v-else class="block py-2 px-3 text-dark  rounded md:bg-transparent  md:p-0 "
-              aria-current="page">
-              {{ i.name }}</NuxtLink>
+            <NuxtLink @click.native="navIsOpen = false" :to="i.path" v-else
+              class="block py-2 px-3 text-dark  rounded md:bg-transparent  md:p-0 " aria-current="page">
+              {{ i.name }} </NuxtLink>
 
 
           </li>
@@ -184,10 +185,7 @@ const menuButtons = reactive([
         </ul>
       </div>
 
-      <div class="text-gray-600 flex gap-1 items-center ">
-
-
-
+      <div  class="text-gray-600 flex gap-1 items-center">
 
         <Menu v-if="appState.isAuth" as="div" class="relative inline-block text-left">
 
@@ -239,9 +237,6 @@ const menuButtons = reactive([
         </Menu>
 
 
-
-
-
         <template v-else>
 
           <NuxtLink class="" to="/login">
@@ -256,13 +251,26 @@ const menuButtons = reactive([
           </div>
           <NuxtLink class="flex-center gap-2" to="/signup">
             ثبت نام
-            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+            <svg class="hidden md:block" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+              viewBox="0 0 24 24">
               <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                 d="M6.578 15.482c-1.415.842-5.125 2.562-2.865 4.715C4.816 21.248 6.045 22 7.59 22h8.818c1.546 0 2.775-.752 3.878-1.803c2.26-2.153-1.45-3.873-2.865-4.715a10.66 10.66 0 0 0-10.844 0M16.5 6.5a4.5 4.5 0 1 1-9 0a4.5 4.5 0 0 1 9 0"
                 color="currentColor" />
             </svg>
           </NuxtLink>
         </template>
+
+
+        <button v-show="!navIsOpen" data-collapse-toggle="navbar-multi-level" type="button"
+          @click="navIsOpen = !navIsOpen"
+          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 "
+          aria-controls="navbar-multi-level" aria-expanded="false">
+          <span class="sr-only">Open main menu</span>
+          <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M1 1h15M1 7h15M1 13h15" />
+          </svg>
+        </button>
 
       </div>
 

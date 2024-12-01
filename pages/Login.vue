@@ -165,7 +165,7 @@ onMounted(() => {
 
           <div class="flex justify-between my-3 mt-auto text-gray-800 ">
             <p>قبلا ثبت نام نکرده اید؟</p>
-            <NuxtLink class="underline" to="/register">
+            <NuxtLink class="underline" to="/signup">
               ثبت نام کنید
             </NuxtLink>
           </div>

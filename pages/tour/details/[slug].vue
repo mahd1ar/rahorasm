@@ -12,7 +12,7 @@ const { data: apiData } = useAPI<TourDetailsAPI.Root>(
   "/tour/flight/" + param.value
 );
 
-const { data: fligthsData } = useAPI<{
+const { data: fligthsData, error, status } = useAPI<{
   departure: string
   return_departure: string
   id: number
@@ -22,6 +22,8 @@ const { data: fligthsData } = useAPI<{
   lazy: true
 }
 );
+
+const loading = computed(() => status.value === 'pending')
 
 const data = computed(() => {
   if (!apiData.value) {
@@ -357,7 +359,12 @@ function storeReserve() {
         <hr class="my-6" />
         <EasyShoppingWithConsultant />
       </aside>
-      <div class="w-full lg:w-9/12">
+      <pre v-if="error" v-text="error" />
+      <div v-if="loading" class="w-full lg:w-9/12 flex-center">
+        <LoadingIndicator />
+      </div>
+      <div v-else class="w-full lg:w-9/12">
+
         <section class="p-4 lg:p-6 rounded-md border bg-white flex flex-col gap-6">
           <div v-for="(i, inx) in data?.travel || []" :key="inx" class="flex flex-col gap-3">
             <div class="flex">
@@ -466,12 +473,11 @@ function storeReserve() {
             class="p-6 rounded-md border bg-white flex flex-col gap-6 relative">
             <div class="relative">
               <div class="flex flex-col sm:flex-row items-start gap-4">
-                <img v-if="i.image" class="h-36 w-72 object-cover rounded-lg"
-                  :src="i.image" alt="" />
+                <img v-if="i.image" class="h-36 w-72 object-cover rounded-lg" :src="i.image" alt="" />
                 <div>
                   <h4 class="text-2xl flex flex-col gap-3">
                     <span> {{ i.name }}</span>
-        
+
                     <!-- stars -->
                     <div class="text-yellow-500 text-2xl flex gap-1">
 
@@ -563,6 +569,7 @@ function storeReserve() {
           </TabGroup>
         </div>
       </div>
+
     </div>
   </main>
 </template>

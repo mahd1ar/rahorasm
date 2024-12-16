@@ -6,13 +6,17 @@ export default defineNuxtConfig({
     head: {
       link: [
         {
-          href: "https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css",
           rel: "stylesheet",
+          href: "https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css",
           type: "text/css"
         },
         {
           rel: "stylesheet",
           href: "https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css"
+        },
+        {
+          rel: "stylesheet",
+          href: "https://cdn.ckeditor.com/ckeditor5/44.1.0/ckeditor5.css" 
         }
       ]
     }

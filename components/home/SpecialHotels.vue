@@ -57,7 +57,7 @@ defineProps({
                 </div>
                 <div class="text-gray-600">
 
-                  <p class="my-0 flex items-center ">
+                  <p class="my-0 flex items-center">
                     <span class="pe-2">
 
                     </span>
@@ -72,6 +72,9 @@ defineProps({
                             d="M12.908 1.581a1 1 0 0 0-1.816 0l-2.87 6.22l-6.801.807a1 1 0 0 0-.562 1.727l5.03 4.65l-1.335 6.72a1 1 0 0 0 1.469 1.067L12 19.426l5.977 3.346a1 1 0 0 0 1.47-1.068l-1.335-6.718l5.029-4.651a1 1 0 0 0-.562-1.727L15.777 7.8z"
                             clip-rule="evenodd" />
                         </svg>
+                        <span v-if="i.stars === 0">
+                          هتل آپارتمان
+                        </span>
 
                       </div>
                       <!-- end of stars -->
@@ -90,7 +93,7 @@ defineProps({
                 </div>
               </div>
               <div class="bg-background p-2 border-t border-gray-400 flex-center">
-                <NuxtLink :to="i.href || '#'"
+                <NuxtLink :to="i.href || '#'" 
                   class="bg-primary rounded-3xl retro px-3 py-1 inline-block mb-1 font-normal hover:text-white">
                   مشاهده هتل
                 </NuxtLink>

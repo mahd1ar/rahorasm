@@ -10,7 +10,8 @@ defineProps({
       title: string,
       stars: number,
       city: string,
-      href: "#"
+      href: string,
+      image: string
     }[]>
   }
 })
@@ -50,10 +51,12 @@ defineProps({
         }" aria-label="Special hotels">
           <SplideSlide v-for="(i, index) in items" :key="index" class="p-1">
             <div class="w-full bg-white flex flex-col rounded-xl retro overflow-hidden ">
-              <!-- <img class="w-full " src="/assets/images/Cards/antalya2.webp" alt=""> -->
+              <img class="w-full " :src="i.image" v-if="i.image" alt="">
               <div class="p-4 flex flex-col">
                 <div class="font-bold">
+                  
                   {{ i.title }}
+                  
                 </div>
                 <div class="text-gray-600">
 

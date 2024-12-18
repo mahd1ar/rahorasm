@@ -1,75 +1,50 @@
 namespace FiltersAPI {
-    export interface Root {
-        airlines: Airline[]
-        durations: Duration[]
-        prices: Price
-    }
+   
 
-    interface Airline {
+
+     export type Root = Root2[]
+
+     interface Root2 {
         id: number
-        name: string
-        tours_quantity: number
-    }
-
-    interface Duration {
-        duration: number
-        tours_quantity: number
-    }
-
-    interface Price {
-        max_price: number
-        least_price: number
-    }
-
-}
-
-namespace TourAPI {
-
-    export type Root = Root2[]
-
-    interface Root2 {
-        id: number
-        airline: Airline
+        image: any
         flights: Flight[]
-        title: string
-        description: string
-        tour_type: string
         start_date: string
+        title: string
+        description_editor?: string
+        occasion?: string
+        tour_type: string
         needed_documents: string
         agency_service: string
         tour_guide: string
-        tour_duration: string
+        tour_duration: number
         is_featured: boolean
+        is_shown: boolean
         least_price: string
+        max_price: string
         created_at: string
         edited_at: string
         destination: number
     }
 
-    interface Airline {
+     interface Flight {
         id: number
-        name: string
-        created_at: string
-        edited_at: string
-    }
-
-    interface Flight {
-        id: number
+        departure: string
+        return_departure: string
+        return_arrival: string
         origin_airport: OriginAirport
         destination_airport: DestinationAirport
         return_origin_airport: ReturnOriginAirport
         return_destination_airport: ReturnDestinationAirport
-        departure: string
+        airline: Airline
+        tour: Tour
+        hotel_prices: HotelPrice[]
         arrival: string
-        return_departure: string
-        return_arrival: string
         start_price: string
         created_at: string
         edited_at: string
-        tour: number
     }
 
-    interface OriginAirport {
+     interface OriginAirport {
         id: number
         city: City
         name: string
@@ -78,7 +53,7 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface City {
+     interface City {
         id: number
         country: Country
         name: string
@@ -86,7 +61,7 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface Country {
+     interface Country {
         id: number
         continent: Continent
         name: string
@@ -94,14 +69,14 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface Continent {
+     interface Continent {
         id: number
         name: string
         created_at: string
         edited_at: string
     }
 
-    interface DestinationAirport {
+     interface DestinationAirport {
         id: number
         city: City2
         name: string
@@ -110,7 +85,7 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface City2 {
+     interface City2 {
         id: number
         country: Country2
         name: string
@@ -118,7 +93,7 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface Country2 {
+     interface Country2 {
         id: number
         continent: Continent2
         name: string
@@ -126,14 +101,14 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface Continent2 {
+     interface Continent2 {
         id: number
         name: string
         created_at: string
         edited_at: string
     }
 
-    interface ReturnOriginAirport {
+     interface ReturnOriginAirport {
         id: number
         city: City3
         name: string
@@ -142,7 +117,7 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface City3 {
+     interface City3 {
         id: number
         country: Country3
         name: string
@@ -150,7 +125,7 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface Country3 {
+     interface Country3 {
         id: number
         continent: Continent3
         name: string
@@ -158,14 +133,14 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface Continent3 {
+     interface Continent3 {
         id: number
         name: string
         created_at: string
         edited_at: string
     }
 
-    interface ReturnDestinationAirport {
+     interface ReturnDestinationAirport {
         id: number
         city: City4
         name: string
@@ -174,7 +149,7 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface City4 {
+     interface City4 {
         id: number
         country: Country4
         name: string
@@ -182,7 +157,7 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface Country4 {
+     interface Country4 {
         id: number
         continent: Continent4
         name: string
@@ -190,10 +165,100 @@ namespace TourAPI {
         edited_at: string
     }
 
-    interface Continent4 {
+     interface Continent4 {
         id: number
         name: string
         created_at: string
         edited_at: string
     }
+
+     interface Airline {
+        id: number
+        name: string
+        logo: any
+        created_at: string
+        edited_at: string
+    }
+
+     interface Tour {
+        id: number
+        title: string
+        description_editor: any
+        occasion: any
+        image: any
+        start_date: string
+        tour_type: string
+        needed_documents: string
+        agency_service: string
+        tour_guide: string
+        tour_duration: number
+        is_featured: boolean
+        is_shown: boolean
+        least_price: string
+        max_price: string
+        created_at: string
+        edited_at: string
+        destination: number
+    }
+
+     interface HotelPrice {
+        id: number
+        hotel: Hotel
+        two_bed_price: string
+        one_bed_price: string
+        child_with_bed_price: string
+        child_no_bed_price: string
+        created_at: string
+        edited_at: string
+        flight: number
+    }
+
+     interface Hotel {
+        id: number
+        images: Image[]
+        hotel_facilities: HotelFacility[]
+        room_facilities: RoomFacility[]
+        recreational_facilities: RecreationalFacility[]
+        sport_facilities: SportFacility[]
+        city: City5
+        name: string
+        address: string
+        is_featured: boolean
+        star: number
+        location_on_map: any
+        description: string
+        long_description: string
+        created_at: string
+        edited_at: string
+    }
+
+     interface Image {
+        id: number
+        image: any
+        alt: any
+    }
+
+     interface HotelFacility {
+        name: string
+    }
+
+     interface RoomFacility {
+        name: string
+    }
+
+     interface RecreationalFacility {
+        name: string
+    }
+
+     interface SportFacility {
+        name: string
+    }
+
+     interface City5 {
+        name: string
+    }
+
+
+
+
 }

@@ -25,12 +25,17 @@ const { data: fligthsData, error, status } = useAPI<{
 
 const loading = computed(() => status.value === 'pending')
 
+function isRichText(text: string) {
+  return text.indexOf('</p>') !== -1
+}
+
 const data = computed(() => {
   if (!apiData.value) {
     return null;
   }
-
+  
   return {
+    title: apiData.value?.tour.title,
     travel: [
       {
         type: "start",
@@ -89,6 +94,10 @@ const data = computed(() => {
     ],
     tour: [
       {
+        label: " توضیحات",
+        value: apiData.value?.tour.description_editor,
+      },
+      {
         label: "نوع سفر",
         value: apiData.value?.tour.tour_type,
       },
@@ -99,10 +108,6 @@ const data = computed(() => {
       {
         label: " خدمات آژانس",
         value: apiData.value?.tour.agency_service,
-      },
-      {
-        label: " توضیحات",
-        value: apiData.value?.tour.description,
       },
       {
         label: "مسئولین تور",
@@ -120,25 +125,28 @@ const data = computed(() => {
           {
             title: "2 تخته (هرنفر)",
             price: i.two_bed_price,
+            formattedPrice: i.two_bed_price ? Intl.NumberFormat("fa-IR").format( parseInt( i.two_bed_price)) : "",
             id: i.id,
           },
           {
             title: "1 تخته (هرنفر)",
             price: i.one_bed_price,
+            formattedPrice: i.one_bed_price ? Intl.NumberFormat("fa-IR").format( parseInt( i.one_bed_price)) : "",
             id: i.id,
           },
           {
             title: "کودک با تخت (هرنفر)",
             price: i.child_with_bed_price,
+            formattedPrice: i.child_with_bed_price ? Intl.NumberFormat("fa-IR").format( parseInt( i.child_with_bed_price)) : "",
             id: i.id,
           },
           {
             title: "کودک بدون تخت (هرنفر)",
             price: i.child_no_bed_price,
+            formattedPrice: i.child_no_bed_price ? Intl.NumberFormat("fa-IR").format( parseInt( i.child_no_bed_price)) : "",
             id: i.id,
           },
-
-        ]
+        ].filter(i =>  parseInt(i.price)),
       }))
     ]
   };
@@ -364,7 +372,7 @@ function storeReserve() {
         <LoadingIndicator />
       </div>
       <div v-else class="w-full lg:w-9/12">
-
+<h1 class="text-2xl font-bold mb-6" >{{ data?.title }}</h1>
         <section class="p-4 lg:p-6 rounded-md border bg-white flex flex-col gap-6">
           <div v-for="(i, inx) in data?.travel || []" :key="inx" class="flex flex-col gap-3">
             <div class="flex">
@@ -520,7 +528,7 @@ function storeReserve() {
                     {{ h.title }}
                   </div>
                   <div class="text-gray-700 font-bold">
-                    {{ h.price }}
+                    {{ h.formattedPrice }}
                     تومان
                   </div>
                   <BedroomCount @update="$d => { checkId(h.id, $d, inx, inxx) }" />
@@ -528,7 +536,7 @@ function storeReserve() {
               </div>
               <div v-if="counts.reduce((a, b) => b += a, 0) !== 0" class="w-full flex justify-end p-2">
                 <button type="button" @click="storeReserve"
-                  class="bg-Secondary px-3 text-pink-100 py-4 rounded  mr-auto w-full md:w-auto flex gap-4">
+                  class="bg-Secondary px-8 text-pink-50 py-4 rounded  mr-auto w-full md:w-auto flex gap-4">
                   نهایی کردن رزرو
                   <svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 16 16">
                     <path fill="none" stroke="currentColor" d="M9.5 4.5L6 8l3.5 3.5" />
@@ -563,7 +571,13 @@ function storeReserve() {
                 'rounded-xl bg-white p-3',
                 'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
               ]">
-                <p v-html="posts.value" class="text-sm p-4 leading-6"></p>
+              <p class="whitespace-pre-wrap" v-if="!isRichText(posts.value)" >
+                {{ posts.value }}
+              </p>
+              <div v-else class="ck ck-content whitespace-pre-wrap">
+
+                <div v-html="posts.value" class="text-sm p-4 leading-6"></div>
+              </div>
               </TabPanel>
             </TabPanels>
           </TabGroup>

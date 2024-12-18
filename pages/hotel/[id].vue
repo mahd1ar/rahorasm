@@ -168,7 +168,7 @@ const product = computed(() => {
         </div>
       </div>
 
-      <p class=" p-4 mt-6  border-t" v-html="apiData?.long_description" />
+      <div class=" ck-content p-4 mt-6  border-t" v-html="apiData?.long_description" />
       
     </div>
   </div>

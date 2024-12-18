@@ -12,7 +12,9 @@ defineProps({
             airline: any,
             price: string,
             href: string,
-            image: string
+            image: string,
+            isFeatured?: boolean,
+            occasion?: string
         }[]>
     },
     europe_items: {
@@ -23,6 +25,8 @@ defineProps({
             price: string,
             href: string,
             image: string
+            isFeatured?: boolean,
+            occasion?: string
         }[]>
     }
 })
@@ -57,11 +61,24 @@ defineProps({
                 }" aria-label="My Favorite Images">
                     <SplideSlide v-for="(i, index) in asia_items || []" :key="index">
                         <div class="p-1">
+                            <div class="w-full bg-white flex flex-col rounded-lg retro overflow-hidden text-sm ">
+                                <div class="h-40 relative">
+                                    <div v-if="i.occasion" v-text="i.occasion"
+                                        class="border-2 border-l-0 text-sm font-bold border-black absolute left-0 px-2 top-3 h-8 flex  justify-center items-center  text-white  bg-Secondary">
 
-                            <div class="w-full bg-white flex flex-col rounded-lg retro overflow-hidden ">
-                                <img class="w-64" :src="i.image" alt="">
+                                    </div>
+                                    <div v-if="i.isFeatured"
+                                        class="absolute right-2 bottom-2 w-8 h-8 flex justify-center items-center text-lg text-yellow-600 rounded-full bg-yellow-100  ">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="m12 8.5l2.116 5.088l5.493.44l-4.185 3.585l1.278 5.36L12 20.1l-4.702 2.872l1.278-5.36l-4.184-3.584l5.492-.44zM8 2v9H6V2zm10 0v9h-2V2zm-5 0v5h-2V2z" />
+                                        </svg>
+                                    </div>
+                                    <img class="h-full object-cover" :src="i.image" alt="">
+                                </div>
                                 <div class="p-4 flex flex-col">
-                                    <div class="font-bold text-dark">
+                                    <div class="font-bold text-dark text-base">
                                         {{ i.title }}
                                     </div>
                                     <div class="text-gray-600">
@@ -112,7 +129,7 @@ defineProps({
                                             </span>
                                             <span class="font-cards">قیمت از:
                                                 {{ i.price }}
-                                                تومان</span>
+                                                ت</span>
                                         </p>
 
                                     </div>

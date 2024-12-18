@@ -357,13 +357,15 @@ watchDebounced([duration, airline, least_price, max_price], () => {
           <TravelItemCard v-for="d in data || []" :key="d.id" :id="d.id" :title="d.title" :duration="+d.tour_duration"
             :airline="d.tour_type" :date="d.start_date"
             :price="d.least_price ? Intl.NumberFormat('fa-ir', {}).format(+d.least_price).replaceAll('٬', '/') : '0'"
+            :occasion="d.occasion"
+            :is-featured="d.is_featured"
             :info="d.flights.map(f => ({
               id: f.id,
               turn: f.departure,
               retunTime: f.return_departure,
               packagePrice: f.start_price,
               path: '/tour/details/' + f.id,
-              airline: f.origin_airport.city.country.name
+              airline: f.origin_airport.city.country.name,
             }))" />
         </template>
 

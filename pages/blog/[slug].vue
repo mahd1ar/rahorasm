@@ -78,9 +78,9 @@ const { data } = useAPI<Root>('/blog/posts/' + param.value)
           :src="data?.image"
           class="h-64 object-cover w-full"
         >
-        <div class="text-gray-800">
+        <div class="text-gray-800 ck ck-content">
           
-          <p v-html="data?.content" ></p>
+          <div v-html="data?.content" ></div>
         </div>
       </article>
     

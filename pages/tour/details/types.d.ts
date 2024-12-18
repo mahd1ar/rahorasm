@@ -157,7 +157,7 @@ namespace TourDetailsAPI {
      interface Tour {
         id: number
         title: string
-        description: string
+        description_editor: string
         start_date: string
         tour_type: string
         needed_documents: string

@@ -13,7 +13,8 @@ defineProps({
             airline: string,
             price: string,
             href: string,
-            image: string
+            image: string,
+            occasion: string
         }[]>
     }
 })
@@ -46,7 +47,26 @@ defineProps({
                         <div class="p-1">
 
                             <div class="w-full bg-white flex flex-col rounded-xl retro overflow-hidden ">
-                                <img class="w-64" src="/assets/images/Cards/antalya2.webp" alt="">
+
+                                <div class="h-44 relative">
+
+
+                                    <div v-text="i.occasion" v-if="i.occasion"
+                                        class="border-2 border-l-0 text-sm font-bold border-black absolute left-0 px-2 pr-4 top-4 h-8 flex  justify-center items-center  text-white  bg-Secondary">
+
+                                    </div>
+
+                                    <!-- <img class="w-64" src="/assets/images/Cards/antalya2.webp" alt=""> -->
+                                    <img class="h-full object-cover" src="/assets/images/Cards/antalya2.webp" alt="">
+
+                                </div>
+
+
+
+
+
+
+
                                 <div class="p-4 flex flex-col">
                                     <div class="font-bold">
                                         {{ i.title }} </div>
@@ -95,8 +115,9 @@ defineProps({
                                                 </svg>
                                             </span>
                                             <span class="font-cards">قیمت از:
-                                                {{ i.price }}
-                                                تومان</span>
+                                                {{ i.price ? Intl.NumberFormat('fa-IR').format(parseInt(i.price)) :
+                                                'نامعلوم' }}
+                                                ت</span>
                                         </p>
 
                                     </div>

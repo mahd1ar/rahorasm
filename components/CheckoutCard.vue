@@ -128,10 +128,10 @@ watch(isOpen, (nval) => {
 
 
 function handelSubmit() {
-  console.log(reservationData.value)
+
   $api('/reserve/new/', { method: "POST", body: reservationData.value })
     .then(res => {
-      console.log(res)
+
       $swal.success("رزرو شما با موفقیت ثبت شد")
     })
     .catch(() => $swal.error("خطا در ثبت رزرو"))

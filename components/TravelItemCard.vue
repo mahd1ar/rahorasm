@@ -16,6 +16,8 @@ defineProps({
   airline: String,
   date: String,
   price: String,
+  isFeatured: Boolean,
+  occasion:String,
   info: {
     type: Array as PropType<Info[]>,
     default: () => []
@@ -29,11 +31,17 @@ const expanded = ref(false)
   <div>
 
     <div
-      class="bg-[#fcfcfd] divide-x-2 divide-x-reverse lg:flex lg:gap-0 gap-2 grid col-span-2 lg:h-20 border border-gray-300 rounded-md">
+      class="bg-[#fcfcfd] divide-x-2 divide-x-reverse lg:flex lg:gap-0 relative gap-2 grid col-span-2 lg:h-20 border border-gray-300 rounded-md">
       <div class="col-span-2 lg:w-3/12 flex-center bg-gray-50">
-        <strong class="p-3 text-center">
-          {{ title }}
-        </strong>
+        <div v-if="occasion" v-text="occasion" class="text-xs bg-Secondary rounded text-white px-2 p-0.5 absolute right-0 top-0 -translate-y-1/2" />
+        
+        <strong 
+        class="p-3 text-center " >
+            <svg v-show="isFeatured" class="text-yellow-500 w-4 h-4 flex-shrink-0 inline-block" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 1200 1200"><path fill="currentColor" d="M600 0C268.629 0 0 268.629 0 600s268.629 600 600 600s600-268.629 600-600S931.371 0 600 0m3.955 209.912l94.556 295.239l309.889 6.958l-251.588 181.055l89.136 296.924l-249.976-183.325l-254.81 176.587l97.119-294.434l-246.68-187.793l310.034 1.392z"/></svg>
+            {{ title }}
+          </strong>
+        
+        
       </div>
 
       <div class="  lg:w-3/12 divide-y-2  flex flex-col text-gray-800">

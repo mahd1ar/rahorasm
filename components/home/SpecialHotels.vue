@@ -51,7 +51,7 @@ defineProps({
         }" aria-label="Special hotels">
           <SplideSlide v-for="(i, index) in items" :key="index" class="p-1">
             <div class="w-full bg-white flex flex-col rounded-xl retro overflow-hidden ">
-              <img class="w-full " :src="i.image" v-if="i.image" alt="">
+              <img class="w-full h-48 object-cover " :src="i.image" v-if="i.image" alt="">
               <div class="p-4 flex flex-col">
                 <div class="font-bold">
                   

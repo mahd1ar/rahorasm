@@ -150,12 +150,12 @@ const expanded = ref(false)
             <div>
               <span class="block font-normal text-gray-600"> تاریخ رفت :</span>
 
-              <strong> {{ inf.retunTime ? new Date(inf.retunTime).toLocaleDateString() : '' }} </strong>
+              <strong> {{ inf.retunTime ? new Date(inf.retunTime).toLocaleDateString('fa') : '' }} </strong>
             </div>
             <div>
               <span class="block font-normal text-gray-600"> برگشت رفت: </span>
 
-              <strong> {{ inf.turn ? new Date(inf.turn).toLocaleDateString() : '' }} </strong>
+              <strong>  {{ inf.turn ? new Date(inf.turn).toLocaleDateString('fa') : '' }} </strong>
             </div>
           </div>
           <div class="lg:w-3/12  flex flex-col  justify-center">

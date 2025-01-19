@@ -119,10 +119,10 @@ function saveEditing() {
 
 function deleteFromReservation(i: number) {
   if (window.confirm("آیا از حذف این مورد اطمینان دارید؟")) {
-    reservationData.value.counts[i].count = 0
-    reservationData.value.counts[i].users.splice(0, reservationData.value.counts[i].users.length)
+    reservationData.value.count[i].count = 0
+    reservationData.value.count[i].users.splice(0, reservationData.value.count[i].users.length)
   }
-  if (reservationData.value.counts.every(i => i.count === 0))
+  if (reservationData.value.count.every(i => i.count === 0))
     $router.push('/')
 }
 
@@ -139,9 +139,11 @@ watch(isOpen, (nval) => {
 function handelSubmit() {
 
   $api('/reserve/new/', { method: "POST", body: reservationData.value })
-    .then(res => {
+    .then(async res => {
 
       $swal.success("رزرو شما با موفقیت ثبت شد")
+      await $router.push('/')
+      reservationData.value = null
     })
     .catch(() => $swal.error("خطا در ثبت رزرو"))
 }

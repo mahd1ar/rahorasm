@@ -7,19 +7,20 @@ const reservation = useCookie<Reservation>(COOKIES.Reservation);
 const router = useRouter()
 const appState = useAppState()
 const { $swal } = useNuxtApp()
-
-const { data: apiData } = useAPI<TourDetailsAPI.Root>(
+const flightsListId = ref(0)
+const { data: apiData, status } = useAPI<TourDetailsAPI.Root>(
   "/tour/flight/" + param.value
 );
 
-const { data: fligthsData, error, status } = useAPI<{
+const { data: fligthsData, error, execute } = useAPI<{
   departure: string
   return_departure: string
   id: number
 }[]>(
-  "/tour/flights/" + param.value, {
+  () => "/tour/flights/" + flightsListId.value, {
   server: false,
-  lazy: true
+  lazy: true,
+  immediate: false
 }
 );
 
@@ -33,64 +34,33 @@ const data = computed(() => {
   if (!apiData.value) {
     return null;
   }
-  
+  flightsListId.value = apiData.value.tour.id || 0
+  execute()
   return {
     title: apiData.value?.tour.title,
-    travel: [
-      {
-        type: "start",
-        title:
-          new Date(apiData.value?.departure).toLocaleDateString("fa-ir", {
-            dateStyle: "full",
-          }) +
+    travel: [...apiData.value.flight_Legs.map(fl => {
+      return {
+        type: 'start',
+        title: new Date(fl.departure).toLocaleDateString("fa-ir", {
+          dateStyle: "full",
+        }) +
           " | " +
-          apiData.value?.origin_airport.city.name, // 'تهران | جمعه 23 شهریور',
+          fl.departure_airport.city.name,
         srcAirport: {
-          code: apiData.value.origin_airport.short_name || "",
-          title: apiData.value.origin_airport.name || "",
+          code: fl.departure_airport.short_name || "",
+          title: fl.departure_airport.name || "",
         },
         destAirport: {
-          code: apiData.value.destination_airport.short_name || "",
-          title: apiData.value.destination_airport.name || "",
+          code: fl.arrival_airport.short_name || "",
+          title: fl.arrival_airport.name || "",
         },
         airline: {
-          name: apiData.value.airline.name,
-          logo: "https://last-cdn.com//cdn/static/airlines/iranair--40x40xwt.png",
+          name: fl.airline.name,
+          logo: fl.airline.logo,
         },
-        time: new Date(apiData.value?.departure).toLocaleTimeString(),
-      },
-      {
-        type: "residence",
-        title:
-          new Date(apiData.value?.arrival).toLocaleDateString("fa-ir", {
-            dateStyle: "full",
-          }) +
-          " | " +
-          apiData.value?.destination_airport.city.name, // 'تهران | جمعه 23 شهریور',
-        time: new Date(apiData.value?.return_departure).toLocaleTimeString(),
-
-        srcAirport: {
-          code: apiData.value.return_origin_airport.short_name || "",
-          title: apiData.value.return_origin_airport.name || "",
-        },
-        destAirport: {
-          code: apiData.value.return_destination_airport.short_name || "",
-          title: apiData.value.return_destination_airport.name || "",
-        },
-        airline: {
-          name: apiData.value.airline.name,
-          logo: apiData.value.airline.logo,
-        },
-      },
-      {
-        type: "end",
-        title:
-          new Date(apiData.value?.return_arrival).toLocaleDateString("fa-ir", {
-            dateStyle: "full",
-          }) +
-          " | " +
-          apiData.value?.return_destination_airport.city.name, // 'تهران | جمعه 23 شهریور',
-      },
+        time: new Date(fl.departure).toLocaleTimeString(),
+      }
+    })
     ],
     tour: [
       {
@@ -114,47 +84,60 @@ const data = computed(() => {
         value: apiData.value?.tour.tour_guide,
       },
     ],
-    hotels: [
-      ...apiData.value?.hotel_prices.map(i => ({
-        name: i.hotel.name,
-        rating: i.hotel.star || 0,
-        city: i.hotel.city.name,
-        duration: apiData.value?.tour.tour_duration,
-        image: i.hotel.images.at(0)?.image || "",
-        prices: [
-          {
-            title: "2 تخته (هرنفر)",
-            price: i.two_bed_price,
-            formattedPrice: i.two_bed_price ? Intl.NumberFormat("fa-IR").format( parseInt( i.two_bed_price)) : "",
-            id: i.id,
-          },
-          {
-            title: "1 تخته (هرنفر)",
-            price: i.one_bed_price,
-            formattedPrice: i.one_bed_price ? Intl.NumberFormat("fa-IR").format( parseInt( i.one_bed_price)) : "",
-            id: i.id,
-          },
-          {
-            title: "کودک با تخت (هرنفر)",
-            price: i.child_with_bed_price,
-            formattedPrice: i.child_with_bed_price ? Intl.NumberFormat("fa-IR").format( parseInt( i.child_with_bed_price)) : "",
-            id: i.id,
-          },
-          {
-            title: "کودک بدون تخت (هرنفر)",
-            price: i.child_no_bed_price,
-            formattedPrice: i.child_no_bed_price ? Intl.NumberFormat("fa-IR").format( parseInt( i.child_no_bed_price)) : "",
-            id: i.id,
-          },
-        ].filter(i =>  parseInt(i.price)),
-      }))
-    ]
+    accommodations: apiData.value?.tour.flight_times.map(j => {
+      return j.hotel_price.map(i => {
+        return {
+          hotelPriceId: i.id,
+          flightTimesId: j.id,
+          hotel: i.hotels.map(h => ({
+            name: h?.name,
+            enName: h.english_name,
+            rating: h?.star || 0,
+            city: h?.city.name,
+            duration: apiData.value?.tour.tour_duration,
+            image: h?.images.at(0)?.image || "",
+          })),
+          prices: [
+            {
+              title: "2 تخته (هرنفر)",
+              priceIRR: i.two_bed_price,
+              priceOther: i.two_bed_price_other_currency,
+              other_currency: i.other_currency,
+              formattedPrice: i.two_bed_price ? Intl.NumberFormat("fa-IR").format(parseInt(i.two_bed_price)) : "",
+              id: i.id,
+            },
+            {
+              title: "1 تخته (هرنفر)",
+              priceIRR: i.one_bed_price,
+              priceOther: i.one_bed_price_other_currency,
+              formattedPrice: i.one_bed_price ? Intl.NumberFormat("fa-IR").format(parseInt(i.one_bed_price)) : "",
+              id: i.id,
+              other_currency: i.other_currency,
+            },
+            {
+              title: "کودک با تخت (هرنفر)",
+              priceIRR: i.child_with_bed_price,
+              priceOther: i.child_with_bed_price_other_currency,
+              formattedPrice: i.child_with_bed_price ? Intl.NumberFormat("fa-IR").format(parseInt(i.child_with_bed_price)) : "",
+              id: i.id,
+              other_currency: i.other_currency,
+            },
+            {
+              title: "کودک بدون تخت (هرنفر)",
+              priceIRR: i.child_no_bed_price,
+              priceOther: i.child_no_bed_price_other_currency,
+              formattedPrice: i.child_no_bed_price ? Intl.NumberFormat("fa-IR").format(parseInt(i.child_no_bed_price)) : "",
+              id: i.id,
+              other_currency: i.other_currency,
+            },
+          ].filter(i => parseInt(i.priceIRR)),
+        }
+      })
+
+    }).flat()
+
   };
 });
-
-
-
-
 
 
 let lastBedroomId: null | number = null;
@@ -183,44 +166,33 @@ function openModal(v: boolean) {
 
 
 function storeReserve() {
-
+  
   const x: Reservation = {
-    tourId: apiData.value!.tour.id,
-    tourtitle: apiData.value!.tour.title,
-    hotelId: apiData.value!.hotel_prices[hotelIndex!].hotel.id,
-    hotelImages: apiData.value!.hotel_prices[hotelIndex!].hotel.images.at(0)!,
-    hotelName: apiData.value!.hotel_prices[hotelIndex!].hotel.name,
-    roomId: lastBedroomId,
-    counts: [
-      {
-        title: "2 تخته (هرنفر)",
-        count: counts.value[0],
-        price: apiData.value!.hotel_prices[hotelIndex!].two_bed_price,
-        identitication: 'two_bed_price',
+    count: [
+    {
+      identitication: 'two_bed_price',
+      count: counts.value[0],
         users: []
       },
       {
-        title: "1 تخته (هرنفر)",
         count: counts.value[1],
-        price: apiData.value!.hotel_prices[hotelIndex!].one_bed_price,
         identitication: 'one_bed_price',
         users: []
       },
       {
-        title: "کودک با تخت (هرنفر)",
         count: counts.value[2],
-        price: apiData.value!.hotel_prices[hotelIndex!].child_with_bed_price,
         identitication: 'child_with_bed_price',
         users: []
       },
       {
-        title: "کودک بدون تخت (هرنفر)",
         count: counts.value[3],
-        price: apiData.value!.hotel_prices[hotelIndex!].child_no_bed_price,
+        users: [],
         identitication: 'child_no_bed_price',
-        users: []
       }
-    ]
+    ],
+    flight_id: param.value,
+    flight_time_id: data.value!.accommodations[hotelIndex!].flightTimesId,
+    hotel_price_id: data.value!.accommodations[hotelIndex!].hotelPriceId
   }
 
   reservation.value = x
@@ -372,7 +344,7 @@ function storeReserve() {
         <LoadingIndicator />
       </div>
       <div v-else class="w-full lg:w-9/12">
-<h1 class="text-2xl font-bold mb-6" >{{ data?.title }}</h1>
+        <h1 class="text-2xl font-bold mb-6">{{ data?.title }}</h1>
         <section class="p-4 lg:p-6 rounded-md border bg-white flex flex-col gap-6">
           <div v-for="(i, inx) in data?.travel || []" :key="inx" class="flex flex-col gap-3">
             <div class="flex">
@@ -475,22 +447,26 @@ function storeReserve() {
         </section>
 
         <h2 class="text-2xl mt-6 mb-4 font-bold">لیست هتل ها و قیمت ها</h2>
-        <section>
+        <section class="space-y-2">
 
-          <div v-for="(i, inxx) in data?.hotels || []" :key="inxx"
+          <div v-for="(i, inxx) in data?.accommodations || []" :key="inxx"
             class="p-6 rounded-md border bg-white flex flex-col gap-6 relative">
             <div class="relative">
-              <div class="flex flex-col sm:flex-row items-start gap-4">
-                <img v-if="i.image" class="h-36 w-72 object-cover rounded-lg" :src="i.image" alt="" />
+              <div v-for="hotel in i.hotel" class="flex flex-col sm:flex-row items-start gap-4">
+                <img v-if="hotel.image" class="h-36 w-72 object-cover rounded-lg" :src="hotel.image" alt="" />
                 <div>
                   <h4 class="text-2xl flex flex-col gap-3">
-                    <span> {{ i.name }}</span>
+                    <div  >
+
+                      <div> {{ hotel.name }}</div>
+                      <div class="text-lg text-gray-600"  > {{ hotel.enName }}</div>
+                    </div>
 
                     <!-- stars -->
                     <div class="text-yellow-500 text-2xl flex gap-1">
 
                       <!-- filled -->
-                      <svg v-for="fs in i.rating" :key="fs" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                      <svg v-for="fs in hotel.rating" :key="fs" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                         viewBox="0 0 24 24">
                         <path fill="currentColor" fill-rule="evenodd"
                           d="M12.908 1.581a1 1 0 0 0-1.816 0l-2.87 6.22l-6.801.807a1 1 0 0 0-.562 1.727l5.03 4.65l-1.335 6.72a1 1 0 0 0 1.469 1.067L12 19.426l5.977 3.346a1 1 0 0 0 1.47-1.068l-1.335-6.718l5.029-4.651a1 1 0 0 0-.562-1.727L15.777 7.8z"
@@ -499,7 +475,7 @@ function storeReserve() {
 
 
                       <!-- outlined -->
-                      <svg v-if="i.rating < 5" v-for="o in (5 - i.rating)" :key="o" xmlns="http://www.w3.org/2000/svg"
+                      <svg v-if="hotel.rating < 5" v-for="o in (5 - hotel.rating)" :key="o" xmlns="http://www.w3.org/2000/svg"
                         width="1em" height="1em" viewBox="0 0 24 24">
                         <g fill="none">
                           <path fill="currentColor"
@@ -514,8 +490,8 @@ function storeReserve() {
                     <!-- end of stars -->
                   </h4>
                   <div class="mt-2 text-gray-600">
-                    <span> {{ i.city }} </span>
-                    <span> {{ i.duration }}</span>
+                    <span> {{ "i.city" }} </span>
+                    <span> {{ "i.duration" }}</span>
                   </div>
                   <div class="mt-2 text-primary">
                     <span> 3 شب </span>
@@ -530,6 +506,14 @@ function storeReserve() {
                   <div class="text-gray-700 font-bold">
                     {{ h.formattedPrice }}
                     تومان
+                  </div>
+                  <div v-if="h.other_currency" class="text-gray-700 font-bold" >
+                    <div>
+
+                      +
+                    </div>
+                    {{ h.priceOther }}
+                    {{ h.other_currency.replace('USD', 'دلار').replace('EUR','یورو') }}
                   </div>
                   <BedroomCount @update="$d => { checkId(h.id, $d, inx, inxx) }" />
                 </div>
@@ -571,13 +555,13 @@ function storeReserve() {
                 'rounded-xl bg-white p-3',
                 'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
               ]">
-              <p class="whitespace-pre-wrap" v-if="!isRichText(posts.value)" >
-                {{ posts.value }}
-              </p>
-              <div v-else class="ck ck-content whitespace-pre-wrap">
+                <p class="whitespace-pre-wrap" v-if="!isRichText(posts.value)">
+                  {{ posts.value }}
+                </p>
+                <div v-else class="ck ck-content whitespace-pre-wrap">
 
-                <div v-html="posts.value" class="text-sm p-4 leading-6"></div>
-              </div>
+                  <div v-html="posts.value" class="text-sm p-4 leading-6"></div>
+                </div>
               </TabPanel>
             </TabPanels>
           </TabGroup>

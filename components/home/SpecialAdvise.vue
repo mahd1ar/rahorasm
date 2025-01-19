@@ -57,7 +57,7 @@ defineProps({
                                     </div>
 
                                     <!-- <img class="w-64" src="/assets/images/Cards/antalya2.webp" alt=""> -->
-                                    <img class="h-full object-cover" src="/assets/images/Cards/antalya2.webp" alt="">
+                                    <img class="h-full object-cover" :src="i.image" alt="">
 
                                 </div>
 

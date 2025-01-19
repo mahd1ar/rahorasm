@@ -25,8 +25,8 @@ export default defineNuxtPlugin(() => {
 
 
   
-  // const baseURL = import.meta.dev ? 'http://192.168.1.54:8000' : 'https://rahorasm.msdcorporation.top';
-  const baseURL = 'https://rahorasm.msdcorporation.top';
+  const baseURL = import.meta.dev ? 'http://192.168.1.54:8000' : 'https://rahorasm.msdcorporation.top';
+  // const baseURL = 'https://rahorasm.msdcorporation.top';
 
   const $api = $fetch.create({
     credentials: 'include',

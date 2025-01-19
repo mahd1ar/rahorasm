@@ -17,14 +17,18 @@ const tempPassengerInput = reactive({
   birthday: '',
 })
 
-
 const reservationData = useCookie<Reservation>(COOKIES.Reservation);
+  const { data, status } = useAPI<TourDetailsAPI.Root>(
+  "/tour/flight/" + reservationData.value.flight_id
+);
 
 const nth = ['اول', 'دوم', 'سوم', 'چهارم', 'پنجم', 'ششم', 'هفتم', 'هشتم', 'نهم'] as const
 
-watchDeep(reservationData, (nval) => {
+watchDeep(reservationData,async (nval) => {
 
-  nval.counts.forEach(i => {
+  // const res = await $api<TourDetailsAPI.Root>("/tour/flight/" + nval.flight_id);
+
+  nval.count.forEach(i => {
     if (i.count !== i.users.length) {
 
       if (i.count > i.users.length) {
@@ -47,6 +51,11 @@ watchDeep(reservationData, (nval) => {
 
 }, {
   immediate: true
+})
+
+
+const hotelPrices = computed(() => {
+  return data.value?.tour.flight_times.find(i => i.id === reservationData.value.flight_time_id )?.hotel_price.find(hp => hp.id === reservationData.value.hotel_price_id)
 })
 
 function openUser(itemIndex: number, roomIndex: number) {
@@ -100,11 +109,11 @@ function saveEditing() {
   if (!validatePassenger())
     return
 
-  reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value].name = tempPassengerInput.name
-  reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value].en_name = tempPassengerInput.en_name
-  reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value].ssn = tempPassengerInput.ssn
-  reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value].passportNumber = tempPassengerInput.passportNumber
-  reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value].birthday = tempPassengerInput.birthday
+  reservationData.value.count[selectedItemIndex.value].users[selectedRoomIndex.value].name = tempPassengerInput.name
+  reservationData.value.count[selectedItemIndex.value].users[selectedRoomIndex.value].en_name = tempPassengerInput.en_name
+  reservationData.value.count[selectedItemIndex.value].users[selectedRoomIndex.value].ssn = tempPassengerInput.ssn
+  reservationData.value.count[selectedItemIndex.value].users[selectedRoomIndex.value].passportNumber = tempPassengerInput.passportNumber
+  reservationData.value.count[selectedItemIndex.value].users[selectedRoomIndex.value].birthday = tempPassengerInput.birthday
   isOpen.value = false
 }
 
@@ -121,7 +130,7 @@ function deleteFromReservation(i: number) {
 watch(isOpen, (nval) => {
   if (nval)
     setTimeout(() => {
-      Object.assign(tempPassengerInput, reservationData.value.counts[selectedItemIndex.value].users[selectedRoomIndex.value])
+      Object.assign(tempPassengerInput, reservationData.value.count[selectedItemIndex.value].users[selectedRoomIndex.value])
       firstInput.value?.focus()
     }, 300);
 })
@@ -160,7 +169,7 @@ function handelSubmit() {
 
               <div class="flex justify-between">
                 <label for="en_name"> نام و نام خانوادگی به انگلیسی </label>
-                <input ref="firstInput" type="text" id="en_name" v-model="tempPassengerInput.en_name">
+                <input ref="secInput" type="text" id="en_name" v-model="tempPassengerInput.en_name">
               </div>
 
               <div class="flex justify-between">
@@ -196,28 +205,23 @@ function handelSubmit() {
 
 
 
-    <div v-if="reservationData" class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div v-if="data && reservationData" class="mx-auto max-w-2xl px-4 pb-24 pt-16 sm:px-6 lg:max-w-7xl lg:px-8">
       <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
         رزرو
 
-        <span class="underline ">
-          {{ reservationData.hotelName }}
-        </span>
 
-        برای
-
-
-        {{ reservationData.tourtitle }}
+        {{ data?.tour.title }}
       </h1>
       <form @submit.prevent="handelSubmit" class="mt-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-12 xl:gap-x-16">
         <section aria-labelledby="cart-heading" class="lg:col-span-7">
           <h2 id="cart-heading" class="sr-only">Items in your shopping cart</h2>
 
           <ul role="list" class="divide-y divide-gray-200 border-b border-t border-gray-200">
-            <li v-for="(item, itemIdx) in reservationData.counts" :key="itemIdx" class="flex py-6 sm:py-10"
+            <li v-for="(item, itemIdx) in reservationData.count" :key="itemIdx" class="flex py-6 sm:py-10"
               v-show="item.count > 0">
               <div class="flex-shrink-0">
-                <img :src="reservationData.hotelImages.image" :alt="reservationData.hotelImages.alt"
+                
+                <img v-if="data.tour.image" :src="data.tour.image" 
                   class="h-24 w-24 rounded-md object-cover object-center sm:h-48 sm:w-48" />
               </div>
 
@@ -225,9 +229,18 @@ function handelSubmit() {
                 <div class="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
                   <div>
                     <div class="flex justify-between">
-                      <h3 class="font-medium text-gray-700 hover:text-gray-800">
-                        {{ item.title }}
-                      </h3>
+                      <div>
+
+                        <h3 class="font-medium text-gray-700 hover:text-gray-800">
+                          {{ item.identitication }}
+                        </h3>
+                        <div class="text-xs text-gray-500 " >
+                    
+
+                            {{ hotelPrices?.hotels.map(ii => ii.name).join(", ") }}
+
+                        </div>
+                      </div>
                     </div>
                     <div class="mt-1 flex text-sm">
                       <!-- <p class="text-gray-500">{{ item.color }}</p>
@@ -235,8 +248,15 @@ function handelSubmit() {
                       </p> -->
                     </div>
                     <p class="mt-1 text-sm font-medium text-gray-900">{{
-                      Intl.NumberFormat('fa-ir').format(+item.price) }}
+                      Intl.NumberFormat('fa-ir').format(+hotelPrices[item.identitication]) }}
                       تومان
+                    </p>
+                    <p v-if="hotelPrices?.other_currency" >
+                      <div>
+                        +
+                      </div>
+                      {{ hotelPrices[ item.identitication + '_other_currency'] }}
+                    {{ hotelPrices?.other_currency }}
                     </p>
                   </div>
 
@@ -315,7 +335,7 @@ function handelSubmit() {
               <dt class="text-sm text-gray-600">
                 تعداد مسافر
               </dt>
-              <dd class="text-sm font-medium text-gray-900">{{ reservationData.counts.reduce((a, b) => a + b.count, 0)
+              <dd class="text-sm font-medium text-gray-900">{{ reservationData.count.reduce((a, b) => a + b.count, 0)
                 }}
               </dd>
             </div>
@@ -324,7 +344,7 @@ function handelSubmit() {
               <dt class="text-sm text-gray-600">
                 تعداد اتاق ها
               </dt>
-              <dd class="text-sm font-medium text-gray-900">{{ reservationData.counts.filter(a => a.count).length }}
+              <dd class="text-sm font-medium text-gray-900">{{ reservationData.count.filter(a => a.count).length }}
               </dd>
             </div>
 
@@ -345,10 +365,17 @@ function handelSubmit() {
                 هزینه ی کل
               </dt>
               <dd class="text-base font-medium text-gray-900">
-                {{ Intl.NumberFormat('fa-ir').format(reservationData.counts.reduce((a, b) => a + (b.count * +b.price),
-                  0))
-                }}
+                {{ 
+                Intl.NumberFormat('fa-ir').format(reservationData.count.reduce((a, b) => a + (b.count * + hotelPrices[ b.identitication]),0))
+              }}
                 تومان
+                <br>
+                <span v-if="hotelPrices?.other_currency" >
+                  {{ 
+                  Intl.NumberFormat('fa-ir').format(reservationData.count.reduce((a, b) => a + (b.count * + hotelPrices[ b.identitication + '_other_currency']),0))
+                     }}
+{{ hotelPrices?.other_currency }}
+                </span>
               </dd>
             </div>
           </dl>

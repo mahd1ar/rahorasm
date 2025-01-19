@@ -2,18 +2,19 @@
 export interface Root {
   featured_tours: FeaturedTour[]
   latest_asia_tours: LatestAsiaTour[]
-  latest_europe_tours: LatestEuropeTour[]
+  latest_europe_tours: any[]
   featured_hotels: FeaturedHotel[]
 }
 
 export interface FeaturedTour {
   id: number
   image: string
-  flights: Flight[]
   start_date: string
+  destinations: Destination[]
+  flight_times: FlightTime[]
   title: string
   description_editor: string
-  occasion?: string
+  occasion: any
   tour_type: string
   needed_documents: string
   agency_service: string
@@ -25,37 +26,9 @@ export interface FeaturedTour {
   max_price: string
   created_at: string
   edited_at: string
-  destination: number
 }
 
-export interface Flight {
-  id: number
-  departure: string
-  return_departure: string
-  return_arrival: string
-  origin_airport: OriginAirport
-  destination_airport: DestinationAirport
-  return_origin_airport: ReturnOriginAirport
-  return_destination_airport: ReturnDestinationAirport
-  airline: Airline
-  tour: Tour
-  hotel_prices: HotelPrice[]
-  arrival: string
-  start_price: string
-  created_at: string
-  edited_at: string
-}
-
-export interface OriginAirport {
-  id: number
-  city: City
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City {
+export interface Destination {
   id: number
   country: Country
   name: string
@@ -78,141 +51,29 @@ export interface Continent {
   edited_at: string
 }
 
-export interface DestinationAirport {
+export interface FlightTime {
   id: number
-  city: City2
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City2 {
-  id: number
-  country: Country2
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country2 {
-  id: number
-  continent: Continent2
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent2 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface ReturnOriginAirport {
-  id: number
-  city: City3
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City3 {
-  id: number
-  country: Country3
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country3 {
-  id: number
-  continent: Continent3
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent3 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface ReturnDestinationAirport {
-  id: number
-  city: City4
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City4 {
-  id: number
-  country: Country4
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country4 {
-  id: number
-  continent: Continent4
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent4 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Airline {
-  id: number
-  name: string
-  logo: any
-  created_at: string
-  edited_at: string
-}
-
-export interface Tour {
-  id: number
-  title: string
-  description_editor: string
-  occasion?: string
-  image: string
-  start_date: string
-  tour_type: string
-  needed_documents: string
-  agency_service: string
-  tour_guide: string
-  tour_duration: number
-  is_featured: boolean
-  is_shown: boolean
-  least_price: string
-  max_price: string
-  created_at: string
-  edited_at: string
-  destination: number
+  departure_date: string
+  arrival_date: string
+  hotel_price: HotelPrice[]
+  least_price: number
+  flight_Legs: number[]
 }
 
 export interface HotelPrice {
   id: number
-  hotel: Hotel
+  hotels: Hotel[]
   two_bed_price: string
   one_bed_price: string
   child_with_bed_price: string
   child_no_bed_price: string
+  other_currency?: string
+  two_bed_price_other_currency?: string
+  one_bed_price_other_currency?: string
+  child_with_bed_price_other_currency?: string
+  child_no_bed_price_other_currency?: string
   created_at: string
   edited_at: string
-  flight: number
 }
 
 export interface Hotel {
@@ -222,8 +83,9 @@ export interface Hotel {
   room_facilities: RoomFacility[]
   recreational_facilities: RecreationalFacility[]
   sport_facilities: SportFacility[]
-  city: City5
+  city: City
   name: string
+  english_name: string
   address: string
   is_featured: boolean
   star: number
@@ -256,18 +118,19 @@ export interface SportFacility {
   name: string
 }
 
-export interface City5 {
+export interface City {
   name: string
 }
 
 export interface LatestAsiaTour {
   id: number
-  image?: string
-  flights: Flight2[]
+  image: string
   start_date: string
+  destinations: Destination2[]
+  flight_times: FlightTime2[]
   title: string
-  description_editor?: string
-  occasion: any
+  description_editor: string
+  occasion?: string
   tour_type: string
   needed_documents: string
   agency_service: string
@@ -275,198 +138,58 @@ export interface LatestAsiaTour {
   tour_duration: number
   is_featured: boolean
   is_shown: boolean
-  least_price: string
-  max_price: string
-  created_at: string
-  edited_at: string
-  destination: number
-}
-
-export interface Flight2 {
-  id: number
-  departure: string
-  return_departure: string
-  return_arrival: string
-  origin_airport: OriginAirport2
-  destination_airport: DestinationAirport2
-  return_origin_airport: ReturnOriginAirport2
-  return_destination_airport: ReturnDestinationAirport2
-  airline: Airline2
-  tour: Tour2
-  hotel_prices: HotelPrice2[]
-  arrival: string
-  start_price: string
+  least_price?: string
+  max_price?: string
   created_at: string
   edited_at: string
 }
 
-export interface OriginAirport2 {
+export interface Destination2 {
   id: number
-  city: City6
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City6 {
-  id: number
-  country: Country5
+  country: Country2
   name: string
   created_at: string
   edited_at: string
 }
 
-export interface Country5 {
+export interface Country2 {
   id: number
-  continent: Continent5
+  continent: Continent2
   name: string
   created_at: string
   edited_at: string
 }
 
-export interface Continent5 {
+export interface Continent2 {
   id: number
   name: string
   created_at: string
   edited_at: string
 }
 
-export interface DestinationAirport2 {
+export interface FlightTime2 {
   id: number
-  city: City7
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City7 {
-  id: number
-  country: Country6
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country6 {
-  id: number
-  continent: Continent6
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent6 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface ReturnOriginAirport2 {
-  id: number
-  city: City8
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City8 {
-  id: number
-  country: Country7
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country7 {
-  id: number
-  continent: Continent7
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent7 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface ReturnDestinationAirport2 {
-  id: number
-  city: City9
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City9 {
-  id: number
-  country: Country8
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country8 {
-  id: number
-  continent: Continent8
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent8 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Airline2 {
-  id: number
-  name: string
-  logo: any
-  created_at: string
-  edited_at: string
-}
-
-export interface Tour2 {
-  id: number
-  title: string
-  description_editor?: string
-  occasion: any
-  image?: string
-  start_date: string
-  tour_type: string
-  needed_documents: string
-  agency_service: string
-  tour_guide: string
-  tour_duration: number
-  is_featured: boolean
-  is_shown: boolean
-  least_price: string
-  max_price: string
-  created_at: string
-  edited_at: string
-  destination: number
+  departure_date: string
+  arrival_date: string
+  hotel_price: HotelPrice2[]
+  least_price: number
+  flight_Legs: number[]
 }
 
 export interface HotelPrice2 {
   id: number
-  hotel: Hotel2
+  hotels: Hotel2[]
   two_bed_price: string
   one_bed_price: string
   child_with_bed_price: string
   child_no_bed_price: string
+  other_currency?: string
+  two_bed_price_other_currency?: string
+  one_bed_price_other_currency?: string
+  child_with_bed_price_other_currency?: string
+  child_no_bed_price_other_currency?: string
   created_at: string
   edited_at: string
-  flight: number
 }
 
 export interface Hotel2 {
@@ -476,8 +199,9 @@ export interface Hotel2 {
   room_facilities: RoomFacility2[]
   recreational_facilities: RecreationalFacility2[]
   sport_facilities: SportFacility2[]
-  city: City10
+  city: City2
   name: string
+  english_name: string
   address: string
   is_featured: boolean
   star: number
@@ -510,228 +234,20 @@ export interface SportFacility2 {
   name: string
 }
 
-export interface City10 {
+export interface City2 {
   name: string
 }
 
-export interface LatestEuropeTour {
-  id: number
-  image: string
-  flights: Flight3[]
-  start_date: string
-  title: string
-  description_editor: string
-  occasion: string
-  tour_type: string
-  needed_documents: string
-  agency_service: string
-  tour_guide: string
-  tour_duration: number
-  is_featured: boolean
-  is_shown: boolean
-  least_price: string
-  max_price: string
-  created_at: string
-  edited_at: string
-  destination: number
-}
-
-export interface Flight3 {
-  id: number
-  departure: string
-  return_departure: string
-  return_arrival: string
-  origin_airport: OriginAirport3
-  destination_airport: DestinationAirport3
-  return_origin_airport: ReturnOriginAirport3
-  return_destination_airport: ReturnDestinationAirport3
-  airline: Airline3
-  tour: Tour3
-  hotel_prices: HotelPrice3[]
-  arrival: string
-  start_price: string
-  created_at: string
-  edited_at: string
-}
-
-export interface OriginAirport3 {
-  id: number
-  city: City11
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City11 {
-  id: number
-  country: Country9
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country9 {
-  id: number
-  continent: Continent9
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent9 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface DestinationAirport3 {
-  id: number
-  city: City12
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City12 {
-  id: number
-  country: Country10
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country10 {
-  id: number
-  continent: Continent10
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent10 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface ReturnOriginAirport3 {
-  id: number
-  city: City13
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City13 {
-  id: number
-  country: Country11
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country11 {
-  id: number
-  continent: Continent11
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent11 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface ReturnDestinationAirport3 {
-  id: number
-  city: City14
-  name: string
-  short_name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface City14 {
-  id: number
-  country: Country12
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Country12 {
-  id: number
-  continent: Continent12
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Continent12 {
-  id: number
-  name: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Airline3 {
-  id: number
-  name: string
-  logo: any
-  created_at: string
-  edited_at: string
-}
-
-export interface Tour3 {
-  id: number
-  title: string
-  description_editor: string
-  occasion: string
-  image: string
-  start_date: string
-  tour_type: string
-  needed_documents: string
-  agency_service: string
-  tour_guide: string
-  tour_duration: number
-  is_featured: boolean
-  is_shown: boolean
-  least_price: string
-  max_price: string
-  created_at: string
-  edited_at: string
-  destination: number
-}
-
-export interface HotelPrice3 {
-  id: number
-  hotel: Hotel3
-  two_bed_price: string
-  one_bed_price: string
-  child_with_bed_price: string
-  child_no_bed_price: string
-  created_at: string
-  edited_at: string
-  flight: number
-}
-
-export interface Hotel3 {
+export interface FeaturedHotel {
   id: number
   images: Image3[]
   hotel_facilities: HotelFacility3[]
   room_facilities: RoomFacility3[]
   recreational_facilities: RecreationalFacility3[]
   sport_facilities: SportFacility3[]
-  city: City15
+  city: City3
   name: string
+  english_name: string
   address: string
   is_featured: boolean
   star: number
@@ -764,52 +280,7 @@ export interface SportFacility3 {
   name: string
 }
 
-export interface City15 {
-  name: string
-}
-
-export interface FeaturedHotel {
-  id: number
-  images: Image4[]
-  hotel_facilities: HotelFacility4[]
-  room_facilities: RoomFacility4[]
-  recreational_facilities: RecreationalFacility4[]
-  sport_facilities: SportFacility4[]
-  city: City16
-  name: string
-  address: string
-  is_featured: boolean
-  star: number
-  location_on_map: any
-  description: string
-  long_description: string
-  created_at: string
-  edited_at: string
-}
-
-export interface Image4 {
-  id: number
-  image: string
-  alt: any
-}
-
-export interface HotelFacility4 {
-  name: string
-}
-
-export interface RoomFacility4 {
-  name: string
-}
-
-export interface RecreationalFacility4 {
-  name: string
-}
-
-export interface SportFacility4 {
-  name: string
-}
-
-export interface City16 {
+export interface City3 {
   name: string
 }
 
@@ -819,9 +290,11 @@ const { data } = useAPI<Root>('/tour/home')
 
 
 <template>
-    <main>
-
-        <section class="py-3 container px-4 mx-auto">
+  <!-- <pre>
+    {{ data }}
+  </pre> -->
+    <main >
+        <section  class="py-3 container px-4 mx-auto">
             <div class="flex items-center homeImg">
                 <div class="hidden lg:block lg:w-4/12 relative" data-aos="fade-left" data-aos-duration="1500">
                     <img src="/assets/images/home/intro.webp" class="w-full " />
@@ -841,7 +314,8 @@ const { data } = useAPI<Root>('/tour/home')
         <HomeSpecialAdvise :items="data.featured_tours.map(i => ({
             title: i.title,
             duration: i.tour_duration,
-            airline: i.flights.at(0)?.airline.name || '',
+            airline: i.flight_times.length + ' تاریخ برگزاری',
+            // airline: i.flight_times.at(0)?.airline.name || '',
             price: i.least_price,
             href: '#',
             image: i.image,
@@ -850,36 +324,39 @@ const { data } = useAPI<Root>('/tour/home')
 
 
 
-        <HomeCallToAction />
+<HomeCallToAction />
+<HomeFourCellGrid :asia_items="data?.latest_asia_tours.map(i => ({
+    title: i.title,
+    duration: i.tour_duration,
+    airline: i.flight_times.length + ' تاریخ برگزاری',
+    price: Intl.NumberFormat('fa-ir').format(+(i.least_price || 0)),
+    href: '/tour/details/' + i.flight_times.at(0)?.id,
+    image: i.image || '',
+    isFeatured: i.is_featured,
+    occasion: i.occasion as string || ''
+})) || []" :europe_items="data?.latest_europe_tours.map(i => ({
+    title: i.title,
+    duration: i.tour_duration,
+    airline: i.flight_times.length + ' تاریخ برگزاری',
+    price: Intl.NumberFormat('fa-ir').format( +i.least_price || 0 ),
+    href: '/tour/details/' + i.flight_times.at(0)?.id,
+    image: i.image || '',
+    isFeatured: i.is_featured,
+    occasion: i.occasion as string || ''
+})) || []" />
 
-        <HomeFourCellGrid :asia_items="data?.latest_asia_tours.map(i => ({
-            title: i.title,
-            duration: i.tour_duration,
-            airline: i.flights.at(0)?.airline.name || '',
-            price: Intl.NumberFormat('fa-ir').format(+i.least_price || 0),
-            href: '/tour/details/' + i.flights?.at(0)?.id,
-            image: i.image || '',
-            isFeatured: i.is_featured,
-            occasion: i.occasion as string || ''
-        })) || []" :europe_items="data?.latest_europe_tours.map(i => ({
-            title: i.title,
-            duration: i.tour_duration,
-            airline: i.flights.at(0)?.airline.name || '',
-            price: Intl.NumberFormat('fa-ir').format( +i.least_price || 0 ),
-            href: '/tour/details/' + i.flights?.at(0)?.id,
-            image: i.image || '',
-            isFeatured: i.is_featured,
-            occasion: i.occasion as string || ''
-        })) || []" />
 
-        <HomeSpecialHotels :items="data.featured_hotels.map(i => ({
-            title: i.name,
-            stars: i.star,
-            city: i.city.name,
-            href: '/hotel/' + i.id || '#',
-            image: i.images.at(0)?.image as string || ''
-        })) || []" v-if="data?.featured_hotels" />
-    
+
+<HomeSpecialHotels :items="data.featured_hotels.map(i => ({
+    title: i.name,
+    stars: i.star,
+    city: i.city.name,
+    href: '/hotel/' + i.id || '#',
+    image: i.images.at(0)?.image as string || ''
+})) || []" v-if="data?.featured_hotels" />
+
+
+
     </main>
 </template>
 

@@ -33,7 +33,7 @@ const route = useRoute()
 
 
 const { data, status, error, refresh } = useAsyncData('tour_with_filters', () => {
-  console.log(route.query)
+  
   return $api<TourAPI.Root>('/tour/tours/', {
     query: { ...route.query },
     cache: 'no-cache'
@@ -276,6 +276,7 @@ watchDebounced([duration, airline, least_price, max_price], () => {
 
 
       <div class=" w-full lg:w-9/12 flex flex-col gap-4">
+      
         <div class="flex lg:flex-row flex-col gap-4">
           <button @click="openModal" type="button"
             class="retro bg-white flex lg:hidden justify-center items-center gap-2 p-2 font-bold  hover:text-teal-600 ">
@@ -352,20 +353,20 @@ watchDebounced([duration, airline, least_price, max_price], () => {
 
 
         <LoadingIndicator v-if="status === 'pending'" />
-        <template v-else>
+        <template v-else >
 
           <TravelItemCard v-for="d in data || []" :key="d.id" :id="d.id" :title="d.title" :duration="+d.tour_duration"
             :airline="d.tour_type" :date="d.start_date"
             :price="d.least_price ? Intl.NumberFormat('fa-ir', {}).format(+d.least_price).replaceAll('٬', '/') : '0'"
             :occasion="d.occasion"
             :is-featured="d.is_featured"
-            :info="d.flights.map(f => ({
+            :info="d.flight_times.map(f => ({
               id: f.id,
-              turn: f.departure,
-              retunTime: f.return_departure,
-              packagePrice: f.start_price,
+              turn: f.departure_date,
+              retunTime: f.arrival_date,
+              packagePrice: f.least_price,
               path: '/tour/details/' + f.id,
-              airline: f.origin_airport.city.country.name,
+              airline: 'asdasd',
             }))" />
         </template>
 

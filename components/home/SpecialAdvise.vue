@@ -123,10 +123,10 @@ defineProps({
                                     </div>
                                 </div>
                                 <div class="bg-background p-2 border-t border-gray-400 flex-center">
-                                    <button
+                                    <NuxtLink to="#"
                                         class="bg-primary rounded-3xl retro px-3 py-1 inline-block mb-1 font-normal hover:text-white">
                                         مشاهده تور
-                                    </button>
+                                    </NuxtLink>
                                 </div>
                             </div>
                         </div>

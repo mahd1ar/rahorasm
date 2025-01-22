@@ -31,6 +31,7 @@ function isRichText(text: string) {
 }
 
 const data = computed(() => {
+  console.log(apiData.value)
   if (!apiData.value) {
     return null;
   }
@@ -43,25 +44,30 @@ const data = computed(() => {
         type: 'start',
         title: new Date(fl.departure).toLocaleDateString("fa-ir", {
           dateStyle: "full",
-        }) +
+        }).split( ' ').reverse().join(' ').replace(',', ' ') 
+        +
           " | " +
-          fl.departure_airport.city.name,
+          fl.departure_airport.city.name
+          ,
         srcAirport: {
           code: fl.departure_airport.short_name || "",
           title: fl.departure_airport.name || "",
+          time: new Date(fl.departure) //Intl.DateTimeFormat('fa-IR').format( )
         },
         destAirport: {
           code: fl.arrival_airport.short_name || "",
           title: fl.arrival_airport.name || "",
+          time: new Date( fl.arrival) //Intl.DateTimeFormat('fa-IR').format( )
         },
         airline: {
           name: fl.airline.name,
           logo: fl.airline.logo,
         },
-        time: new Date(fl.departure).toLocaleTimeString(),
+        time: new Date(fl.departure).toLocaleTimeString('fa'),
+        epoch: new Date(fl.departure).getTime(),
       }
     })
-    ],
+    ].sort((a,b) =>  a.epoch - b.epoch ),
     tour: [
       {
         label: " توضیحات",
@@ -90,6 +96,7 @@ const data = computed(() => {
           hotelPriceId: i.id,
           flightTimesId: j.id,
           hotel: i.hotels.map(h => ({
+            id: h.id,
             name: h?.name,
             enName: h.english_name,
             rating: h?.star || 0,
@@ -380,6 +387,10 @@ function storeReserve() {
                     <p class="text-sm leading-6">
                       {{ i.srcAirport.title }}
                     </p>
+                    <div class="flex flex-col w-full leading-3 font-mono" >
+                      <span class="text-xs  text-gray-500" >{{ Intl.DateTimeFormat('fa-IR',{dateStyle:'short'}).format(i.srcAirport.time) }}</span>
+                      <span class="text-xs  text-gray-500" >{{ Intl.DateTimeFormat('fa-IR',{timeStyle:'short'}).format(i.srcAirport.time) }}</span>
+                    </div>
                   </div>
                   <div class="w-full flex items-center p-4 justify-center relative">
                     <div class="w-full border-t-4 border-dotted border-gray-400 h-1" />
@@ -410,8 +421,12 @@ function storeReserve() {
                   <div class="w-16 shrink-0">
                     <strong class="block">{{ i.destAirport.code }}</strong>
                     <p class="text-sm leading-6">
-                      {{ i.srcAirport.title }}
+                      {{ i.destAirport.title }}
                     </p>
+                    <div class="flex flex-col w-full leading-3 font-mono" >
+                      <span class="text-xs  text-gray-500" >{{ Intl.DateTimeFormat('fa-IR',{dateStyle:'short'}).format(i.destAirport.time) }}</span>
+                      <span class="text-xs  text-gray-500" >{{ Intl.DateTimeFormat('fa-IR',{timeStyle:'short'}).format(i.destAirport.time) }}</span>
+                    </div>
                   </div>
                 </div>
 
@@ -447,73 +462,52 @@ function storeReserve() {
         </section>
 
         <h2 class="text-2xl mt-6 mb-4 font-bold">لیست هتل ها و قیمت ها</h2>
-        <section class="space-y-2">
+        <section class="space-y-2 ">
 
-          <div v-for="(i, inxx) in data?.accommodations || []" :key="inxx"
-            class="p-6 rounded-md border bg-white flex flex-col gap-6 relative">
-            <div class="relative">
-              <div v-for="hotel in i.hotel" class="flex flex-col sm:flex-row items-start gap-4">
-                <img v-if="hotel.image" class="h-36 w-72 object-cover rounded-lg" :src="hotel.image" alt="" />
-                <div>
-                  <h4 class="text-2xl flex flex-col gap-3">
-                    <div  >
-
-                      <div> {{ hotel.name }}</div>
-                      <div class="text-lg text-gray-600"  > {{ hotel.enName }}</div>
+          <div v-for="(i, inxx) in data?.accommodations || []" :key="inxx" class="p-6 rounded-md border bg-white gap-6 relative ">
+            
+            <div  class="grid grid-cols-1 md:grid-cols-2 gap-2 " >
+              <NuxtLink :to="'/hotel/'+hotel.id" v-for="(hotel,index) in i.hotel" :key="index" class="border p-2 rounded-lg hover:bg-slate-100" >
+                 
+                <div  class="flex flex-col sm:flex-row items-start gap-4 ">
+                  <img v-if="hotel.image" class="size-36 object-cover rounded-lg" :src="hotel.image" alt="" />
+                  <div>
+                    <h4 class=" flex flex-col gap-3">
+                      <div  >
+                        <div class="text-xl" > {{ hotel.name }}</div>
+                        <div class=" text-gray-600"  > {{ hotel.enName }}</div>
+                      </div>
+    
+                      <HotelRating :stars="hotel.rating || 0" />
+                 
+                    </h4>
+                    <div class="mt-2 text-gray-600 space-x-2">
+                      <span class="inline-block"> {{ hotel.city }} </span>
+                      .
+                      <span class="text-primary inline-block" > 3 شب </span>
                     </div>
-
-                    <!-- stars -->
-                    <div class="text-yellow-500 text-2xl flex gap-1">
-
-                      <!-- filled -->
-                      <svg v-for="fs in hotel.rating" :key="fs" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                        viewBox="0 0 24 24">
-                        <path fill="currentColor" fill-rule="evenodd"
-                          d="M12.908 1.581a1 1 0 0 0-1.816 0l-2.87 6.22l-6.801.807a1 1 0 0 0-.562 1.727l5.03 4.65l-1.335 6.72a1 1 0 0 0 1.469 1.067L12 19.426l5.977 3.346a1 1 0 0 0 1.47-1.068l-1.335-6.718l5.029-4.651a1 1 0 0 0-.562-1.727L15.777 7.8z"
-                          clip-rule="evenodd" />
-                      </svg>
-
-
-                      <!-- outlined -->
-                      <svg v-if="hotel.rating < 5" v-for="o in (5 - hotel.rating)" :key="o" xmlns="http://www.w3.org/2000/svg"
-                        width="1em" height="1em" viewBox="0 0 24 24">
-                        <g fill="none">
-                          <path fill="currentColor"
-                            d="m12 2l3.104 6.728l7.358.873l-5.44 5.03l1.444 7.268L12 18.28L5.534 21.9l1.444-7.268L1.538 9.6l7.359-.873z"
-                            opacity="0.16" />
-                          <path stroke="currentColor" stroke-linejoin="round" stroke-width="2"
-                            d="m12 2l3.104 6.728l7.358.873l-5.44 5.03l1.444 7.268L12 18.28L5.534 21.9l1.444-7.268L1.538 9.6l7.359-.873z" />
-                        </g>
-                      </svg>
-
-                    </div>
-                    <!-- end of stars -->
-                  </h4>
-                  <div class="mt-2 text-gray-600">
-                    <span> {{ "i.city" }} </span>
-                    <span> {{ "i.duration" }}</span>
-                  </div>
-                  <div class="mt-2 text-primary">
-                    <span> 3 شب </span>
+                    
                   </div>
                 </div>
-              </div>
+              </NuxtLink>
+            </div>
+            <div class="relative">
               <div class="w-full grid grid-cols-2 md:grid-cols-4 mt-4 gap-6 md:gap-1 text-center">
                 <div v-for="(h, inx) in i.prices" :key="inx">
                   <div class="bg-background p-2 rounded-lg mb-2">
                     {{ h.title }}
                   </div>
+                  
+                  <div v-if="h.other_currency" class="text-gray-700 font-bold" >
+                    {{ parseInt( h.priceOther) }}
+                    {{ h.other_currency.replace('USD', 'دلار').replace('EUR','یورو') }}
+                    <div>
+                      +
+                    </div>
+                  </div>
                   <div class="text-gray-700 font-bold">
                     {{ h.formattedPrice }}
                     تومان
-                  </div>
-                  <div v-if="h.other_currency" class="text-gray-700 font-bold" >
-                    <div>
-
-                      +
-                    </div>
-                    {{ h.priceOther }}
-                    {{ h.other_currency.replace('USD', 'دلار').replace('EUR','یورو') }}
                   </div>
                   <BedroomCount @update="$d => { checkId(h.id, $d, inx, inxx) }" />
                 </div>

@@ -18,7 +18,7 @@ import { HeartIcon, MinusIcon, PlusIcon } from '@heroicons/vue/24/outline'
 
 const param = useRouteParams('id', 1, { transform: Number })
 
-const { data: apiData, error } = useAPI<HotelDetailsAPI.Root>('/hotels/' + param.value)
+const { data: apiData, error,status } = useAPI<HotelDetailsAPI.Root>('/hotels/' + param.value)
 
 const product = computed(() => {
 
@@ -63,7 +63,11 @@ const product = computed(() => {
 <template>
   {{ error }}
   <div class="bg-white">
-    <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6  lg:max-w-7xl lg:px-8">
+    <div v-if="status==='pending'" class="w-full flex justify-center items-center" >
+
+      <LoadingIndicator />
+    </div>
+    <div v-else class="mx-auto max-w-2xl px-4 py-16 sm:px-6  lg:max-w-7xl lg:px-8">
       <div class="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
         <!-- Image gallery -->
         <TabGroup as="div" class="flex flex-col-reverse">

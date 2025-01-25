@@ -317,7 +317,7 @@ const { data } = useAPI<Root>('/tour/home')
             airline: i.flight_times.length + ' تاریخ برگزاری',
             // airline: i.flight_times.at(0)?.airline.name || '',
             price: i.least_price,
-            href: '#',
+            href: i.flight_times?.at(0)?.id ?  `/tour/details/${ i.flight_times.at(0)!.id!}`  : '#' ,
             image: i.image,
             occasion: i.occasion
         })) || []" v-if="data?.featured_tours" />

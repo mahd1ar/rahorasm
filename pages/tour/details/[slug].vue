@@ -490,9 +490,9 @@ function storeReserve() {
           <div v-for="(i, inxx) in data?.accommodations || []" :key="inxx" class="p-6 rounded-md border bg-white gap-6 relative ">
             
             <div  class="grid grid-cols-1 md:grid-cols-2 gap-2 " >
-              <NuxtLink :to="'/hotel/'+hotel.id" v-for="(hotel,index) in i.hotel" :key="index" class="border p-2 rounded-lg hover:bg-slate-100" >
+              <NuxtLink :to="'/hotel/'+hotel.id" v-for="(hotel,index) in i.hotel" :key="index" class="p-2 rounded-lg hover:bg-slate-100" >
                  
-                <div  class="flex flex-col sm:flex-row items-start gap-4 ">
+                <div class="flex flex-col sm:flex-row items-start gap-4">
                   <img v-if="hotel.image" class="size-36 object-cover rounded-lg" :src="hotel.image" alt="" />
                   <div>
                     <h4 class=" flex flex-col gap-3">

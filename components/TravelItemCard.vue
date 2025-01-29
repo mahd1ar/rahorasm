@@ -79,7 +79,7 @@ const expanded = ref(false)
             <path fill="currentColor" d="M13 6h10v2H13z" class="clr-i-outline clr-i-outline-path-16" />
             <path fill="none" d="M0 0h36v36H0z" />
           </svg>
-          <span> {{ date && ' از ' + new Date(date).toLocaleDateString('fa-IR') }} </span>
+          <span> {{ date && ' شروع از ' + new Date(date).toLocaleDateString('fa-IR') }} </span>
         </div>
       </div>
 

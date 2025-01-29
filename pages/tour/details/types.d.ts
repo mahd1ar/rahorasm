@@ -93,7 +93,7 @@ export interface Continent2 {
 
 export interface Tour {
   id: number
-  image: any
+  image: string
   start_date: string
   destinations: Destination[]
   flight_times: FlightTime[]
@@ -107,8 +107,8 @@ export interface Tour {
   tour_duration: number
   is_featured: boolean
   is_shown: boolean
-  least_price: any
-  max_price: any
+  least_price: string
+  max_price: string
   created_at: string
   edited_at: string
 }
@@ -140,9 +140,93 @@ export interface FlightTime {
   id: number
   departure_date: string
   arrival_date: string
+  flight_Legs: FlightLeg2[]
   hotel_price: HotelPrice[]
   least_price: number
-  flight_Legs: number[]
+}
+
+export interface FlightLeg2 {
+  id: number
+  airline: Airline2
+  departure_airport: DepartureAirport2
+  arrival_airport: ArrivalAirport2
+  departure: string
+  arrival: string
+  departure_time: string
+  arrival_time: string
+  travel_class: string
+}
+
+export interface Airline2 {
+  id: number
+  name: string
+  logo: string
+  created_at: string
+  edited_at: string
+}
+
+export interface DepartureAirport2 {
+  id: number
+  city: City3
+  name: string
+  short_name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface City3 {
+  id: number
+  country: Country4
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Country4 {
+  id: number
+  continent: Continent4
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Continent4 {
+  id: number
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface ArrivalAirport2 {
+  id: number
+  city: City4
+  name: string
+  short_name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface City4 {
+  id: number
+  country: Country5
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Country5 {
+  id: number
+  continent: Continent5
+  name: string
+  created_at: string
+  edited_at: string
+}
+
+export interface Continent5 {
+  id: number
+  name: string
+  created_at: string
+  edited_at: string
 }
 
 export interface HotelPrice {
@@ -152,11 +236,13 @@ export interface HotelPrice {
   one_bed_price: string
   child_with_bed_price: string
   child_no_bed_price: string
+  baby_price: string
   other_currency: any
   two_bed_price_other_currency: any
   one_bed_price_other_currency: any
   child_with_bed_price_other_currency: any
   child_no_bed_price_other_currency: any
+  baby_price_other_currency: any
   created_at: string
   edited_at: string
 }
@@ -168,9 +254,9 @@ export interface Hotel {
   room_facilities: RoomFacility[]
   recreational_facilities: RecreationalFacility[]
   sport_facilities: SportFacility[]
-  city: City3
+  city: City5
   name: string
-  english_name: any
+  english_name: string
   address: string
   is_featured: boolean
   star: number
@@ -183,7 +269,7 @@ export interface Hotel {
 
 export interface Image {
   id: number
-  image: any
+  image: string
   alt: any
 }
 
@@ -203,8 +289,9 @@ export interface SportFacility {
   name: string
 }
 
-export interface City3 {
+export interface City5 {
   name: string
 }
+
      
 }

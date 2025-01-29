@@ -3,6 +3,7 @@
 import { AutoScroll } from '@splidejs/splide-extension-auto-scroll';
 // @ts-ignore
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
+import HotelRating from '../HotelRating.vue';
 
 defineProps({
   items: {
@@ -58,31 +59,10 @@ defineProps({
                   {{ i.title }}
                   
                 </div>
-                <div class="text-gray-600">
+                <div class="text-gray-600 space-y-1">
 
-                  <p class="my-0 flex items-center">
-                    <span class="pe-2">
-
-                    </span>
-                    <span class="font-cards">
-                      <!-- stars -->
-                      <div class="text-yellow-500 text-lg my-2 flex gap-1">
-
-                        <!-- filled -->
-                        <svg v-for="fs in i.stars" :key="fs" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                          viewBox="0 0 24 24">
-                          <path fill="currentColor" fill-rule="evenodd"
-                            d="M12.908 1.581a1 1 0 0 0-1.816 0l-2.87 6.22l-6.801.807a1 1 0 0 0-.562 1.727l5.03 4.65l-1.335 6.72a1 1 0 0 0 1.469 1.067L12 19.426l5.977 3.346a1 1 0 0 0 1.47-1.068l-1.335-6.718l5.029-4.651a1 1 0 0 0-.562-1.727L15.777 7.8z"
-                            clip-rule="evenodd" />
-                        </svg>
-                        <span v-if="i.stars === 0">
-                          هتل آپارتمان
-                        </span>
-
-                      </div>
-                      <!-- end of stars -->
-                    </span>
-                  </p>
+                     <HotelRating :stars="i.stars" />
+                  
 
                   <p class="my-0 flex items-center">
                     <span class="pe-2">

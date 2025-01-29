@@ -284,7 +284,7 @@ function handelSubmit() {
                   <button type="button" v-for="(i, index) in item.users" :key="index" @click="openUser(itemIdx, index)"
                     class="p-2 border rounded  text-sm shadow flex items-center gap-2 h-12 group" :class="[
                       i.name ? 'border-emerald-500 bg-emerald-50 text-emerald-700' :
-                        index === 0 || item.users.at(index - 1)?.name ? 'border-gray-500 bg-gray-50 text-gray-700' :
+                        index === 0 || item.users.at(index - 1)?.name ? 'border-primary bg-primary/20 text-gray-700' :
                           'border-gray-500 bg-gray-50 text-gray-700 opacity-70 pointer-events-none'
                     ]">
                     <Icon size="28px" :name="i.name ? 'material-symbols-light:person-check-rounded' :

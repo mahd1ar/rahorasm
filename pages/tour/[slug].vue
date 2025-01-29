@@ -356,7 +356,8 @@ watchDebounced([duration, airline, least_price, max_price], () => {
         <template v-else >
 
           <TravelItemCard v-for="d in data || []" :key="d.id" :id="d.id" :title="d.title" :duration="+d.tour_duration"
-            :airline="d.tour_type" :date="d.start_date"
+            :airline="d.flight_times.at(0)?.flight_Legs.at(0)?.airline.name"
+             :date="d.start_date"
             :price="d.least_price ? Intl.NumberFormat('fa-ir', {}).format(+d.least_price).replaceAll('٬', '/') : '0'"
             :occasion="d.occasion"
             :is-featured="d.is_featured"
@@ -366,7 +367,7 @@ watchDebounced([duration, airline, least_price, max_price], () => {
               retunTime: f.arrival_date,
               packagePrice: f.least_price,
               path: '/tour/details/' + f.id,
-              airline: 'asdasd',
+              airline: '1111',
             }))" />
         </template>
 

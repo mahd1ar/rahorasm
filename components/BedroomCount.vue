@@ -34,6 +34,13 @@ function select() {
   emit('update', count.value)
 }
 
+defineExpose({
+  reset: () => {
+    isSelecred.value = false
+    count.value = 0
+  }
+})
+
 </script>
 
 <template>

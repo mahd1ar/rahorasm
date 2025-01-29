@@ -30,7 +30,7 @@ export type Reservation = {
         flight_time_id: number,
         hotel_price_id: number,
         count: {
-                identitication: "two_bed_price" | "one_bed_price" | "child_with_bed_price" | "child_no_bed_price",
+                identitication: "two_bed_price" | "one_bed_price" | "child_with_bed_price" | "child_no_bed_price" | "baby_price",
                 count: number,
                 users: {
                         name: string,

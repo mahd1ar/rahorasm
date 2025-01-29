@@ -314,7 +314,7 @@ const { data } = useAPI<Root>('/tour/home')
         <HomeSpecialAdvise :items="data.featured_tours.map(i => ({
             title: i.title,
             duration: i.tour_duration,
-            airline: i.flight_times.length + ' تاریخ برگزاری',
+            airline: i.flight_times.at(0)?.flight_Legs.at(0).airline.name || '',
             // airline: i.flight_times.at(0)?.airline.name || '',
             price: i.least_price,
             href: i.flight_times?.at(0)?.id ?  `/tour/details/${ i.flight_times.at(0)!.id!}`  : '#' ,
@@ -328,7 +328,7 @@ const { data } = useAPI<Root>('/tour/home')
 <HomeFourCellGrid :asia_items="data?.latest_asia_tours.map(i => ({
     title: i.title,
     duration: i.tour_duration,
-    airline: i.flight_times.length + ' تاریخ برگزاری',
+    airline: i.flight_times.at(0)?.flight_Legs.at(0).airline.name,
     price: Intl.NumberFormat('fa-ir').format(+(i.least_price || 0)),
     href: '/tour/details/' + i.flight_times.at(0)?.id,
     image: i.image || '',
@@ -337,7 +337,7 @@ const { data } = useAPI<Root>('/tour/home')
 })) || []" :europe_items="data?.latest_europe_tours.map(i => ({
     title: i.title,
     duration: i.tour_duration,
-    airline: i.flight_times.length + ' تاریخ برگزاری',
+    airline: i.flight_times.at(0)?.flight_Legs.at(0).airline.name,
     price: Intl.NumberFormat('fa-ir').format( +i.least_price || 0 ),
     href: '/tour/details/' + i.flight_times.at(0)?.id,
     image: i.image || '',

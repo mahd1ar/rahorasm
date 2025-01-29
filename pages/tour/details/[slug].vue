@@ -137,6 +137,14 @@ const data = computed(() => {
               id: i.id,
               other_currency: i.other_currency,
             },
+            {
+              title: "نوزاد",
+              priceIRR: i.baby_price,
+              priceOther: i.baby_price_other_currency,
+              formattedPrice: i.baby_price ? Intl.NumberFormat("fa-IR").format(parseInt(i.baby_price)) : "",
+              id: i.id,
+              other_currency: i.other_currency,
+            },
           ].filter(i => parseInt(i.priceIRR)),
         }
       })
@@ -146,20 +154,30 @@ const data = computed(() => {
   };
 });
 
+const counter = useTemplateRefsList()
 
-let lastBedroomId: null | number = null;
+const lastBedroomId = ref< number| null>(null);
 let hotelIndex: null | number = null;
-const counts = ref([0, 0, 0, 0])
+const counts = ref([0, 0, 0, 0,0])
 function checkId(id: number, count: number, inxed: number, hIndex: number) {
 
-  if (!lastBedroomId)
-    lastBedroomId = id
+  if (!lastBedroomId.value)
+  lastBedroomId.value = id
 
-  if (lastBedroomId === id) {
+if (lastBedroomId.value === id) {
 
     counts.value[inxed] = count
   } else {
-    counts.value = [0, 0, 0, 0]
+    counter.value.forEach(i => {
+      // @ts-check
+      i.reset()
+    })
+    counts.value[0] = 0
+    counts.value[1] = 0
+    counts.value[2] = 0
+    counts.value[3] = 0
+    counts.value[4] = 0
+    lastBedroomId.value = id
   }
   hotelIndex = hIndex
 }
@@ -195,7 +213,12 @@ function storeReserve() {
         count: counts.value[3],
         users: [],
         identitication: 'child_no_bed_price',
-      }
+      },
+      {
+        count: counts.value[4],
+        users: [],
+        identitication: 'baby_price',
+      },
     ],
     flight_id: param.value,
     flight_time_id: data.value!.accommodations[hotelIndex!].flightTimesId,
@@ -493,7 +516,7 @@ function storeReserve() {
             </div>
             <div class="relative">
               <div class="w-full grid grid-cols-2 md:grid-cols-4 mt-4 gap-6 md:gap-1 text-center">
-                <div v-for="(h, inx) in i.prices" :key="inx">
+                <div v-for="(h, inx) in i.prices" :key="inx" class="h-full flex flex-col">
                   <div class="bg-background p-2 rounded-lg mb-2">
                     {{ h.title }}
                   </div>
@@ -509,10 +532,10 @@ function storeReserve() {
                     {{ h.formattedPrice }}
                     تومان
                   </div>
-                  <BedroomCount @update="$d => { checkId(h.id, $d, inx, inxx) }" />
+                  <BedroomCount ref="counter" class="mt-auto" @update="$d => { checkId(h.id, $d, inx, inxx) }" />
                 </div>
               </div>
-              <div v-if="counts.reduce((a, b) => b += a, 0) !== 0" class="w-full flex justify-end p-2">
+              <div v-show="lastBedroomId === i.prices[0].id" v-if="counts.reduce((a, b) => b += a, 0) !== 0" class="w-full flex justify-end mt-2">
                 <button type="button" @click="storeReserve"
                   class="bg-Secondary px-8 text-pink-50 py-4 rounded  mr-auto w-full md:w-auto flex gap-4">
                   نهایی کردن رزرو

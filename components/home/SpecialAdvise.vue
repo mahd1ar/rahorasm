@@ -38,6 +38,15 @@ defineProps({
                     autoScroll: {
                         speed: 0.75,
                     },
+                    breakpoints: {
+                        mediaQuery: 'min',
+                        768: {
+                        perPage: 2,
+                        },
+                        430: {
+                        perPage: 1,
+                        },
+                    },
                     pagination: false,
                     arrows: false,
                     gap: '8px'
@@ -115,9 +124,12 @@ defineProps({
                                                 </svg>
                                             </span>
                                             <span class="font-cards">قیمت از:
-                                                {{ i.price ? Intl.NumberFormat('fa-IR').format(parseInt(i.price)) :
+                                                <span class="text-red-500 font-semibold" >
+
+                                                    {{ i.price ? Intl.NumberFormat('fa-IR').format(parseInt(i.price)) + " ت " :
                                                 'نامعلوم' }}
-                                                ت</span>
+                                            </span>
+                                                </span>
                                         </p>
 
                                     </div>

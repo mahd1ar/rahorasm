@@ -39,7 +39,7 @@ defineProps({
     <section class="container mx-auto">
 
         <div class=" rounded-3xl min-h-60 bg-dark grid grid-cols-1 lg:grid-cols-2 text-white overflow-hidden">
-            <div class="bg-primary p-12 flex flex-col">
+            <div class="bg-primary p-6 sm:p-12 flex flex-col">
 
                 <h2 class="text-dark text-2xl relative font-bold asia-title inline-block h-24">
                     تازه ترین تورهای آسیا
@@ -51,6 +51,15 @@ defineProps({
                     focus: 'center',
                     direction: 'rtl',
                     perPage: 2,
+                    breakpoints: {
+                        mediaQuery: 'min',
+                        768: {
+                        perPage: 2,
+                        },
+                        430: {
+                        perPage: 1,
+                        },
+                    },
                     autoScroll: {
                         speed: 0.75,
                     },
@@ -153,7 +162,7 @@ defineProps({
                     </div>
                 </div>
             </div>
-            <div class="p-12">
+            <div class="p-6 sm:p-12">
 
                 <h2 class=" text-3xl relative font-bold mt-4 h-24">
                     تازه ترین تورهای اروپا
@@ -241,8 +250,8 @@ defineProps({
             </div>
             <div class="flex flex-col">
 
-                <div class="flex h-full">
-                    <div class="p-6 py-12 w-1/2 flex flex-col bg-[#e9ecef] text-black">
+                <div class="flex flex-col sm:flex-row h-full">
+                    <div class="p-6 py-12 w-full sm:w-1/2 flex flex-col bg-[#e9ecef] text-black">
                         <div class=" px-4 leading-7 text-justify mb-10">
                             در صورت عدم مشاهده پکیج مورد نظرتان در وب سایت، با توجه به تنوع هتل ها و پروازها، جهت
                             بررسی
@@ -259,7 +268,7 @@ defineProps({
                         </div>
 
                     </div>
-                    <div class="p-6 py-12 w-1/2 bg-white text-black">
+                    <div class="p-6 py-12 w-full sm:w-1/2 bg-white text-black">
                         <img class="px-4" src="/assets/images/home/europe-map.webp" alt="">
                         <p class="text-justify my-8">
 

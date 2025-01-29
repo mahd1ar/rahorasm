@@ -17,7 +17,7 @@ defineProps({
 
     <div v-if="stars > 0" class="text-yellow-500 flex gap-2">
 
-      <div style="font-size: 0.9rem;" class="font-bold">TOP</div>
+      <div v-if="stars === 6" style="font-size: 0.9rem;" class="font-bold">TOP</div>
       <div class="flex gap-1">
 
         <!-- filled -->

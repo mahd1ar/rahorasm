@@ -39,7 +39,7 @@ const { data } = useAPI<Root>('/visa/' + id.value)
               {{ data?.title }}
 
             </h1>
-            <p>
+            <p class="whitespace-break-spaces" >
               {{ data?.description }}
             </p>
 

@@ -169,7 +169,7 @@ if (lastBedroomId.value === id) {
     counts.value[inxed] = count
   } else {
     counter.value.forEach(i => {
-      // @ts-check
+      // @ts-ignore
       i.reset()
     })
     counts.value[0] = 0
@@ -441,7 +441,7 @@ function storeReserve() {
                       <path fill="currentColor" d="M12 10a2 2 0 0 0-2 2a2 2 0 0 0 2 2c1.11 0 2-.89 2-2a2 2 0 0 0-2-2" />
                     </svg>
                   </div>
-                  <div class="w-16 shrink-0">
+                  <div class="w-16 shrink-0 text-left lg:text-right">
                     <strong class="block">{{ i.destAirport.code }}</strong>
                     <p class="text-sm leading-6">
                       {{ i.destAirport.title }}

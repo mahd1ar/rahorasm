@@ -155,11 +155,11 @@ defineProps({
                 </Splide>
 
                 <div class="mt-auto text-dark">
-                    <div class="flex-center gap-4 font-bold text-xl">
+                    <NuxtLink to="/tour/tours?continent=آسیا" class="flex-center gap-4 font-bold text-xl">
                         مشاهده بیشتر
                         <Icon name="material-symbols:arrow-left-alt" size="24px" />
 
-                    </div>
+                    </NuxtLink>
                 </div>
             </div>
             <div class="p-6 sm:p-12">

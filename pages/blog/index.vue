@@ -56,7 +56,7 @@ const { data, status } = useAPI<Root>(() => {
       <div v-for="i in data" :key="i.id"
         class=" overflow-hidden retro transition duration-500 w-full ease-in-out transform hover:-translate-y-5  rounded-lg h-90 lg:w-60 md:w-80 cursor-pointer ">
         <NuxtLink :to="'/blog/' + i.id" class="w-full block h-full fade-in-bck">
-          <img v-if="i.image" alt="blog photo" :src="i.image" class="max-h-40 w-full object-cover" />
+          <img v-if="i.image" alt="blog photo" :src="i.image" class="max-h-40 lg:h-40 w-full object-cover" />
           <div v-else
             class="h-40 w-full object-cover text-gray-400 text-3xl bg-gray-50 flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 256 256">

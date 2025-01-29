@@ -89,7 +89,8 @@ const { data } = useAPI<Root>('/api/footer',{server: false,lazy:false})
 
             <div>
               <h2 class="text-2xl font-medium text-gray-900">
-                با ما در ارتباط باشید
+
+{{ data?.contact.title }}
               </h2>
 
               <div class="mt-4 max-w-lg text-gray-500 flex flex-col gap-2">
@@ -110,8 +111,7 @@ const { data } = useAPI<Root>('/api/footer',{server: false,lazy:false})
                         d="M12 11.5A2.5 2.5 0 0 1 9.5 9A2.5 2.5 0 0 1 12 6.5A2.5 2.5 0 0 1 14.5 9a2.5 2.5 0 0 1-2.5 2.5M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7" />
                     </svg>
                   </span>
-                  آدرس: تهران - خیابان جردن (خیابان نلسون ماندلا) - خیابان ناهید
-                  غربی - پلاک 38 - طبقه سوم - واحد 16
+                  {{ data?.contact.address }}
                 </p>
                 <p class="flex gap-2 items-start">
                   <span
@@ -121,11 +121,10 @@ const { data } = useAPI<Root>('/api/footer',{server: false,lazy:false})
                         d="M17 3.34a10 10 0 1 1-14.995 8.984L2 12l.005-.324A10 10 0 0 1 17 3.34M12 6a1 1 0 0 0-.993.883L11 7v5l.009.131a1 1 0 0 0 .197.477l.087.1l3 3l.094.082a1 1 0 0 0 1.226 0l.094-.083l.083-.094a1 1 0 0 0 0-1.226l-.083-.094L13 11.585V7l-.007-.117A1 1 0 0 0 12 6" />
                     </svg>
                   </span>
+{{ data?.contact.work_time }}
 
-                  ساعت کاری آژانس: شنبه تا چهارشنبه 09:30 الی 17:30 پنج شنبه ها
-                  09:30 الی 14:00
                 </p>
-                <p class="flex gap-2 items-start">
+                <p class="flex gap-2 items-start whitespace-break-spaces">
                   <span
                     class="text-primary ml-2 shrink-0 bg-gray-50 border w-6 h-6 rounded-full inline-flex flex-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
@@ -133,9 +132,8 @@ const { data } = useAPI<Root>('/api/footer',{server: false,lazy:false})
                         d="m6.68 3.32l.613-.613a1 1 0 0 1 1.414 0l2.586 2.586a1 1 0 0 1 0 1.414L9.5 8.5a.98.98 0 0 0-.183 1.133a11.3 11.3 0 0 0 5.05 5.05a.98.98 0 0 0 1.133-.184l1.793-1.792a1 1 0 0 1 1.414 0l2.586 2.586a1 1 0 0 1 0 1.414l-.613.613a6 6 0 0 1-7.843.558l-1.208-.907a23 23 0 0 1-4.6-4.6l-.907-1.208A6 6 0 0 1 6.68 3.32" />
                     </svg>
                   </span>
-                  ثابت محل کار : 02145246
-                  <br />
-                  همراه کاری : 09127335749
+
+                  {{ data?.contact.phone }}
                 </p>
                 <p class="flex gap-2 items-start">
                   <span
@@ -145,7 +143,7 @@ const { data } = useAPI<Root>('/api/footer',{server: false,lazy:false})
                         d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2m-.4 4.25l-7.07 4.42c-.32.2-.74.2-1.06 0L4.4 8.25a.85.85 0 1 1 .9-1.44L12 11l6.7-4.19a.85.85 0 1 1 .9 1.44" />
                     </svg>
                   </span>
-                  ایمیل : info@rahorasm.com
+                  ایمیل : {{ data?.contact.email }}
                 </p>
               </div>
             </div>
@@ -156,32 +154,41 @@ const { data } = useAPI<Root>('/api/footer',{server: false,lazy:false})
                   class="retro mt-1 w-full rounded-lg btn px-4 py-2 text-sm font-bold uppercase tracking-wide text-white transition-none hover:bg-teal-600 sm:mt-0 sm:w-auto sm:shrink-0">
                   <div class="mr-auto flex gap-4">
                     <!-- insta -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 hover:scale-125 transition-all cursor-pointer"
-                      viewBox="0 0 16 16">
-                      <path fill="currentColor"
-                        d="M8 5.67C6.71 5.67 5.67 6.72 5.67 8S6.72 10.33 8 10.33S10.33 9.28 10.33 8S9.28 5.67 8 5.67M15 8c0-.97 0-1.92-.05-2.89c-.05-1.12-.31-2.12-1.13-2.93c-.82-.82-1.81-1.08-2.93-1.13C9.92 1 8.97 1 8 1s-1.92 0-2.89.05c-1.12.05-2.12.31-2.93 1.13C1.36 3 1.1 3.99 1.05 5.11C1 6.08 1 7.03 1 8s0 1.92.05 2.89c.05 1.12.31 2.12 1.13 2.93c.82.82 1.81 1.08 2.93 1.13C6.08 15 7.03 15 8 15s1.92 0 2.89-.05c1.12-.05 2.12-.31 2.93-1.13c.82-.82 1.08-1.81 1.13-2.93c.06-.96.05-1.92.05-2.89m-7 3.59c-1.99 0-3.59-1.6-3.59-3.59S6.01 4.41 8 4.41s3.59 1.6 3.59 3.59s-1.6 3.59-3.59 3.59m3.74-6.49c-.46 0-.84-.37-.84-.84s.37-.84.84-.84s.84.37.84.84a.8.8 0 0 1-.24.59a.8.8 0 0 1-.59.24Z" />
-                    </svg>
+                     <a :href="data?.contact.instagram" v-if="data?.contact.instagram">
+
+                       <svg xmlns="http://www.w3.org/2000/svg" class="w-8 hover:scale-125 transition-all cursor-pointer"
+                         viewBox="0 0 16 16">
+                         <path fill="currentColor"
+                           d="M8 5.67C6.71 5.67 5.67 6.72 5.67 8S6.72 10.33 8 10.33S10.33 9.28 10.33 8S9.28 5.67 8 5.67M15 8c0-.97 0-1.92-.05-2.89c-.05-1.12-.31-2.12-1.13-2.93c-.82-.82-1.81-1.08-2.93-1.13C9.92 1 8.97 1 8 1s-1.92 0-2.89.05c-1.12.05-2.12.31-2.93 1.13C1.36 3 1.1 3.99 1.05 5.11C1 6.08 1 7.03 1 8s0 1.92.05 2.89c.05 1.12.31 2.12 1.13 2.93c.82.82 1.81 1.08 2.93 1.13C6.08 15 7.03 15 8 15s1.92 0 2.89-.05c1.12-.05 2.12-.31 2.93-1.13c.82-.82 1.08-1.81 1.13-2.93c.06-.96.05-1.92.05-2.89m-7 3.59c-1.99 0-3.59-1.6-3.59-3.59S6.01 4.41 8 4.41s3.59 1.6 3.59 3.59s-1.6 3.59-3.59 3.59m3.74-6.49c-.46 0-.84-.37-.84-.84s.37-.84.84-.84s.84.37.84.84a.8.8 0 0 1-.24.59a.8.8 0 0 1-.59.24Z" />
+                       </svg>
+                     </a>
                     <!-- telegram -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 hover:scale-125 transition-all cursor-pointer"
-                      viewBox="0 0 32 32">
-                      <path fill="currentColor"
-                        d="M16 .5C7.437.5.5 7.438.5 16S7.438 31.5 16 31.5S31.5 24.562 31.5 16S24.562.5 16 .5m7.613 10.619l-2.544 11.988c-.188.85-.694 1.056-1.4.656l-3.875-2.856l-1.869 1.8c-.206.206-.381.381-.781.381l.275-3.944l7.181-6.488c.313-.275-.069-.431-.482-.156l-8.875 5.587l-3.825-1.194c-.831-.262-.85-.831.175-1.231l14.944-5.763c.694-.25 1.3.169 1.075 1.219z" />
-                    </svg>
+                     <a :href="data?.contact.telegram">
+                       <svg xmlns="http://www.w3.org/2000/svg" class="w-8 hover:scale-125 transition-all cursor-pointer"
+                         viewBox="0 0 32 32">
+                         <path fill="currentColor"
+                           d="M16 .5C7.437.5.5 7.438.5 16S7.438 31.5 16 31.5S31.5 24.562 31.5 16S24.562.5 16 .5m7.613 10.619l-2.544 11.988c-.188.85-.694 1.056-1.4.656l-3.875-2.856l-1.869 1.8c-.206.206-.381.381-.781.381l.275-3.944l7.181-6.488c.313-.275-.069-.431-.482-.156l-8.875 5.587l-3.825-1.194c-.831-.262-.85-.831.175-1.231l14.944-5.763c.694-.25 1.3.169 1.075 1.219z" />
+                       </svg>
+                     </a>
+
                     <!-- whatsapp -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-10 hover:scale-125 transition-all cursor-pointer"
-                      viewBox="0 0 24 24">
-                      <g fill="none">
-                        <g clip-path="url(#mageWhatsappFilled0)">
-                          <path fill="currentColor"
-                            d="m13.79 2.64l-.57-.08a9.13 9.13 0 0 0-8.92 4a9.1 9.1 0 0 0-.71 9.66a1.3 1.3 0 0 1 .1 1c-.41 1.41-.79 2.83-1.19 4.32l.5-.15c1.35-.36 2.7-.72 4.05-1.05a1.45 1.45 0 0 1 .85.08a9.45 9.45 0 1 0 5.89-17.78m2.52 13.12a2.76 2.76 0 0 1-2.72.56a9.2 9.2 0 0 1-5.13-3.71a8.5 8.5 0 0 1-1.11-2.08a2.49 2.49 0 0 1 .55-2.52a1.23 1.23 0 0 1 1.32-.42c.2.05.34.34.52.56q.22.62.51 1.21a.94.94 0 0 1-.2 1.31c-.45.4-.38.73-.06 1.18a6.7 6.7 0 0 0 2.82 2.32c.32.14.56.17.77-.16c.09-.13.21-.24.31-.36c.58-.73.4-.72 1.32-.32q.44.185.85.43c.27.16.68.33.74.57a1.45 1.45 0 0 1-.49 1.43" />
+                    <a v-if="data?.contact.whatsapp" :href="data?.contact.whatsapp">
+
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-10 hover:scale-125 transition-all cursor-pointer"
+                        viewBox="0 0 24 24">
+                        <g fill="none">
+                          <g clip-path="url(#mageWhatsappFilled0)">
+                            <path fill="currentColor"
+                              d="m13.79 2.64l-.57-.08a9.13 9.13 0 0 0-8.92 4a9.1 9.1 0 0 0-.71 9.66a1.3 1.3 0 0 1 .1 1c-.41 1.41-.79 2.83-1.19 4.32l.5-.15c1.35-.36 2.7-.72 4.05-1.05a1.45 1.45 0 0 1 .85.08a9.45 9.45 0 1 0 5.89-17.78m2.52 13.12a2.76 2.76 0 0 1-2.72.56a9.2 9.2 0 0 1-5.13-3.71a8.5 8.5 0 0 1-1.11-2.08a2.49 2.49 0 0 1 .55-2.52a1.23 1.23 0 0 1 1.32-.42c.2.05.34.34.52.56q.22.62.51 1.21a.94.94 0 0 1-.2 1.31c-.45.4-.38.73-.06 1.18a6.7 6.7 0 0 0 2.82 2.32c.32.14.56.17.77-.16c.09-.13.21-.24.31-.36c.58-.73.4-.72 1.32-.32q.44.185.85.43c.27.16.68.33.74.57a1.45 1.45 0 0 1-.49 1.43" />
+                          </g>
+                          <defs>
+                            <clipPath id="mageWhatsappFilled0">
+                              <path fill="#fff" d="M2.5 2.5h19v19h-19z" />
+                            </clipPath>
+                          </defs>
                         </g>
-                        <defs>
-                          <clipPath id="mageWhatsappFilled0">
-                            <path fill="#fff" d="M2.5 2.5h19v19h-19z" />
-                          </clipPath>
-                        </defs>
-                      </g>
-                    </svg>
+                      </svg>
+                    </a>
                   </div>
                 </div>
               </div>

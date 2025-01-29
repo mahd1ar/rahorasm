@@ -35,8 +35,12 @@ const { data } = useAPI<Root>('/blog/posts/' + param.value)
   <div class="p-2 ">
     
       <article
-        class="max-w-2xl border px-6 py-24 mx-auto space-y-12 bg-gray-100 text-gray-800 "
+        class="max-w-2xl  px-6 py-16 my-8  mx-auto space-y-12  text-gray-800 "
       >
+      <img
+          :src="data?.image"
+          class=" object-cover w-full max-h-96 rounded-lg"
+        >
         <div class="w-full mx-auto space-y-4 text-center">
           <div class="flex justify-center items-center gap-4">
             <!-- <p
@@ -74,10 +78,7 @@ const { data } = useAPI<Root>('/blog/posts/' + param.value)
             </time>
           </p>
         </div>
-        <img
-          :src="data?.image"
-          class="h-64 object-cover w-full"
-        >
+        
         <div class="text-gray-800 ck ck-content">
           
           <div v-html="data?.content" ></div>

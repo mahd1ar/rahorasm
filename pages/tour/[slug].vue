@@ -181,7 +181,8 @@ watchDebounced([duration, airline, least_price, max_price], () => {
         class=" w-full lg:w-3/12 shrink-0 bg-white hidden border border-gray-300 rounded-md lg:flex flex-col gap-4 p-3 py-4">
 
 
-        <FilterCard title="توضیحات تور استانبول">
+        <FilterCard :title="
+        ' توضیحات تور ' + (route.query.city || route.query.country || route.query.continent)">
           <template #icon-pre>
             <!-- pin icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 56 56">
@@ -191,7 +192,7 @@ watchDebounced([duration, airline, least_price, max_price], () => {
           </template>
         </FilterCard>
 
-        <FilterCard v-if="data?.length" :title="data?.length + ` تور ${route.query.city} برای شما پیدا شد.`">
+        <FilterCard v-if="data?.length" :title="data?.length + ` تور ${route.query.city || route.query.country || route.query.continent } برای شما پیدا شد.`">
           <template #icon-pre>
             <!-- check icon -->
             <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24">
@@ -355,7 +356,7 @@ watchDebounced([duration, airline, least_price, max_price], () => {
         <LoadingIndicator v-if="status === 'pending'" />
         <template v-else >
 
-          <TravelItemCard v-for="d in data || []" :key="d.id" :id="d.id" :title="d.title" :duration="+d.tour_duration"
+          <TravelItemCard v-for="d in data || []" :key="d.id" :id="d.id" :title="d.title" :duration="d.tour_duration"
             :airline="d.flight_times.at(0)?.flight_Legs.at(0)?.airline.name"
              :date="d.start_date"
             :price="d.least_price ? Intl.NumberFormat('fa-ir', {}).format(+d.least_price).replaceAll('٬', '/') : '0'"

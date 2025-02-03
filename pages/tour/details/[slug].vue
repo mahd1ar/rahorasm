@@ -26,6 +26,29 @@ const { data: fligthsData, error, execute } = useAPI<{
 
 const loading = computed(() => status.value === 'pending')
 
+function durationFormatter(time: `${string}:${string}:${string}`) {
+ 
+  if(!time) return ""
+
+  const [h, m ] = time.split(':')
+
+  if(!h || !m) return ""
+
+  let hf = ''
+  let mf = ''
+
+  if( Boolean( +h)) {
+    hf = `${Intl.NumberFormat('fa-IR').format(+h)} ساعت`
+  }
+
+  if( Boolean( +m)) {
+    mf = `${ Intl.NumberFormat('fa-IR').format(+m) } دقیقه`
+  }
+
+
+ return `${hf} ${mf}`
+}
+
 function isRichText(text: string) {
   return text.indexOf('</p>') !== -1
 }
@@ -41,7 +64,7 @@ const data = computed(() => {
     title: apiData.value?.tour.title,
     travel: [...apiData.value.flight_Legs.map(fl => {
       return {
-        type: 'start',
+        type: fl.leg_type.toLowerCase() as 'departure' | 'arrival' | 'decontinueparture' | 'continuearrival',
         title: new Date(fl.departure).toLocaleDateString("fa-ir", {
           dateStyle: "full",
         }).split( ' ').reverse().join(' ').replace(',', ' ') 
@@ -63,7 +86,7 @@ const data = computed(() => {
           name: fl.airline.name,
           logo: fl.airline.logo,
         },
-        time: new Date(fl.departure).toLocaleTimeString('fa'),
+        time: durationFormatter( fl.flight_length),
         epoch: new Date(fl.departure).getTime(),
       }
     })
@@ -368,6 +391,16 @@ function storeReserve() {
         </div>
         <hr class="my-6" />
         <EasyShoppingWithConsultant />
+        <hr class="my-6" />
+
+        <a href="" class="w-full flex-center gap-2 text-center py-4 bg-Secondary hover:bg-rose-500 text-white rounded" >
+          
+            دانلود پکیج
+          
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path fill="currentColor" fill-opacity="0" stroke-dasharray="20" stroke-dashoffset="20" d="M12 4h2v6h2.5l-4.5 4.5M12 4h-2v6h-2.5l4.5 4.5"><animate fill="freeze" attributeName="fill-opacity" begin="0.7s" dur="0.5s" values="0;1"/><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="20;0"/></path><path stroke-dasharray="14" stroke-dashoffset="14" d="M6 19h12"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s" values="14;0"/></path></g></svg>
+
+
+        </a>
       </aside>
       <pre v-if="error" v-text="error" />
       <div v-if="loading" class="w-full lg:w-9/12 flex-center">
@@ -378,13 +411,7 @@ function storeReserve() {
         <section class="p-4 lg:p-6 rounded-md border bg-white flex flex-col gap-6">
           <div v-for="(i, inx) in data?.travel || []" :key="inx" class="flex flex-col gap-3">
             <div class="flex">
-              <svg v-if="i.type !== 'residence'" xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0"
-                viewBox="0 0 24 24">
-                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z" />
-              </svg>
-
-              <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0" viewBox="0 0 24 24">
+              <svg v-if="i.type.search('continue') >= 0" xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0" viewBox="0 0 24 24">
                 <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
                   <path
                     d="M7.25 10a4.75 4.75 0 1 1 9.5 0a4.75 4.75 0 0 1-9.5 0M12 6.75a3.25 3.25 0 1 0 0 6.5a3.25 3.25 0 0 0 0-6.5" />
@@ -392,11 +419,17 @@ function storeReserve() {
                     d="M3.524 8.857a8.29 8.29 0 0 1 8.26-7.607h.432a8.29 8.29 0 0 1 8.26 7.607a8.94 8.94 0 0 1-1.99 6.396l-4.793 5.861a2.187 2.187 0 0 1-3.386 0l-4.793-5.861a8.94 8.94 0 0 1-1.99-6.396m8.26-6.107A6.79 6.79 0 0 0 5.02 8.98a7.44 7.44 0 0 0 1.656 5.323l4.793 5.862a.687.687 0 0 0 1.064 0l4.793-5.862A7.44 7.44 0 0 0 18.98 8.98a6.79 6.79 0 0 0-6.765-6.23z" />
                 </g>
               </svg>
+              <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0"
+                viewBox="0 0 24 24">
+                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z" />
+              </svg>
+
 
               <div class="flex mr-4 sm:mr-10 gap-2 sm:gap-6 sm:text-base text-sm">
-                <strong v-if="i.type === 'start'" class="text-primary">شروع سفر:</strong>
-                <strong v-if="i.type === 'residence'" class="text-primary">محل اقامت:</strong>
-                <strong v-if="i.type === 'end'" class="text-primary">پایان سفر :</strong>
+                <strong v-if="i.type === 'departure'" class="text-primary">شروع سفر:</strong>
+                <strong v-if="i.type === 'arrival'" class="text-primary">سفر بازگشت :</strong>
+                <!-- <strong v-if="i.type === 'continuearrival'" class="text-primary">محل اقامت:</strong> -->
                 <div>
                   {{ i.title }}
                 </div>
@@ -418,7 +451,8 @@ function storeReserve() {
                   <div class="w-full flex items-center p-4 justify-center relative">
                     <div class="w-full border-t-4 border-dotted border-gray-400 h-1" />
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-8 sm:w-10 absolute"
-                      style="transform: rotate(225deg)" viewBox="0 0 64 64">
+                      :style="{transform: i.type.search('arrival') >= 0 ? 'rotate(45deg)' : 'rotate(225deg)'}" 
+                      viewBox="0 0 64 64">
                       <path fill="#acb8bf"
                         d="m7.212 12.752l8.132-8.132l1.98 1.98l-8.132 8.132zm14.209 2.045l8.133-8.13l1.98 1.98l-8.133 8.13zM49.31 54.854l8.134-8.13l1.98 1.981l-8.134 8.13zm-2.031-14.297l8.134-8.13l1.98 1.981l-8.135 8.13z" />
                       <path fill="#42ade2"

@@ -71,10 +71,10 @@ defineExpose({
       </button>
     </div>
     <button v-else @click="select"
-      class="text-teal-500 border   group hover:text-white hover:bg-primary  transition-all  w-full p-2 py-3 rounded-lg font-bold mt-4 flex items-center justify-center gap-2 text-sm">
+      class="text-teal-500 border group hover:text-white hover:bg-primary transition-all w-full p-2 py-3 rounded-lg font-bold mt-4 flex items-center justify-center gap-1 text-xs sm:text-sm ">
       اضافه به سبد خرید
 
-      <svg class="" xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 16 16">
+      <svg class="" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 16 16">
         <path fill="currentColor" d="M9 3a1 1 0 0 0-2 0v4H3a1 1 0 0 0 0 2h4v4a1 1 0 0 0 2 0V9h4a1 1 0 0 0 0-2H9z" />
       </svg>
     </button>

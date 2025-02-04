@@ -427,8 +427,8 @@ function storeReserve() {
 
 
               <div class="flex mr-4 sm:mr-10 gap-2 sm:gap-6 sm:text-base text-sm">
-                <strong v-if="i.type === 'departure'" class="text-primary">شروع سفر:</strong>
-                <strong v-if="i.type === 'arrival'" class="text-primary">سفر بازگشت :</strong>
+                <strong v-if="i.type === 'departure'" class="text-primary"> شروع سفر </strong>
+                <strong v-if="i.type === 'arrival'" class="text-primary">سفر بازگشت </strong>
                 <!-- <strong v-if="i.type === 'continuearrival'" class="text-primary">محل اقامت:</strong> -->
                 <div>
                   {{ i.title }}

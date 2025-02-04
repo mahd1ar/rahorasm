@@ -25,14 +25,14 @@ function selectSubmenu(level: 1 | 2 | 3, id: string) {
 
 }
 
+function closeMobileMenu(){
+  navIsOpen.value = false
+}
+
 function closeSubmenu() {
-
-
-  console.log('closeSubmenu')
   l1.value = ''
   l2.value = ''
   l3.value = ''
-
 }
 
 const menuButtons = reactive([
@@ -67,6 +67,7 @@ const menuButtons = reactive([
     href: '/signout',
   }]
 ])
+
 
 </script>
 
@@ -123,7 +124,7 @@ const menuButtons = reactive([
                       </button>
                       <div :class="l2 && ii.name === l2 ? 'md:absolute relative' : 'hidden'"
                         :style="{ '--max-items': ii.children?.length || 0 }"
-                        class="slide-up z-10 bg-gray-200 md:bg-white border border-gray-300 divide-y divide-gray-300 rounded-lg  w-full md:w-44 left-0  lg:-translate-x-full lg:-translate-y-10 ">
+                        class="slide-up z-10 bg-gray-100 md:bg-white border border-gray-300 divide-y divide-gray-300 rounded-lg  w-full md:w-44 left-0 lg:-translate-x-full lg:-translate-y-10">
                         <ul class="py-2 text-sm " aria-labelledby="doubleDropdownButton">
 
                           <template v-for="iii in ii.children" :key="iii.id">
@@ -153,7 +154,7 @@ const menuButtons = reactive([
                               </div>
                             </li>
                             <li @click="closeSubmenu" :key="i.id + '01'" v-else>
-                              <NuxtLink :to="iii.path || '#'" class="block px-4 py-2 hover:bg-white ">
+                              <NuxtLink @click.native="closeMobileMenu" :to="iii.path || '#'" class="block px-4 py-2 ">
                                 {{ iii.name }}
                               </NuxtLinK>
                             </li>
@@ -164,7 +165,7 @@ const menuButtons = reactive([
                       </div>
                     </li>
                     <li @click="closeSubmenu" :key="ii.id + '01'" v-else>
-                      <NuxtLink :to="ii.path || '#'" class="block px-4 py-2 hover:bg-gray-100 ">
+                      <NuxtLink @click.native="closeMobileMenu" :to="ii.path || '#'" class="block px-4 py-2 hover:bg-gray-100 ">
                         {{ ii.name }}
                       </NuxtLink>
                     </li>
@@ -175,7 +176,7 @@ const menuButtons = reactive([
               </div>
             </template>
 
-            <NuxtLink @click.native="navIsOpen = false" :to="i.path" v-else
+            <NuxtLink @click.native="closeMobileMenu()" :to="i.path" v-else
               class="block py-2 px-3 text-dark  rounded md:bg-transparent  md:p-0 " aria-current="page">
               {{ i.name }} </NuxtLink>
 

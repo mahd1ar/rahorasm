@@ -16,9 +16,9 @@ const {data,error} = useAPI<Root[]>('/api/aboutus/')
   <div class="" >
   
     <div class="container mx-auto mt-6" >
-      <section class="bg-primary  rounded-xl relative flex overflow-hidden" >
-        <div class="bg-dark absolute left-0 top-0 w-5/12 h-full" aria-hidden="true" />
-        <div class="w-7/12 relative p-6" >
+      <section class="bg-primary  rounded-xl relative flex flex-col md:flex-row overflow-hidden" >
+        <!-- <div class="bg-dark absolute left-0 top-0 w-5/12 h-full" aria-hidden="true" /> -->
+        <div class="w-full md:w-7/12 relative p-6" >
           <h1 class="text-2xl advise-title p-4 inline-block" >
             چرا راه و رسم سفر؟
           </h1>
@@ -43,14 +43,14 @@ const {data,error} = useAPI<Root[]>('/api/aboutus/')
             </div>
           </div>
         </div>
-        <div class="w-5/12 relative p-6 flex-center" >
+        <div class="w-full md:w-5/12 relative p-6 flex-center bg-black" >
           <div class="max-w-sm" >
             <img class="w-full" src="/assets/images/about/about-bg.webp" alt="">
           </div>
         </div>
 
       </section>
-      <section class="mt-4 grid grid-cols-3 gap-4 ">
+      <section class="my-4 mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 ">
         <div v-for="i in data || []" :key="i.id"class="retro rounded-md p-6 flex-col flex gap-4 text-center ">
           <div class="flex-center text-Secondary" >
 

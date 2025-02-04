@@ -23,16 +23,21 @@ export const useAppState = defineStore('appState', {
         name: '',
       } as User,
       _navbar: [] as NavbarItem[] ,
-      _isLoading: true
+      _isLoading: true,
+      _count:0
     }
   },
   getters: {
     navbar: state => state._navbar,
     isAuth: state => !!state._user.id,
     user: state => ({ ...state._user }),
-    isLoading: state => state._isLoading
+    isLoading: state => state._isLoading,
+    pageLeaveCount: state => state._count
   },
   actions: {
+    leavePage(){
+      this._count++
+    },
     // user actions:
     setUser (user:  User) {
       Object.assign(this._user, user)

@@ -27,26 +27,26 @@ const { data: fligthsData, error, execute } = useAPI<{
 const loading = computed(() => status.value === 'pending')
 
 function durationFormatter(time: `${string}:${string}:${string}`) {
- 
-  if(!time) return ""
 
-  const [h, m ] = time.split(':')
+  if (!time) return ""
 
-  if(!h || !m) return ""
+  const [h, m] = time.split(':')
+
+  if (!h || !m) return ""
 
   let hf = ''
   let mf = ''
 
-  if( Boolean( +h)) {
+  if (Boolean(+h)) {
     hf = `${Intl.NumberFormat('fa-IR').format(+h)} ساعت`
   }
 
-  if( Boolean( +m)) {
-    mf = `${ Intl.NumberFormat('fa-IR').format(+m) } دقیقه`
+  if (Boolean(+m)) {
+    mf = `${Intl.NumberFormat('fa-IR').format(+m)} دقیقه`
   }
 
 
- return `${hf} ${mf}`
+  return `${hf} ${mf}`
 }
 
 function isRichText(text: string) {
@@ -64,14 +64,15 @@ const data = computed(() => {
     title: apiData.value?.tour.title,
     travel: [...apiData.value.flight_Legs.map(fl => {
       return {
+        stop_time: fl.stop_time,
         type: fl.leg_type.toLowerCase() as 'departure' | 'arrival' | 'decontinueparture' | 'continuearrival',
         title: new Date(fl.departure).toLocaleDateString("fa-ir", {
           dateStyle: "full",
-        }).split( ' ').reverse().join(' ').replace(',', ' ') 
-        +
+        }).split(' ').reverse().join(' ').replace(',', ' ')
+          +
           " | " +
           fl.departure_airport.city.name
-          ,
+        ,
         srcAirport: {
           code: fl.departure_airport.short_name || "",
           title: fl.departure_airport.name || "",
@@ -80,17 +81,17 @@ const data = computed(() => {
         destAirport: {
           code: fl.arrival_airport.short_name || "",
           title: fl.arrival_airport.name || "",
-          time: new Date( fl.arrival) //Intl.DateTimeFormat('fa-IR').format( )
+          time: new Date(fl.arrival) //Intl.DateTimeFormat('fa-IR').format( )
         },
         airline: {
           name: fl.airline.name,
           logo: fl.airline.logo,
         },
-        time: durationFormatter( fl.flight_length),
+        time: durationFormatter(fl.flight_length),
         epoch: new Date(fl.departure).getTime(),
       }
     })
-    ].sort((a,b) =>  a.epoch - b.epoch ),
+    ].sort((a, b) => a.epoch - b.epoch),
     tour: [
       {
         label: " توضیحات",
@@ -113,7 +114,7 @@ const data = computed(() => {
         value: apiData.value?.tour.tour_guide,
       },
     ],
-    accommodations: apiData.value?.tour.flight_times.map(j => {
+    accommodations: apiData.value?.tour.flight_times.filter(j => j.id === param.value).map(j => {
       return j.hotel_price.map(i => {
         return {
           hotelPriceId: i.id,
@@ -179,15 +180,15 @@ const data = computed(() => {
 
 const counter = useTemplateRefsList()
 
-const lastBedroomId = ref< number| null>(null);
+const lastBedroomId = ref<number | null>(null);
 let hotelIndex: null | number = null;
-const counts = ref([0, 0, 0, 0,0])
+const counts = ref([0, 0, 0, 0, 0])
 function checkId(id: number, count: number, inxed: number, hIndex: number) {
 
   if (!lastBedroomId.value)
-  lastBedroomId.value = id
+    lastBedroomId.value = id
 
-if (lastBedroomId.value === id) {
+  if (lastBedroomId.value === id) {
 
     counts.value[inxed] = count
   } else {
@@ -214,12 +215,12 @@ function openModal(v: boolean) {
 
 
 function storeReserve() {
-  
+
   const x: Reservation = {
     count: [
-    {
-      identitication: 'two_bed_price',
-      count: counts.value[0],
+      {
+        identitication: 'two_bed_price',
+        count: counts.value[0],
         users: []
       },
       {
@@ -393,11 +394,22 @@ function storeReserve() {
         <EasyShoppingWithConsultant />
         <hr class="my-6" />
 
-        <a href="" class="w-full flex-center gap-2 text-center py-4 bg-Secondary hover:bg-rose-500 text-white rounded" >
-          
-            دانلود پکیج
-          
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path fill="currentColor" fill-opacity="0" stroke-dasharray="20" stroke-dashoffset="20" d="M12 4h2v6h2.5l-4.5 4.5M12 4h-2v6h-2.5l4.5 4.5"><animate fill="freeze" attributeName="fill-opacity" begin="0.7s" dur="0.5s" values="0;1"/><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="20;0"/></path><path stroke-dasharray="14" stroke-dashoffset="14" d="M6 19h12"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s" values="14;0"/></path></g></svg>
+        <a download="" target="_blank" :href="'https://rahorasm.msdcorporation.top/tour/pdf/' + param + '/'" class="w-full flex-center gap-2 text-center py-4 bg-Secondary hover:bg-rose-500 text-white rounded">
+
+          دانلود پکیج
+
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+              <path fill="currentColor" fill-opacity="0" stroke-dasharray="20" stroke-dashoffset="20"
+                d="M12 4h2v6h2.5l-4.5 4.5M12 4h-2v6h-2.5l4.5 4.5">
+                <animate fill="freeze" attributeName="fill-opacity" begin="0.7s" dur="0.5s" values="0;1" />
+                <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="20;0" />
+              </path>
+              <path stroke-dasharray="14" stroke-dashoffset="14" d="M6 19h12">
+                <animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.2s" values="14;0" />
+              </path>
+            </g>
+          </svg>
 
 
         </a>
@@ -410,8 +422,24 @@ function storeReserve() {
         <h1 class="text-2xl font-bold mb-6">{{ data?.title }}</h1>
         <section class="p-4 lg:p-6 rounded-md border bg-white flex flex-col gap-6">
           <div v-for="(i, inx) in data?.travel || []" :key="inx" class="flex flex-col gap-3">
+            <div v-if="i.stop_time" class="relative flex flex-col items-center py-2 border-dashed px-2 justify-center">
+
+              <hr class="w-52 border absolute border-dashed" />
+              <div
+                class="text-center relative bg-gray-100 p-2 rounded-full text-gray-500 inline-flex gap-1 justify-center items-center text-sm">
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="1rem" height="1rem" viewBox="0 0 24 24">
+                  <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2" d="M5 13a7 7 0 1 0 14 0a7 7 0 0 0-14 0m9.5-2.5L12 13m5-5l1-1m-4-4h-4" />
+                </svg>
+
+                {{ durationFormatter(i.stop_time) }}
+
+              </div>
+            </div>
             <div class="flex">
-              <svg v-if="i.type.search('continue') >= 0" xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0" viewBox="0 0 24 24">
+              <svg v-if="i.type.search('continue') >= 0" xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0"
+                viewBox="0 0 24 24">
                 <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
                   <path
                     d="M7.25 10a4.75 4.75 0 1 1 9.5 0a4.75 4.75 0 0 1-9.5 0M12 6.75a3.25 3.25 0 1 0 0 6.5a3.25 3.25 0 0 0 0-6.5" />
@@ -419,8 +447,7 @@ function storeReserve() {
                     d="M3.524 8.857a8.29 8.29 0 0 1 8.26-7.607h.432a8.29 8.29 0 0 1 8.26 7.607a8.94 8.94 0 0 1-1.99 6.396l-4.793 5.861a2.187 2.187 0 0 1-3.386 0l-4.793-5.861a8.94 8.94 0 0 1-1.99-6.396m8.26-6.107A6.79 6.79 0 0 0 5.02 8.98a7.44 7.44 0 0 0 1.656 5.323l4.793 5.862a.687.687 0 0 0 1.064 0l4.793-5.862A7.44 7.44 0 0 0 18.98 8.98a6.79 6.79 0 0 0-6.765-6.23z" />
                 </g>
               </svg>
-              <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0"
-                viewBox="0 0 24 24">
+              <svg v-else xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0" viewBox="0 0 24 24">
                 <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z" />
               </svg>
@@ -443,15 +470,17 @@ function storeReserve() {
                     <p class="text-sm leading-6">
                       {{ i.srcAirport.title }}
                     </p>
-                    <div class="flex flex-col w-full leading-3 font-mono" >
-                      <span class="text-xs  text-gray-500" >{{ Intl.DateTimeFormat('fa-IR',{dateStyle:'short'}).format(i.srcAirport.time) }}</span>
-                      <span class="text-xs  text-gray-500" >{{ Intl.DateTimeFormat('fa-IR',{timeStyle:'short'}).format(i.srcAirport.time) }}</span>
+                    <div class="flex flex-col w-full leading-3 font-mono">
+                      <span class="text-xs  text-gray-500">{{
+                        Intl.DateTimeFormat('fa-IR', { dateStyle: 'short' }).format(i.srcAirport.time) }}</span>
+                      <span class="text-xs  text-gray-500">{{
+                        Intl.DateTimeFormat('fa-IR', { timeStyle: 'short' }).format(i.srcAirport.time) }}</span>
                     </div>
                   </div>
                   <div class="w-full flex items-center p-4 justify-center relative">
                     <div class="w-full border-t-4 border-dotted border-gray-400 h-1" />
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-8 sm:w-10 absolute"
-                      :style="{transform: i.type.search('arrival') >= 0 ? 'rotate(45deg)' : 'rotate(225deg)'}" 
+                      :style="{ transform: i.type.search('arrival') >= 0 ? 'rotate(45deg)' : 'rotate(225deg)' }"
                       viewBox="0 0 64 64">
                       <path fill="#acb8bf"
                         d="m7.212 12.752l8.132-8.132l1.98 1.98l-8.132 8.132zm14.209 2.045l8.133-8.13l1.98 1.98l-8.133 8.13zM49.31 54.854l8.134-8.13l1.98 1.981l-8.134 8.13zm-2.031-14.297l8.134-8.13l1.98 1.981l-8.135 8.13z" />
@@ -480,9 +509,11 @@ function storeReserve() {
                     <p class="text-sm leading-6">
                       {{ i.destAirport.title }}
                     </p>
-                    <div class="flex flex-col w-full leading-3 font-mono" >
-                      <span class="text-xs  text-gray-500" >{{ Intl.DateTimeFormat('fa-IR',{dateStyle:'short'}).format(i.destAirport.time) }}</span>
-                      <span class="text-xs  text-gray-500" >{{ Intl.DateTimeFormat('fa-IR',{timeStyle:'short'}).format(i.destAirport.time) }}</span>
+                    <div class="flex flex-col w-full leading-3 font-mono">
+                      <span class="text-xs  text-gray-500">{{
+                        Intl.DateTimeFormat('fa-IR', { dateStyle: 'short' }).format(i.destAirport.time) }}</span>
+                      <span class="text-xs  text-gray-500">{{
+                        Intl.DateTimeFormat('fa-IR', { timeStyle: 'short' }).format(i.destAirport.time) }}</span>
                     </div>
                   </div>
                 </div>
@@ -502,7 +533,7 @@ function storeReserve() {
 
                   <div class="col-span-2 lg:col-span-3 border-r-2">
                     <div class="w-full justify-center items-center flex flex-col gap-4 sm:gap-3">
-                      <strong class="">ساعت پرواز</strong>
+                      <strong class="">مدت پرواز</strong>
                       <div class="text-gray-700">
                         {{ i.time }}
                       </div>
@@ -515,35 +546,38 @@ function storeReserve() {
               </div>
               <!-- <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 14v7M5 4.971v9.541c5.6-5.538 8.4 2.64 14-.086v-9.54C13.4 7.61 10.6-.568 5 4.97Z"/></svg> -->
             </div>
+
           </div>
         </section>
 
         <h2 class="text-2xl mt-6 mb-4 font-bold">لیست هتل ها و قیمت ها</h2>
         <section class="space-y-2 ">
 
-          <div v-for="(i, inxx) in data?.accommodations || []" :key="inxx" class="p-6 rounded-md border bg-white gap-6 relative ">
-            
-            <div  class="grid grid-cols-1 md:grid-cols-2 gap-2 " >
-              <NuxtLink :to="'/hotel/'+hotel.id" v-for="(hotel,index) in i.hotel" :key="index" class="p-2 rounded-lg hover:bg-slate-100" >
-                 
+          <div v-for="(i, inxx) in data?.accommodations || []" :key="inxx"
+            class="p-6 rounded-md border bg-white gap-6 relative ">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 ">
+              <NuxtLink :to="'/hotel/' + hotel.id" v-for="(hotel, index) in i.hotel" :key="index"
+                class="p-2 rounded-lg hover:bg-slate-100">
+
                 <div class="flex flex-col sm:flex-row items-start gap-4">
                   <img v-if="hotel.image" class="size-36 object-cover rounded-lg" :src="hotel.image" alt="" />
                   <div>
                     <h4 class=" flex flex-col gap-3">
-                      <div  >
-                        <div class="text-xl" > {{ hotel.name }}</div>
-                        <div class=" text-gray-600"  > {{ hotel.enName }}</div>
+                      <div>
+                        <div class="text-xl"> {{ hotel.name }}</div>
+                        <div class=" text-gray-600"> {{ hotel.enName }}</div>
                       </div>
-    
+
                       <HotelRating :stars="hotel.rating || 0" />
-                 
+
                     </h4>
                     <div class="mt-2 text-gray-600 space-x-2">
                       <span class="inline-block"> {{ hotel.city }} </span>
                       .
-                      <span class="text-primary inline-block" > 3 شب </span>
+                      <span class="text-primary inline-block"> 3 شب </span>
                     </div>
-                    
+
                   </div>
                 </div>
               </NuxtLink>
@@ -554,10 +588,10 @@ function storeReserve() {
                   <div class="bg-background p-2 rounded-lg mb-2">
                     {{ h.title }}
                   </div>
-                  
-                  <div v-if="h.other_currency" class="text-gray-700 font-bold" >
-                    {{ parseInt( h.priceOther) }}
-                    {{ h.other_currency.replace('USD', 'دلار').replace('EUR','یورو') }}
+
+                  <div v-if="h.other_currency" class="text-gray-700 font-bold">
+                    {{ parseInt(h.priceOther) }}
+                    {{ h.other_currency.replace('USD', 'دلار').replace('EUR', 'یورو') }}
                     <div>
                       +
                     </div>
@@ -569,7 +603,8 @@ function storeReserve() {
                   <BedroomCount ref="counter" class="mt-auto" @update="$d => { checkId(h.id, $d, inx, inxx) }" />
                 </div>
               </div>
-              <div v-show="lastBedroomId === i.prices[0].id" v-if="counts.reduce((a, b) => b += a, 0) !== 0" class="w-full flex justify-end mt-2">
+              <div v-show="lastBedroomId === i.prices[0].id" v-if="counts.reduce((a, b) => b += a, 0) !== 0"
+                class="w-full flex justify-end mt-2">
                 <button type="button" @click="storeReserve"
                   class="bg-Secondary px-8 text-pink-50 py-4 rounded  mr-auto w-full md:w-auto flex gap-4">
                   نهایی کردن رزرو

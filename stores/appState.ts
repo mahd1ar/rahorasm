@@ -1,3 +1,4 @@
+import type { set } from '@vueuse/core'
 import { defineStore } from 'pinia'
 
 
@@ -24,7 +25,16 @@ export const useAppState = defineStore('appState', {
       } as User,
       _navbar: [] as NavbarItem[] ,
       _isLoading: true,
-      _count:0
+      _contact: {
+        telegram: '',
+        email: '',
+        phone: '',
+        address: '',
+        facebook: '',
+        instagram: '',
+        twitter: '',
+        whatsapp: ''
+      }
     }
   },
   getters: {
@@ -32,11 +42,11 @@ export const useAppState = defineStore('appState', {
     isAuth: state => !!state._user.id,
     user: state => ({ ...state._user }),
     isLoading: state => state._isLoading,
-    pageLeaveCount: state => state._count
+    contact: state => ({ ...state._contact })
   },
   actions: {
-    leavePage(){
-      this._count++
+    setContact (contact: any) {
+      Object.assign(this._contact, contact)
     },
     // user actions:
     setUser (user:  User) {

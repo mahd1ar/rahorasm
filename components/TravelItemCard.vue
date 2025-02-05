@@ -108,7 +108,7 @@ const expanded = ref(false)
             <b class="text-Secondary mx-1">
 
               {{ price }}
-              ت
+              
             </b>
           </span>
         </div>
@@ -150,14 +150,14 @@ const expanded = ref(false)
             <div>
               <span class="block font-normal text-gray-600"> تاریخ رفت </span>
 
-              <strong> {{ inf.retunTime ? new Date(inf.retunTime).toLocaleDateString('fa') : '' }} </strong>
+              <strong>  {{ inf.turn ? new Date(inf.turn).toLocaleDateString('fa') : '' }} </strong>
             </div>
             <div>
               <span class="block font-normal text-gray-600">  تاریخ
                 برگشت
               </span>
-
-              <strong>  {{ inf.turn ? new Date(inf.turn).toLocaleDateString('fa') : '' }} </strong>
+              
+              <strong> {{ inf.retunTime ? new Date(inf.retunTime).toLocaleDateString('fa') : '' }} </strong>
             </div>
           </div>
           <div class="lg:w-3/12  flex flex-col  justify-center">
@@ -166,8 +166,7 @@ const expanded = ref(false)
               از
             </div>
             <strong class="text-dark text-lg">
-              {{ inf.packagePrice && Intl.NumberFormat('fa-ir', {}).format(+inf.packagePrice) }}
-              ت
+              {{inf.packagePrice}} 
             </strong>
           </div>
           <div class="lg:w-2/12 flex-center ">

@@ -1,4 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+defineProps({
+    url:String
+})
+
+</script>
 
 <template>
       <!-- call to action -->
@@ -11,9 +17,9 @@
                         <div class="mb-1 text-lg leading-7">با ما همراه شوید و تجربه ی یک سفر بی نظیر را به یاد ماندنی
                             کنید.
                             برای کسب اطلاعات بیشتر و رزرو تورها با ما تماس بگیرید.</div>
-                        <button
+                        <a :href="url" download target="_blank"
                             class="retro inline-block rounded bg-primary hover:text-white p-1 px-4 card-style mt-2">جهت
-                            دانلود پکیج تورهای اروپا کلیک کنید</button>
+                            دانلود پکیج تورهای اروپا کلیک کنید</a>
                     </div>
                     <div class="call-bg w-full md:w-5/12 shrink-0" data-aos="zoom-out-right" data-aos-duration="1500"
                         data-aos-delay="700" data-aos-once='true'>

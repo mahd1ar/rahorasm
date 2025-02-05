@@ -62,7 +62,7 @@ const { data } = useAPI<Root>('/visa/' + id.value)
                 leave-active-class="transition duration-75 ease-out" leave-from-class="transform scale-100 opacity-100"
                 leave-to-class="transform scale-95 opacity-0">
                 <DisclosurePanel>
-                  <p class="p-5" style="color:#212529">
+                  <p class="p-5 whitespace-break-spaces" style="color:#212529">
 
                     {{ i.answer_text }}
                   </p>

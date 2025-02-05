@@ -359,14 +359,14 @@ watchDebounced([duration, airline, least_price, max_price], () => {
           <TravelItemCard v-for="d in data || []" :key="d.id" :id="d.id" :title="d.title" :duration="d.tour_duration"
             :airline="d.flight_times.at(0)?.flight_Legs.at(0)?.airline.name"
              :date="d.start_date"
-            :price="d.least_price ? Intl.NumberFormat('fa-ir', {}).format(+d.least_price).replaceAll('٬', '/') : '0'"
+            :price="(d.least_price ? Intl.NumberFormat('fa-ir', {}).format(+d.least_price).replaceAll('٬', '/') : '0') + ' تومان' + (d.other_currency ? `+ ${+d.least_price_currency} ${d.other_currency}` : '') "
             :occasion="d.occasion"
             :is-featured="d.is_featured"
             :info="d.flight_times.map(f => ({
               id: f.id,
               turn: f.departure_date,
               retunTime: f.arrival_date,
-              packagePrice: f.least_price,
+              packagePrice: (f.least_price ? Intl.NumberFormat('fa-ir', {}).format(+f.least_price).replaceAll('٬', '/') : '0') + ' تومان' + (f.other_currency ? `+ ${+f.least_price_currency} ${f.other_currency}` : ''),
               path: '/tour/details/' + f.id,
               airline: '1111',
             }))" />

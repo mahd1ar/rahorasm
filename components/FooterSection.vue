@@ -38,8 +38,19 @@ export interface Root {
   whatsapp: string
 }
 
+const appState = useAppState()
+const { data,  } = useAPI<Root>('/api/footer',
+{
+  server: false,
+  lazy:false,
+  onResponse(ctx) {
+    
+    if(ctx.response.status !== 200) return
+console.log(ctx.response._data)
+    appState.setContact(data.value?.contact)
+  }
+})
 
-const { data } = useAPI<Root>('/api/footer',{server: false,lazy:false})
 
 </script>
 

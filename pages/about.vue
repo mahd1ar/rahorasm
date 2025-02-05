@@ -1,11 +1,12 @@
 <script setup lang="ts">
+
  interface Root {
   id: number
   icon: string
   title: string
   desc: string
 }
-
+const appState = useAppState()
 const {data,error} = useAPI<Root[]>('/api/aboutus/')
 
 // iconname like : 'material-symbols-light:10k-outline-rounded'
@@ -35,11 +36,12 @@ const {data,error} = useAPI<Root[]>('/api/aboutus/')
                 <br>
                 پنج شنبه ها 09:30 الی 14:00
               </p>
-              <button type="button" class="btn p-2 rounded retro flex gap-2 justify-center" >
+
+              <NuxtLink :to="'tel:' + appState.contact.phone.replace(/[^0-9]/g, ' ').replace(/\s+/g, ' ').split(' ').filter(Boolean).at(0)" type="button" class="btn p-2 rounded retro flex gap-2 justify-center" >
                 مشاوره رایگان
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-6" viewBox="0 0 24 24"><path fill="currentColor" d="m19.23 15.26l-2.54-.29a1.99 1.99 0 0 0-1.64.57l-1.84 1.84a15.05 15.05 0 0 1-6.59-6.59l1.85-1.85c.43-.43.64-1.03.57-1.64l-.29-2.52a2 2 0 0 0-1.99-1.77H5.03c-1.13 0-2.07.94-2 2.07c.53 8.54 7.36 15.36 15.89 15.89c1.13.07 2.07-.87 2.07-2v-1.73c.01-1.01-.75-1.86-1.76-1.98"/></svg>
 
-              </button>
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -53,7 +55,6 @@ const {data,error} = useAPI<Root[]>('/api/aboutus/')
       <section class="my-4 mb-6 grid grid-cols-1 md:grid-cols-3 gap-4 ">
         <div v-for="i in data || []" :key="i.id"class="retro rounded-md p-6 flex-col flex gap-4 text-center ">
           <div class="flex-center text-Secondary" >
-
             <Icon :name="i.icon" size="32px" />
           </div>
           <h3 class="font-bold text-xl" >{{ i.title }}</h3>

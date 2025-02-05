@@ -317,6 +317,8 @@ const { data } = useAPI<Root>('/tour/home')
             airline: i.flight_times.at(0)?.flight_Legs.at(0).airline.name || '',
             // airline: i.flight_times.at(0)?.airline.name || '',
             price: i.least_price,
+            priceOther: i.least_price_currency,
+            otherCurrency: i.other_currency,
             href: i.flight_times?.at(0)?.id ?  `/tour/details/${ i.flight_times.at(0)!.id!}`  : '#' ,
             image: i.image,
             occasion: i.occasion
@@ -324,12 +326,14 @@ const { data } = useAPI<Root>('/tour/home')
 
 
 
-<HomeCallToAction />
+<HomeCallToAction  :url="data?.pdf?.at(0)?.pdf" />
+
 <HomeFourCellGrid :asia_items="data?.latest_asia_tours.map(i => ({
     title: i.title,
     duration: i.tour_duration,
     airline: i.flight_times.at(0)?.flight_Legs.at(0).airline.name,
-    price: Intl.NumberFormat('fa-ir').format(+(i.least_price || 0)),
+    price: Intl.NumberFormat('fa-ir').format( +i.least_price || 0 ) + ' ت ' + (i.other_currency ? `+ ${+i.least_price_currency} ${i.other_currency}` :''  ) ,
+
     href: '/tour/details/' + i.flight_times.at(0)?.id,
     image: i.image || '',
     isFeatured: i.is_featured,
@@ -338,7 +342,7 @@ const { data } = useAPI<Root>('/tour/home')
     title: i.title,
     duration: i.tour_duration,
     airline: i.flight_times.at(0)?.flight_Legs.at(0).airline.name,
-    price: Intl.NumberFormat('fa-ir').format( +i.least_price || 0 ),
+    price: Intl.NumberFormat('fa-ir').format( +i.least_price || 0 ) + ' ت ' + (i.other_currency ? `+ ${+i.least_price_currency} ${i.other_currency}` :''  ) ,
     href: '/tour/details/' + i.flight_times.at(0)?.id,
     image: i.image || '',
     isFeatured: i.is_featured,

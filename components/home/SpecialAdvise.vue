@@ -14,7 +14,9 @@ defineProps({
             price: string,
             href: string,
             image: string,
-            occasion: string
+            occasion: string,
+            priceOther: string,
+            otherCurrency: string,
         }[]>
     }
 })
@@ -128,6 +130,15 @@ defineProps({
 
                                                     {{ i.price ? Intl.NumberFormat('fa-IR').format(parseInt(i.price)) + " ت " :
                                                 'نامعلوم' }}
+
+                                                <span v-if="i.otherCurrency" class="" > 
+                                                    <strong class="text-rose-600" >
+
+                                                        +
+                                                    </strong>
+                                                    {{  Intl.NumberFormat('en-us').format(i.priceOther) }} 
+{{ i.otherCurrency }}
+                                                </span>
                                             </span>
                                                 </span>
                                         </p>
